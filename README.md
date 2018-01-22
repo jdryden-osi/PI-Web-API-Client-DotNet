@@ -1,4 +1,4 @@
-PI Web API Client libraries for .NET Framework (2017 R2)
+PI Web API client library for .NET Framework (2017 R2)
 ===
 
 
@@ -48,33 +48,33 @@ If you want to use basic authentication instead of Kerberos, set useKerberos to 
 ### Get the PI Data Archive WebId
 
 ```cs
-    PIDataServer dataServer = client.DataServer.GetByPath("\\\\MARC-PI2016");
+	PIDataServer dataServer = client.DataServer.GetByPath("\\\\MARC-PI2016");
 ```
 
 ### Create a new PI Point
 
 ```cs
-    PIPoint newPIPoint = new PIPoint();
-    newPIPoint.Name = "MyNewPIPoint"
-    newPIPoint.Descriptor = "Point created for wrapper test"
-    newPIPoint.PointClass = "classic"
-    newPIPoint.PointType = "Float32"
-    ApiResponseObject response = client.dataServer.CreatePointWithHttpInfo(dataServer.webId, newPIPoint)
+	PIPoint newPIPoint = new PIPoint();
+	newPIPoint.Name = "MyNewPIPoint"
+	newPIPoint.Descriptor = "Point created for wrapper test"
+	newPIPoint.PointClass = "classic"
+	newPIPoint.PointType = "Float32"
+	ApiResponseObject response = client.dataServer.CreatePointWithHttpInfo(dataServer.webId, newPIPoint)
 ```
 
 ### Get PI Points WebIds
 
 ```cs
-    PIPoint point1 = client.Point.GetByPath("\\\\marc-pi2016\\sinusoid");
-    PIPoint point2 = client.Point.GetByPath("\\\\marc-pi2016\\sinusoidu");
-    PIPoint point3 = client.Point.GetByPath("\\\\marc-pi2016\\cdt158");
+	PIPoint point1 = client.Point.GetByPath("\\\\marc-pi2016\\sinusoid");
+	PIPoint point2 = client.Point.GetByPath("\\\\marc-pi2016\\sinusoidu");
+	PIPoint point3 = client.Point.GetByPath("\\\\marc-pi2016\\cdt158");
 ```
 
 ### Get recorded values in bulk using the StreamSet/GetRecordedAdHoc
 
 ```cs
-    List<string> webIds = new List<string>() { point1.WebId, point2.WebId, point3.WebId };
-    PIItemsStreamValues piItemsStreamValues = client.StreamSet.GetRecordedAdHoc(webIds, startTime: "*-3d", endTime: "*");
+	List<string> webIds = new List<string>() { point1.WebId, point2.WebId, point3.WebId };
+	PIItemsStreamValues piItemsStreamValues = client.StreamSet.GetRecordedAdHoc(webIds, startTime: "*-3d", endTime: "*");
 ```
 
 ### Send values in bulk using the StreamSet/UpdateValuesAdHoc
@@ -136,8 +136,8 @@ If you want to use basic authentication instead of Kerberos, set useKerberos to 
 ### Get Event Frames given an AF Database path
 
 ```cs
-    PIAssetDatabase db = client.AssetData.GetByPath(path);
-    PIItemsEventFrame efs = client.AssetData.GetEventFrames(db.WebId, referencedElementNameFilter: "myElement", referencedElementTemplateName: "user", startTime: "*-1d", endTime: "*");
+ 	PIAssetDatabase db = client.AssetData.GetByPath(path);
+	PIItemsEventFrame efs = client.AssetData.GetEventFrames(db.WebId, referencedElementNameFilter: "myElement", referencedElementTemplateName: "user", startTime: "*-1d", endTime: "*");
 ```
 
 
