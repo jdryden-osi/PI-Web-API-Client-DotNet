@@ -80,7 +80,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
         public void DeleteTest()
         {
             string path = Constants.AF_TIMERULE_PATH;
-            instance.Delete(webId);
+            var res = instance.DeleteWithHttpInfo(webId);
             StandardPISystem.Refresh();
             var newTimeRule = AFObject.FindObject(path) as AFTimeRule;
             Assert.IsNull(newTimeRule);
@@ -135,7 +135,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
             timeRule.Path = null;
             timeRule.Links = null;
             timeRule.ConfigString = "Frequency=400";
-            instance.Update(webId, timeRule);          
+            var res = instance.UpdateWithHttpInfo(webId, timeRule);          
             StandardPISystem.Refresh();
             var newTimeRule = AFObject.FindObject(path) as AFTimeRule;
             if (newTimeRule != null)

@@ -214,9 +214,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
             string path2 = Constants.AF_ATTRIBUTE_PATH.Replace(Constants.AF_ATTRIBUTE_NAME, "Temperature");
             string webId2 = instance.GetByPath(path2).WebId;
             List<string> webIdList = new List<string>() { webId, webId2 };
-            List<string> path = new List<string>();
-            string includeMode = null;
-            bool? asParallel = null;
+            List<string> path = null;
+            string includeMode = "All";
+            bool? asParallel = false;
             string selectedFields = null;
             var response = instance.GetMultiple(asParallel, includeMode, path, selectedFields, webIdList);
             Assert.IsInstanceOf<PIItemsItemAttribute>(response, "response is PIItemsItemAttribute");

@@ -121,11 +121,12 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
             string path = Constants.AF_ENUMERATION_VALUE_PATH;
             PIEnumerationValue enumerationValue = instance.GetByPath(path, null);
             enumerationValue.Id = null;
+            enumerationValue.Parent = null;
             enumerationValue.Description = "New enumeration value description";
             enumerationValue.Links = null;
             enumerationValue.Path = null;
             enumerationValue.WebId = null;
-            instance.UpdateEnumerationValue(webId, enumerationValue);
+            var res = instance.UpdateEnumerationValueWithHttpInfo(webId, enumerationValue);
 
             StandardPISystem.Refresh();
             AFEnumerationValue afEnumValue = AFObject.FindObject(path) as AFEnumerationValue;

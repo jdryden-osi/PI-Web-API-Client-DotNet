@@ -135,7 +135,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
             bool? showHidden = null;
             bool? searchFullHierarchy = null;
             string selectedFields = null;
-            var response = instance.GetInterpolated(webId, categoryName, endTime, filterExpression, includeFilteredValues, interval, nameFilter, searchFullHierarchy, selectedFields, showExcluded, showHidden, startTime, templateName, timeZone);
+            string sortField = null;
+            string sortOrder = null;
+            string syncTime = null;
+            string syncTimeBoundaryType = null;
+            var response = instance.GetInterpolated(webId, categoryName, endTime, filterExpression, includeFilteredValues, interval, nameFilter, searchFullHierarchy, selectedFields, showExcluded, showHidden, sortField, sortOrder, startTime, syncTime, syncTimeBoundaryType, templateName, timeZone);
             Assert.IsInstanceOf<PIItemsStreamValues>(response, "response is PIItemsStreamValues");
             Assert.IsTrue(response.Items.Count > 0);
         }
@@ -153,7 +157,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
             string filterExpression = null;
             bool? includeFilteredValues = null;
             string selectedFields = null;
-            var response = instance.GetInterpolatedAdHoc(webIds, endTime, filterExpression, includeFilteredValues, interval, selectedFields, startTime, timeZone);
+            string sortField = null;
+            string sortOrder = null;
+            var response = instance.GetInterpolatedAdHoc(webIds, endTime, filterExpression, includeFilteredValues, interval, selectedFields, sortField, sortOrder, startTime, timeZone);
             Assert.IsInstanceOf<PIItemsStreamValues>(response, "response is PIItemsStreamValues");
             Assert.IsTrue(response.Items.Count > 0);
         }
@@ -214,7 +220,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
             bool? showHidden = null;
             bool? searchFullHierarchy = null;
             string selectedFields = null;
-            var response = instance.GetPlot(webId, categoryName, endTime, intervals, nameFilter, searchFullHierarchy, selectedFields, showExcluded, showHidden, startTime, templateName, timeZone);
+            string sortField = null;
+            string sortOrder = null;
+            var response = instance.GetPlot(webId, categoryName, endTime, intervals, nameFilter, searchFullHierarchy, selectedFields, showExcluded, showHidden, sortField, sortOrder, startTime, templateName, timeZone);
             Assert.IsInstanceOf<PIItemsStreamValues>(response, "response is PIItemsStreamValues");
         }
 
@@ -229,7 +237,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
             string timeZone = null;
             int? intervals = null;
             string selectedFields = null;
-            var response = instance.GetPlotAdHoc(webIds, endTime, intervals, selectedFields, startTime, timeZone);
+            string sortField = null;
+            string sortOrder = null;
+            var response = instance.GetPlotAdHoc(webIds, endTime, intervals, selectedFields, sortField, sortOrder, startTime, timeZone);
             Assert.IsInstanceOf<PIItemsStreamValues>(response, "response is PIItemsStreamValues");
             Assert.IsTrue(response.Items.Count > 0);
         }
@@ -251,10 +261,12 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
             string templateName = null;
             bool? showExcluded = null;
             bool? showHidden = null;
+            string sortField = null;
+            string sortOrder = null;
             bool? searchFullHierarchy = null;
             int? maxCount = null;
             string selectedFields = null;
-            var response = instance.GetRecorded(webId, boundaryType, categoryName, endTime, filterExpression, includeFilteredValues, maxCount, nameFilter, searchFullHierarchy, selectedFields, showExcluded, showHidden, startTime, templateName, timeZone);
+            var response = instance.GetRecorded(webId, boundaryType, categoryName, endTime, filterExpression, includeFilteredValues, maxCount, nameFilter, searchFullHierarchy, selectedFields, showExcluded, showHidden, sortField, sortOrder,startTime, templateName, timeZone);
             Assert.IsInstanceOf<PIItemsStreamValues>(response, "response is PIItemsStreamValues");
         }
 
@@ -272,7 +284,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
             bool? includeFilteredValues = null;
             int? maxCount = null;
             string selectedFields = null;
-            var response = instance.GetRecordedAdHoc(webIds, boundaryType, endTime, filterExpression, includeFilteredValues, maxCount, selectedFields, startTime, timeZone);
+            string sortField = null;
+            string sortOrder = null;
+            var response = instance.GetRecordedAdHoc(webIds, boundaryType, endTime, filterExpression, includeFilteredValues, maxCount, selectedFields, sortField, sortOrder, startTime, timeZone);
             Assert.IsInstanceOf<PIItemsStreamValues>(response, "response is PIItemsStreamValues");
             Assert.IsTrue(response.Items.Count > 0);
         }

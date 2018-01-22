@@ -197,9 +197,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
         public void CreateSearchByAttributeTest()
         {
             string templateWebId = client.ElementTemplate.GetByPath(Constants.AF_ELEMENT_TEMPLATE_PATH).WebId;
-            List<PIAttributeValueQuery> valueQueries = new List<PIAttributeValueQuery>();
-            valueQueries.Add(new PIAttributeValueQuery(Constants.AF_ATTRIBUTE_TEMPLATE_NAME, 1000, null, "LessThan"));
-            PISearchByAttributeElement search = new PISearchByAttributeElement()
+            List<PIValueQuery> valueQueries = new List<PIValueQuery>();
+            valueQueries.Add(new PIValueQuery(Constants.AF_ATTRIBUTE_TEMPLATE_NAME, null, 1000, "LessThan"));
+            PISearchByAttribute search = new PISearchByAttribute()
             {
                 SearchRoot = null,
                 ElementTemplate = templateWebId,
@@ -209,7 +209,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
             var response = instance.CreateSearchByAttributeWithHttpInfo(search);
             string location = response.Headers.Where(h => h.Key == "Location").First().Value;
             Assert.IsTrue(location.Substring(0, 5) == "https");
-            Assert.IsInstanceOf<ApiResponse<Object>>(response, "response is Object");
+            Assert.IsInstanceOf<ApiResponse<PIItemsElement>>(response, "response is Object");
 
         }
 
@@ -276,9 +276,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
         public void ExecuteSearchByAttributeTest()
         {
             string templateWebId = client.ElementTemplate.GetByPath(Constants.AF_ELEMENT_TEMPLATE_PATH).WebId;
-            List<PIAttributeValueQuery> valueQueries = new List<PIAttributeValueQuery>();
-            valueQueries.Add(new PIAttributeValueQuery(Constants.AF_ATTRIBUTE_TEMPLATE_NAME, 1000, null, "LessThan"));
-            PISearchByAttributeElement search = new PISearchByAttributeElement()
+            List<PIValueQuery> valueQueries = new List<PIValueQuery>();
+            valueQueries.Add(new PIValueQuery(Constants.AF_ATTRIBUTE_TEMPLATE_NAME, null, 1000, "LessThan"));
+            PISearchByAttribute search = new PISearchByAttribute()
             {
                 SearchRoot = null,
                 ElementTemplate = templateWebId,

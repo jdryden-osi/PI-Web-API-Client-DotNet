@@ -1,13 +1,13 @@
-PI Web API Client libraries for .NET Framework
+PI Web API Client libraries for .NET Framework (2017 R2)
 ===
 
 
 ## Overview
-This repository has the source code package of the PI Web API Client libraries for .NET Framework. Although PI AF SDK can also be used with .NET Framework, the advantage of using this client library is that you don't need to install PI AF Client on your machine. 
+This repository has the source code package of the PI Web API Client libraries for .NET Framework. Although PI AF SDK can also be used with .NET Framework, the advantage of using this client library is that you don't need to install PI AF Client on your machine. This version was developed on top of the PI Web API 2017 R2 swagger specification. 
 
 ## Requirements
 
- - PI Web API 2017 installed within your domain using Kerberos or Basic Authentication.
+ - PI Web API 2017 R2 installed within your domain using Kerberos or Basic Authentication. If you are using an older version, some methods might not work.
  - .NET Framework 4.5.2
 
 ## Installation
@@ -26,6 +26,10 @@ Create a new .NET Framework project (Console Application for instance). On the S
 
 All classes and methods are described on the [DOCUMENTATION](DOCUMENTATION.md). 
 
+## Notes
+
+ - Is is highly recommended to turn debug mode on in case you are using PI Web API 2017 R2+ in order to receive more detailed exception errors. This can be achieved by creating or editing the DebugMode attribute's value to TRUE from the System Configuration element.
+ - The X-Requested-With header is added to work with CSRF defences.
  
 ## Examples
 
@@ -139,7 +143,7 @@ If you want to use basic authentication instead of Kerberos, set useKerberos to 
 
 
 ## Licensing
-Copyright 2017 OSIsoft, LLC.
+Copyright 2018 OSIsoft, LLC.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.

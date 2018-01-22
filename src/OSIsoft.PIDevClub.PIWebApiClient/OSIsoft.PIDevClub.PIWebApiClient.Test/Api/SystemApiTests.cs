@@ -84,7 +84,6 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
         {
             // TODO uncomment below to test the method and replace null with proper value
             var response = instance.Landing();
-            Assert.IsTrue(response.Links.Count > 0);
             Assert.IsInstanceOf<PISystemLanding>(response, "response is PILinks");
         }
 

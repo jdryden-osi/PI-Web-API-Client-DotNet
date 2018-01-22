@@ -68,13 +68,13 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
         [Test]
         public void GetTest()
         {
-            string path = Constants.AF_SERVER_PATH + @"\PlugInsAnalysisRule[Imbalance]";
+            string path = Constants.AF_SERVER_PATH + @"\PlugInsTimeRule[Natural]";
             string selectedFields = null;
             var response2 = instance.GetByPath(path, selectedFields);
             string webId = response2.WebId;
             var response = instance.Get(webId, selectedFields);
             Assert.IsInstanceOf<PITimeRulePlugIn>(response, "response is PIPlugIn");
-            Assert.IsTrue(response.Name == "Imbalance");
+            Assert.IsTrue(response.Name == "Natural");
         }
 
         /// <summary>
@@ -84,11 +84,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
         public void GetByPathTest()
         {
             // TODO uncomment below to test the method and replace null with proper value
-            string path = Constants.AF_SERVER_PATH + @"\PlugInsAnalysisRule[Imbalance]";
+            string path = Constants.AF_SERVER_PATH + @"\PlugInsTimeRule[Natural]";
             string selectedFields = null;
             var response = instance.GetByPath(path, selectedFields);
             Assert.IsInstanceOf<PITimeRulePlugIn>(response, "response is PIPlugIn");
-            Assert.IsTrue(response.Name == "Imbalance");
+            Assert.IsTrue(response.Name == "Natural");
         }
 
     }

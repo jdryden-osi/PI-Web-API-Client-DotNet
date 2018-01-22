@@ -71,7 +71,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
             // TODO uncomment below to test the method and replace null with proper value
             var response = instance.Get();
             Assert.IsInstanceOf<PILanding> (response, "response is PILinks");
-            Assert.IsNotNull(response.Links["System"]);
+            Assert.IsNotNull(response.Links.System);
         }
         
     }

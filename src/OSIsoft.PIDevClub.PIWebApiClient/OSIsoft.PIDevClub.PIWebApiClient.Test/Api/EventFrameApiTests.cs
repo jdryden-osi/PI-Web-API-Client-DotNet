@@ -192,9 +192,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
         public void CreateSearchByAttributeTest()
         {
             string templateWebId = client.ElementTemplate.GetByPath(Constants.AF_EVENT_FRAME_TEMPLATE_PATH).WebId;
-            List<PIAttributeValueQuery> valueQueries = new List<PIAttributeValueQuery>();
-            valueQueries.Add(new PIAttributeValueQuery("Level", 1000, null, "LessThan"));
-            PISearchByAttributeEventFrame search = new PISearchByAttributeEventFrame()
+            List<PIValueQuery> valueQueries = new List<PIValueQuery>();
+            valueQueries.Add(new PIValueQuery("Level", null, 1000, "LessThan"));
+            PISearchByAttribute search = new PISearchByAttribute()
             {
                 SearchRoot = null,
                 ElementTemplate = templateWebId,
@@ -204,7 +204,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
             var response = instance.CreateSearchByAttributeWithHttpInfo(search);
             string location = response.Headers.Where(h => h.Key == "Location").First().Value;
             Assert.IsTrue(location.Substring(0, 5) == "https");
-            Assert.IsInstanceOf<ApiResponse<Object>>(response, "response is Object");
+            Assert.IsInstanceOf<ApiResponse<PIItemsEventFrame>>(response, "response is Object");
         }
 
         /// <summary>
@@ -294,9 +294,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
         public void ExecuteSearchByAttributeTest()
         {
             string templateWebId = client.ElementTemplate.GetByPath(Constants.AF_EVENT_FRAME_TEMPLATE_PATH).WebId;
-            List<PIAttributeValueQuery> valueQueries = new List<PIAttributeValueQuery>();
-            valueQueries.Add(new PIAttributeValueQuery("Level", 1000, null, "LessThan"));
-            PISearchByAttributeEventFrame search = new PISearchByAttributeEventFrame()
+            List<PIValueQuery> valueQueries = new List<PIValueQuery>();
+            valueQueries.Add(new PIValueQuery("Level", null, 1000, "LessThan"));
+            PISearchByAttribute search = new PISearchByAttribute()
             {
                 SearchRoot = null,
                 ElementTemplate = templateWebId,

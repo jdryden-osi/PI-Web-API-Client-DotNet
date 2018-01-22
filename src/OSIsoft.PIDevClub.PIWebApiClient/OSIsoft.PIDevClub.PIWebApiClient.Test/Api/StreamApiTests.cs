@@ -268,7 +268,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
         public void UpdateValueTest()
         {
             // TODO uncomment below to test the method and replace null with proper value
-            var currentTime = "*-1d";
+            var currentTime = "t";
             PITimedValue value = new PITimedValue()
             {
                 Timestamp = currentTime,
@@ -276,7 +276,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
             };
             string updateOption = "Replace";
             string bufferOption = "BufferIfPossible";
-            instance.UpdateValue(webId: webId, value: value,  updateOption: updateOption, bufferOption: bufferOption);
+            var res = instance.UpdateValueWithHttpInfo(webId: webId, value: value, updateOption: updateOption, bufferOption: bufferOption);
             var afValue = point.RecordedValue(new AFTime(currentTime));
             Assert.IsTrue(afValue.ValueAsSingle() == Convert.ToSingle(value.Value));
 
