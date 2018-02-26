@@ -49,7 +49,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
             base.CommonInit();
             instance = client.Stream;
             point = GetPIPoint("sinusoid");
-            webId = client.Point.GetByPath(Constants.DATA_SERVER_PATH + @"\sinusoid").WebId;
+            webId = client.Point.GetByPath(Constants.PI_DATA_SERVER_PATH + @"\sinusoid").WebId;
         }
 
 

@@ -50,9 +50,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
             instance = client.StreamSet;
             base.CreateSampleDatabaseForTests();
             webIds = new List<string>();
-            webIds.Add(client.Point.GetByPath(Constants.DATA_SERVER_PATH + @"\sinusoid").WebId);
-            webIds.Add(client.Point.GetByPath(Constants.DATA_SERVER_PATH + @"\sinusoidu").WebId);
-            webIds.Add(client.Point.GetByPath(Constants.DATA_SERVER_PATH + @"\cdt158").WebId);
+            webIds.Add(client.Point.GetByPath(Constants.PI_DATA_SERVER_PATH + @"\sinusoid").WebId);
+            webIds.Add(client.Point.GetByPath(Constants.PI_DATA_SERVER_PATH + @"\sinusoidu").WebId);
+            webIds.Add(client.Point.GetByPath(Constants.PI_DATA_SERVER_PATH + @"\cdt158").WebId);
             AFElement element = AFObject.FindObject(Constants.AF_ELEMENT_STREAMSET_PATH) as AFElement;
             element.Refresh();
             Assert.IsTrue(element.Attributes.Count == 3);

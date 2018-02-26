@@ -12,7 +12,6 @@ namespace OSIsoft.PIDevClub.PIWebApiClient
         private List<KeyValuePair<String, String>> items = new List<KeyValuePair<String, String>>();
         public void Add(string key, string value)
         {
-            //
             string[] queryStringWords = value.Split(',');
             foreach (var item in queryStringWords)
             {

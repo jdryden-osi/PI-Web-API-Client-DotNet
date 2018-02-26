@@ -43,7 +43,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
         {
             base.CommonInit();
             instance = client.DataServer;
-            webId = instance.GetByName(Constants.DATA_SERVER_NAME).WebId;
+            webId = instance.GetByName(Constants.PI_DATA_SERVER_NAME).WebId;
             Cleanup();
         }
 
@@ -128,7 +128,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
             string selectedFields = null;
             var response = instance.Get(webId, selectedFields);
             Assert.IsInstanceOf<PIDataServer>(response, "response is PIDataServer");
-            Assert.IsTrue(response.Name == Constants.DATA_SERVER_NAME);
+            Assert.IsTrue(response.Name == Constants.PI_DATA_SERVER_NAME);
         }
 
         /// <summary>
@@ -138,11 +138,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
         public void GetByNameTest()
         {
             // TODO uncomment below to test the method and replace null with proper value
-            string name = Constants.DATA_SERVER_NAME;
+            string name = Constants.PI_DATA_SERVER_NAME;
             string selectedFields = null;
             var response = instance.GetByName(name, selectedFields);
             Assert.IsInstanceOf<PIDataServer>(response, "response is PIDataServer");
-            Assert.IsTrue(response.Name == Constants.DATA_SERVER_NAME);
+            Assert.IsTrue(response.Name == Constants.PI_DATA_SERVER_NAME);
         }
 
         /// <summary>
@@ -152,11 +152,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
         public void GetByPathTest()
         {
             // TODO uncomment below to test the method and replace null with proper value
-            string path = Constants.DATA_SERVER_PATH;
+            string path = Constants.PI_DATA_SERVER_PATH;
             string selectedFields = null;
             var response = instance.GetByPath(path, selectedFields);
             Assert.IsInstanceOf<PIDataServer>(response, "response is PIDataServer");
-            Assert.IsTrue(response.Name == Constants.DATA_SERVER_NAME);
+            Assert.IsTrue(response.Name == Constants.PI_DATA_SERVER_NAME);
         }
 
         /// <summary>
@@ -198,9 +198,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
             string selectedFields = null;
             var response = instance.List(selectedFields);
             Assert.IsInstanceOf<PIItemsDataServer>(response, "response is PIItemsDataServer");
-            var server = response.Items.Where(m => m.Name == Constants.DATA_SERVER_NAME).FirstOrDefault();
+            var server = response.Items.Where(m => m.Name == Constants.PI_DATA_SERVER_NAME).FirstOrDefault();
             Assert.IsNotNull(server);
-            Assert.IsTrue(server.Name == Constants.DATA_SERVER_NAME);
+            Assert.IsTrue(server.Name == Constants.PI_DATA_SERVER_NAME);
         }
 
     }

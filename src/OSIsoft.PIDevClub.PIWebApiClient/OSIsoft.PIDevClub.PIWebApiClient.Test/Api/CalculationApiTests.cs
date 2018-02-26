@@ -44,7 +44,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
         public void Init()
         {
             base.CommonInit();
-            webId = client.DataServer.GetByPath(Constants.DATA_SERVER_PATH).WebId;
+            webId = client.DataServer.GetByPath(Constants.PI_DATA_SERVER_PATH).WebId;
             instance = client.Calculation;
             base.CreateSampleDatabaseForTests();
 

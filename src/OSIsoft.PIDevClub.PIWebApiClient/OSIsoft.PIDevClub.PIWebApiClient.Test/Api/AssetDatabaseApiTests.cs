@@ -45,7 +45,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
         public void Init()
         {
             base.CommonInit();
-            instance = client.AssetData;
+            instance = client.AssetDatabase;
             base.CreateSampleDatabaseForTests();
 
             string path = Constants.AF_DATABASE_PATH;

@@ -232,6 +232,10 @@
     <Compile Include="Model\PIWebException.cs" />
     <Compile Include="PIWebApiClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebID\WebIdException.cs" />
+    <Compile Include="WebID\WebIdHelper.cs" />
+    <Compile Include="WebID\WebIdInfo.cs" />
+    <Compile Include="WebID\WebIdType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

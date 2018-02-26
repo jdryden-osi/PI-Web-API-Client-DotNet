@@ -25,8 +25,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
     public class Constants
     {
         public const string BASE_URL = "https://marc-web-sql.marc.net/piwebapi";
-        public const string DATA_SERVER_NAME = "MARC-PI2016";
-        public const string DATA_SERVER_PATH = @"\\" + DATA_SERVER_NAME;
+        public const string PI_DATA_SERVER_NAME = "MARC-PI2016";
+        public const string PI_DATA_SERVER_PATH = @"\\" + PI_DATA_SERVER_NAME;
+
+        public const string PI_POINT_NAME = "MARC-PI2016";
+        public const string PI_POINT_PATH = @"\\" + PI_DATA_SERVER_NAME + "\\sinusoid";
 
         public const string PIPOINT_CREATE_NAME = "PIPOINT-PIWEBAPI-SWAGGER-TEST";
         public const string ENUMERATIONSET_CREATE_NAME = "DigitalSwaggerEnum";

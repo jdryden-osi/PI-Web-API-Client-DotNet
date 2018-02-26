@@ -41,7 +41,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
             {
                 if (_piServer == null)
                 {
-                    _piServer = new OSIsoft.AF.PI.PIServers()[Constants.DATA_SERVER_NAME];
+                    _piServer = new OSIsoft.AF.PI.PIServers()[Constants.PI_DATA_SERVER_NAME];
                 }
                 return _piServer;
             }
@@ -320,7 +320,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
                 temp = el.Attributes.Add("Temperature");
                 temp.Type = typeof(Double);
                 temp.DataReferencePlugIn = _piSystem.DataReferencePlugIns["PI Point"];
-                temp.ConfigString = @"\\" + Constants.DATA_SERVER_NAME + @"\sinusoid";
+                temp.ConfigString = @"\\" + Constants.PI_DATA_SERVER_NAME + @"\sinusoid";
                 temp.DefaultUOM = _piSystem.UOMDatabase.UOMClasses["Temperature"].UOMs["degree Celsius"];
                 AFAttribute limitHiAttr = temp.Attributes.Add(AFAttributeTrait.LimitHi.Abbreviation);
                 limitHiAttr.Trait = AFAttributeTrait.LimitHi;
@@ -427,7 +427,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
                 AFAttribute attr = streamSetElement.Attributes.Add(attributeName);
                 attr.Type = typeof(Double);
                 attr.DataReferencePlugIn = _piSystem.DataReferencePlugIns["PI Point"];
-                attr.ConfigString = @"\\" + Constants.DATA_SERVER_NAME + @"\" + attributeName;
+                attr.ConfigString = @"\\" + Constants.PI_DATA_SERVER_NAME + @"\" + attributeName;
             }
         }
 
@@ -435,11 +435,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
         private void CreateElementFromTemplate(AFDatabase db, AFElementTemplate elementTemplate)
         {
             AFElement element1= db.Elements.Add("Tank 1", elementTemplate);
-            element1.Attributes["Pressure"].ConfigString = @"\\" + Constants.DATA_SERVER_NAME + @"\sinusoid";
-            element1.Attributes["Level"].ConfigString = @"\\" + Constants.DATA_SERVER_NAME + @"\cdt158";
+            element1.Attributes["Pressure"].ConfigString = @"\\" + Constants.PI_DATA_SERVER_NAME + @"\sinusoid";
+            element1.Attributes["Level"].ConfigString = @"\\" + Constants.PI_DATA_SERVER_NAME + @"\cdt158";
             AFElement element2 = db.Elements.Add("Tank 2", elementTemplate);
-            element2.Attributes["Pressure"].ConfigString = @"\\" + Constants.DATA_SERVER_NAME + @"\sinusoidu";
-            element2.Attributes["Level"].ConfigString = @"\\" + Constants.DATA_SERVER_NAME + @"\sinusoid";
+            element2.Attributes["Pressure"].ConfigString = @"\\" + Constants.PI_DATA_SERVER_NAME + @"\sinusoidu";
+            element2.Attributes["Level"].ConfigString = @"\\" + Constants.PI_DATA_SERVER_NAME + @"\sinusoid";
         }
 
         public void CreateSampleDatabaseForTests()

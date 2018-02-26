@@ -91,6 +91,7 @@
     <Compile Include="Api\TimeRulePlugInApiTests.cs" />
     <Compile Include="Api\UnitApiTests.cs" />
     <Compile Include="Api\UnitClassApiTests.cs" />
+    <Compile Include="Api\WebIdBuilderTests.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="PIWebApiClientGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

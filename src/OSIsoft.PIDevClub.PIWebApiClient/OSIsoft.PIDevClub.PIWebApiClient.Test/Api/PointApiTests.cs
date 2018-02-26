@@ -52,7 +52,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
 
         public void UpdatePIPointData()
         {
-            webId = client.Point.GetByPath(Constants.DATA_SERVER_PATH + @"\" + Constants.PIPOINT_CREATE_NAME).WebId;
+            webId = client.Point.GetByPath(Constants.PI_DATA_SERVER_PATH + @"\" + Constants.PIPOINT_CREATE_NAME).WebId;
             point = base.GetPIPoint(Constants.PIPOINT_CREATE_NAME);
         }
 
@@ -141,7 +141,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
         public void GetByPathTest()
         {
             // TODO uncomment below to test the method and replace null with proper value
-            string path = Constants.DATA_SERVER_PATH + @"\" + Constants.PIPOINT_CREATE_NAME;
+            string path = Constants.PI_DATA_SERVER_PATH + @"\" + Constants.PIPOINT_CREATE_NAME;
             string selectedFields = null;
             var response = instance.GetByPath(path, selectedFields);
             Assert.IsTrue(response.Name == Constants.PIPOINT_CREATE_NAME);
@@ -157,8 +157,8 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
             bool? asParallel = null;
             string includeMode = null;
             string selectedFields = null;
-            PIPoint piPoint1 = instance.GetByPath(Constants.DATA_SERVER_PATH + @"\" + Constants.PIPOINT_CREATE_NAME);
-            PIPoint piPoint2 = instance.GetByPath(Constants.DATA_SERVER_PATH + @"\sinusoidu");
+            PIPoint piPoint1 = instance.GetByPath(Constants.PI_DATA_SERVER_PATH + @"\" + Constants.PIPOINT_CREATE_NAME);
+            PIPoint piPoint2 = instance.GetByPath(Constants.PI_DATA_SERVER_PATH + @"\sinusoidu");
             List<string> webId = new List<string>();
 
             webId.Add(piPoint1.WebId);
@@ -169,8 +169,8 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
             Assert.IsTrue(response.Items[0].Object.WebId == piPoint1.WebId);
 
             List<string> path = new List<string>();
-            path.Add(Constants.DATA_SERVER_PATH + @"\" + Constants.PIPOINT_CREATE_NAME);
-            path.Add(Constants.DATA_SERVER_PATH + @"\sinusoid");
+            path.Add(Constants.PI_DATA_SERVER_PATH + @"\" + Constants.PIPOINT_CREATE_NAME);
+            path.Add(Constants.PI_DATA_SERVER_PATH + @"\sinusoid");
             var response2 = instance.GetMultiple(asParallel, includeMode, path, selectedFields, null);
             Assert.IsInstanceOf<PIItemsItemPoint>(response2, "response is PIItemsItemPoint");
             Assert.IsTrue(response2.Items.Count == 2);
@@ -187,7 +187,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test
         public void UpdateTest()
         {
             // TODO uncomment below to test the method and replace null with proper value
-            PIPoint modPoint = instance.GetByPath(Constants.DATA_SERVER_PATH + @"\" + Constants.PIPOINT_CREATE_NAME);
+            PIPoint modPoint = instance.GetByPath(Constants.PI_DATA_SERVER_PATH + @"\" + Constants.PIPOINT_CREATE_NAME);
             modPoint.Descriptor = "Updated descriptor yay!!!";
             modPoint.WebId = null;
             modPoint.Id = null;
