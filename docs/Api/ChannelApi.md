@@ -3,9 +3,9 @@
 Method | HTTP request | Description
 ------------ | ------------- | -------------
 [**Instances**](ChannelApi.md#instances) | **GET** /channels/instances | Retrieves a list of currently running channel instances.
-[**StartStream**](ChannelApi.md#startstream) | ------ | Retrieves continuous updates about a stream.
-[**StartStreamSet**](ChannelApi.md#startstreamset) | ------ | Retrieves continuous updates about a stream set.
-[**StartStreamSets**](ChannelApi.md#startstreamsets) | ------ | Retrieves continuous updates about multiple stream sets.
+[**StartStream**](ChannelApi.md#startstream) | WebSocket | Retrieves continuous updates about a stream.
+[**StartStreamSet**](ChannelApi.md#startstreamset) | WebSocket | Retrieves continuous updates about a stream set.
+[**StartStreamSets**](ChannelApi.md#startstreamsets) | WebSocket | Retrieves continuous updates about multiple stream sets.
 
 
 # **Instances**
