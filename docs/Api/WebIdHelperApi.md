@@ -1,7 +1,7 @@
 # WebApiHelper
 
 Method | Description
------------- | ------------- | -------------
+------------ | -------------
 [**GetWebIdInfo**](WebApiHelper.md#getwebidinfo) | Get WebID information.
 [**GenerateWebIdByPath**](WebApiHelper.md#generatewebidbypath) | Get a WebID using a path.
 
