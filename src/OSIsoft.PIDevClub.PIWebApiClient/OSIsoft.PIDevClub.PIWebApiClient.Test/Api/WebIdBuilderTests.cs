@@ -27,7 +27,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Test.Api
 {
     public class WebIdBuilderTests : CommonApi
     {
-        private WebIdHelper instance;
+        private IWebIdHelper instance;
 
 
         /// <summary>

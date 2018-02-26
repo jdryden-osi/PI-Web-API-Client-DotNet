@@ -314,7 +314,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			string url = this.ChannelsBaseUrl + "/streamsets/channel?";
 			foreach (string webId in webIds)
 			{
-				url = url + string.Format("webId ={0}&", webId);
+				url = url + string.Format("webId={0}&", webId);
 			}
 			url = url.Substring(0, url.Length - 1);
 			return RunClient(url, observer, cancellationToken);
