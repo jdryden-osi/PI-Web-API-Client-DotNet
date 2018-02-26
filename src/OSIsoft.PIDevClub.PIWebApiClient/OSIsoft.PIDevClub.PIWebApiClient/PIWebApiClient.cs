@@ -394,7 +394,8 @@ namespace OSIsoft.PIDevClub.PIWebApiClient
                 {
                     systemLanding = System.Landing();
                 }
-                if (systemLanding.ProductVersion != "1.10.0.475")
+                int piWebApiYearVersion = Convert.ToInt32(systemLanding.ProductTitle.Substring(11, 4));
+                if ((systemLanding.ProductVersion != "1.10.0.475") && (piWebApiYearVersion < 2018))
                 {
                     throw new WebIdException("This PI Web API version is not compatible with Web ID 2.0. Please update your PI Web API to 2017 R2 to use this feature.");
                 }

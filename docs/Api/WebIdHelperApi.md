@@ -3,7 +3,7 @@
 Method | Description
 ------------ | -------------
 [**GetWebIdInfo**](WebApiHelper.md#getwebidinfo) | Get WebID information.
-[**GenerateWebIdByPath**](WebApiHelper.md#generatewebidbypath) | Get a WebID using a path.
+[**GenerateWebIdByPath**](WebApiHelper.md#generatewebidbypath) | Generate a WebID on the client using the Path.
 
 
 
