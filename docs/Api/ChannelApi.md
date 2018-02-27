@@ -44,7 +44,7 @@ Name | Type | Description | Notes
 [[Back to top]](#) [[Back to API list]](../../DOCUMENTATION.md#documentation-for-api-endpoints) [[Back to Model list]](../../DOCUMENTATION.md#documentation-for-models) [[Back to DOCUMENTATION]](../../DOCUMENTATION.md)
 
 # **StartStreamSet**
-> Task StartStreamSet(string webId, IObserver<PIItemsStreamValues> observer, System.Threading.CancellationToken cancellationToken)
+> Task StartStreamSet(string webId, IObserver < PIItemsStreamValues >  observer, System.Threading.CancellationToken cancellationToken)
 
 Retrieves continuous updates about a stream set.
 
@@ -63,7 +63,7 @@ Name | Type | Description | Notes
 
 
 # **StartStreamSets**
-> Task StartStreamSets(List<string> webIds, IObserver<PIItemsStreamValues> observer, System.Threading.CancellationToken cancellationToken)
+> Task StartStreamSets(List<string> webIds, IObserver < PIItemsStreamValues >  observer, System.Threading.CancellationToken cancellationToken)
 
 Retrieves continuous updates about multiple streams.
 
