@@ -21,6 +21,7 @@ using OSIsoft.PIDevClub.PIWebApiClient.Model;
 using OSIsoft.PIDevClub.PIWebApiClient.WebID;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -32,7 +33,7 @@ namespace LibraryTest
         {
             //Create an instance of the PI Web API top level object.
             PIWebApiClient client = new PIWebApiClient("https://marc-web-sql.marc.net/piwebapi", true);
-
+           
             //Get the PI Data Archive object
             PIDataServer dataServer = client.DataServer.GetByPath("\\\\MARC-PI2016");
 
@@ -137,7 +138,7 @@ namespace LibraryTest
         }
 
         private static void ChannelsExamples(PIWebApiClient client, List<string> webIds)
-        { 
+        {
             //Example StartStream
             CancellationTokenSource cancellationSource1 = new CancellationTokenSource();
             IObserver<PIItemsStreamValues> observer1 = new CustomChannelObserver();
