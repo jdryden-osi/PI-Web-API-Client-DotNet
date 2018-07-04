@@ -15,10 +15,11 @@
 // ************************************************************************
 
 using System;
+using System.Threading;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Net.Http;
 using System.Linq;
-using RestSharp;
 using OSIsoft.PIDevClub.PIWebApiClient.Client;
 using OSIsoft.PIDevClub.PIWebApiClient.Model;
 
@@ -61,8 +62,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// 
 		/// </remarks>
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PILanding></returns>
-		System.Threading.Tasks.Task<PILanding> GetAsync();
+		System.Threading.Tasks.Task<PILanding> GetAsync(CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Get top level links for this PI System Web API instance.
@@ -71,8 +73,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// 
 		/// </remarks>
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PILanding>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PILanding>> GetAsyncWithHttpInfo();
+		System.Threading.Tasks.Task<ApiResponse<PILanding>> GetAsyncWithHttpInfo(CancellationToken cancellationToken = default(CancellationToken));
 
 		#endregion
 	}
@@ -82,11 +85,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		private OSIsoft.PIDevClub.PIWebApiClient.Client.ExceptionFactory _exceptionFactory = (name, response) => null;
 		public HomeApi(Configuration configuration = null)
 		{
-			if (configuration == null)
-				this.Configuration = Configuration.Default;
-			else
-				this.Configuration = configuration;
-
+			this.Configuration = configuration;
 			ExceptionFactory = OSIsoft.PIDevClub.PIWebApiClient.Client.Configuration.DefaultExceptionFactory;
 			if (Configuration.ApiClient.Configuration == null)
 			{
@@ -140,20 +139,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -164,7 +154,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PILanding>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PILanding)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PILanding)));
 		}
 
@@ -177,10 +167,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// 
 		/// </remarks>
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PILanding></returns>
-		public async System.Threading.Tasks.Task<PILanding> GetAsync()
+		public async System.Threading.Tasks.Task<PILanding> GetAsync(CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PILanding> localVarResponse = await GetAsyncWithHttpInfo();
+			ApiResponse<PILanding> localVarResponse = await GetAsyncWithHttpInfo(cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -191,8 +182,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// 
 		/// </remarks>
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PILanding>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PILanding>> GetAsyncWithHttpInfo()
+		public async System.Threading.Tasks.Task<ApiResponse<PILanding>> GetAsyncWithHttpInfo(CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			var localVarPath = "/";
@@ -200,20 +192,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -224,7 +207,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PILanding>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PILanding)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PILanding)));
 		}
 

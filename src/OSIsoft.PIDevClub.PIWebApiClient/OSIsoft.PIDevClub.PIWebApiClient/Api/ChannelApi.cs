@@ -15,12 +15,14 @@
 // ************************************************************************
 
 using System;
+using System.Threading;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Net.Http;
 using System.Linq;
-using RestSharp;
 using OSIsoft.PIDevClub.PIWebApiClient.Client;
 using OSIsoft.PIDevClub.PIWebApiClient.Model;
+using System.Threading.Tasks;
 
 namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 {
@@ -61,8 +63,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// 
 		/// </remarks>
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsChannelInstance></returns>
-		System.Threading.Tasks.Task<PIItemsChannelInstance> InstancesAsync();
+		System.Threading.Tasks.Task<PIItemsChannelInstance> InstancesAsync(CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Retrieves a list of currently running channel instances.
@@ -71,332 +74,280 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// 
 		/// </remarks>
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsChannelInstance>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsChannelInstance>> InstancesAsyncWithHttpInfo();
+		System.Threading.Tasks.Task<ApiResponse<PIItemsChannelInstance>> InstancesAsyncWithHttpInfo(CancellationToken cancellationToken = default(CancellationToken));
+        Task StartStream(string v, IObserver<PIItemsStreamValues> observer1, CancellationToken token);
+        Task StartStreamSet(string webId, IObserver<PIItemsStreamValues> observer2, CancellationToken token);
+        Task StartStreamSets(List<string> webIds, IObserver<PIItemsStreamValues> observer3, CancellationToken token);
 
+        #endregion
+    }
 
-		/// <summary>
-		/// Retrieves continuous updates about a stream. 
-		/// </summary>
-		/// <remarks>
-		/// 
-		/// </remarks>
-		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
-		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsChannelInstance>></returns>
-		/// 
-		System.Threading.Tasks.Task StartStream(string webId, IObserver<PIItemsStreamValues> observer, System.Threading.CancellationToken cancellationToken);
+    public class ChannelApi : IChannelApi
+    {
+        private OSIsoft.PIDevClub.PIWebApiClient.Client.ExceptionFactory _exceptionFactory = (name, response) => null;
+        public ChannelApi(Configuration configuration = null)
+        {
+            this.Configuration = configuration;
+            ExceptionFactory = OSIsoft.PIDevClub.PIWebApiClient.Client.Configuration.DefaultExceptionFactory;
+            if (Configuration.ApiClient.Configuration == null)
+            {
+                this.Configuration.ApiClient.Configuration = this.Configuration;
+            }
+        }
 
+        public Configuration Configuration { get; set; }
 
-		/// <summary>
-		/// Retrieves continuous updates about a stream set. 
-		/// </summary>
-		/// <remarks>
-		/// 
-		/// </remarks>
-		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
-		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsChannelInstance>></returns>
-		/// 
-		System.Threading.Tasks.Task StartStreamSet(string webId, IObserver<PIItemsStreamValues> observer, System.Threading.CancellationToken cancellationToken);
-		
-		
-		/// <summary>
-		/// Retrieves continuous updates about multiple streams.
-		/// </summary>
-		/// <remarks>
-		/// 
-		/// </remarks>
-		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
-		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsChannelInstance>></returns>
-		/// 
-		System.Threading.Tasks.Task StartStreamSets(List<string> webIds, IObserver<PIItemsStreamValues> observer, System.Threading.CancellationToken cancellationToken);
-		
-		#endregion
-	}
+        public OSIsoft.PIDevClub.PIWebApiClient.Client.ExceptionFactory ExceptionFactory
+        {
+            get
+            {
+                if (_exceptionFactory != null && _exceptionFactory.GetInvocationList().Length > 1)
+                {
+                    throw new InvalidOperationException("Multicast delegate for ExceptionFactory is unsupported.");
+                }
+                return _exceptionFactory;
+            }
+            set { _exceptionFactory = value; }
+        }
 
-	public class ChannelApi : IChannelApi
-	{
-		private OSIsoft.PIDevClub.PIWebApiClient.Client.ExceptionFactory _exceptionFactory = (name, response) => null;
-		public ChannelApi(Configuration configuration = null)
-		{
-			if (configuration == null)
-				this.Configuration = Configuration.Default;
-			else
-				this.Configuration = configuration;
+        #region Synchronous Operations
+        /// <summary>
+        /// Retrieves a list of currently running channel instances.
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <returns>PIItemsChannelInstance</returns>
+        public PIItemsChannelInstance Instances()
+        {
+            ApiResponse<PIItemsChannelInstance> localVarResponse = InstancesWithHttpInfo();
+            return localVarResponse.Data;
+        }
 
-			ExceptionFactory = OSIsoft.PIDevClub.PIWebApiClient.Client.Configuration.DefaultExceptionFactory;
-			if (Configuration.ApiClient.Configuration == null)
-			{
-				this.Configuration.ApiClient.Configuration = this.Configuration;
-			}
-		}
+        /// <summary>
+        /// Retrieves a list of currently running channel instances.
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <returns>ApiResponse<PIItemsChannelInstance></returns>
+        public ApiResponse<PIItemsChannelInstance> InstancesWithHttpInfo()
+        {
 
-		public Configuration Configuration { get; set; }
+            var localVarPath = "/channels/instances";
+            var localVarPathParams = new Dictionary<String, String>();
+            var localVarQueryParams = new CustomDictionaryForQueryString();
+            var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
+            var localVarFormParams = new Dictionary<String, String>();
+            string localVarPostBody = null;
 
-		public OSIsoft.PIDevClub.PIWebApiClient.Client.ExceptionFactory ExceptionFactory
-		{
-			get
-			{
-				if (_exceptionFactory != null && _exceptionFactory.GetInvocationList().Length > 1)
-				{
-					throw new InvalidOperationException("Multicast delegate for ExceptionFactory is unsupported.");
-				}
-				return _exceptionFactory;
-			}
-			set { _exceptionFactory = value; }
-		}
+            IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
+                new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams,
+                localVarPathParams);
 
-		#region Synchronous Operations
-		/// <summary>
-		/// Retrieves a list of currently running channel instances.
-		/// </summary>
-		/// <remarks>
-		/// 
-		/// </remarks>
-		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
-		/// <returns>PIItemsChannelInstance</returns>
-		public PIItemsChannelInstance Instances()
-		{
-			ApiResponse<PIItemsChannelInstance> localVarResponse = InstancesWithHttpInfo();
-			return localVarResponse.Data;
-		}
+            int localVarStatusCode = (int)localVarResponse.StatusCode;
 
-		/// <summary>
-		/// Retrieves a list of currently running channel instances.
-		/// </summary>
-		/// <remarks>
-		/// 
-		/// </remarks>
-		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
-		/// <returns>ApiResponse<PIItemsChannelInstance></returns>
-		public ApiResponse<PIItemsChannelInstance> InstancesWithHttpInfo()
-		{
+            if (ExceptionFactory != null)
+            {
+                Exception exception = ExceptionFactory("InstancesWithHttpInfo", localVarResponse);
+                if (exception != null) throw exception;
+            }
 
-			var localVarPath = "/channels/instances";
-			var localVarPathParams = new Dictionary<String, String>();
-			var localVarQueryParams = new CustomDictionaryForQueryString();
-			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
-			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+            return new ApiResponse<PIItemsChannelInstance>(localVarStatusCode,
+                localVarResponse.Headers,
+                (PIItemsChannelInstance)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsChannelInstance)));
+        }
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+        #endregion
+        #region Asynchronous Operations
+        /// <summary>
+        /// Retrieves a list of currently running channel instances.
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
+        /// <returns>async System.Threading.Tasks.Task<PIItemsChannelInstance></returns>
+        public async System.Threading.Tasks.Task<PIItemsChannelInstance> InstancesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            ApiResponse<PIItemsChannelInstance> localVarResponse = await InstancesAsyncWithHttpInfo(cancellationToken);
+            return localVarResponse.Data;
+        }
 
-			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+        /// <summary>
+        /// Retrieves a list of currently running channel instances.
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
+        /// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsChannelInstance>></returns>
+        public async System.Threading.Tasks.Task<ApiResponse<PIItemsChannelInstance>> InstancesAsyncWithHttpInfo(CancellationToken cancellationToken = default(CancellationToken))
+        {
 
-			int localVarStatusCode = (int)localVarResponse.StatusCode;
+            var localVarPath = "/channels/instances";
+            var localVarPathParams = new Dictionary<String, String>();
+            var localVarQueryParams = new CustomDictionaryForQueryString();
+            var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
+            var localVarFormParams = new Dictionary<String, String>();
+            string localVarPostBody = null;
 
-			if (ExceptionFactory != null)
-			{
-				Exception exception = ExceptionFactory("InstancesWithHttpInfo", localVarResponse);
-				if (exception != null) throw exception;
-			}
+            IRestResponse localVarResponse = (IRestResponse)await Configuration.ApiClient.CallApiAsync(localVarPath,
+                new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams,
+                localVarPathParams, cancellationToken);
 
-			return new ApiResponse<PIItemsChannelInstance>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
-				(PIItemsChannelInstance)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsChannelInstance)));
-		}
+            int localVarStatusCode = (int)localVarResponse.StatusCode;
 
-		#endregion
-		#region Asynchronous Operations
-		/// <summary>
-		/// Retrieves a list of currently running channel instances.
-		/// </summary>
-		/// <remarks>
-		/// 
-		/// </remarks>
-		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
-		/// <returns>async System.Threading.Tasks.Task<PIItemsChannelInstance></returns>
-		public async System.Threading.Tasks.Task<PIItemsChannelInstance> InstancesAsync()
-		{
-			ApiResponse<PIItemsChannelInstance> localVarResponse = await InstancesAsyncWithHttpInfo();
-			return localVarResponse.Data;
-		}
+            if (ExceptionFactory != null)
+            {
+                Exception exception = ExceptionFactory("InstancesAsyncWithHttpInfo", localVarResponse);
+                if (exception != null) throw exception;
+            }
 
-		/// <summary>
-		/// Retrieves a list of currently running channel instances.
-		/// </summary>
-		/// <remarks>
-		/// 
-		/// </remarks>
-		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
-		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsChannelInstance>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsChannelInstance>> InstancesAsyncWithHttpInfo()
-		{
+            return new ApiResponse<PIItemsChannelInstance>(localVarStatusCode,
+                localVarResponse.Headers,
+                (PIItemsChannelInstance)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsChannelInstance)));
+        }
 
-			var localVarPath = "/channels/instances";
-			var localVarPathParams = new Dictionary<String, String>();
-			var localVarQueryParams = new CustomDictionaryForQueryString();
-			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
-			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+        public string ChannelsBaseUrl
+        {
+            get
+            {
+                return this.Configuration.ApiClient.BaseUrl.ToString().Replace("https", "wss");
+            }
+        }
+        /// <summary>
+        /// Retrieves continuous updates about a stream.
+        /// </summary>
+        /// <remarks>
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+        /// </remarks>
+        /// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsChannelInstance>></returns>
 
-			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+        public System.Threading.Tasks.Task StartStream(string webId, IObserver<PIItemsStreamValues> observer, System.Threading.CancellationToken cancellationToken)
+        {
+            string url = string.Format(this.ChannelsBaseUrl + "/streams/{0}/channel", webId);
+            return RunClient(url, observer, cancellationToken);
+        }
+        /// <summary>
+        /// Retrieves continuous updates about a stream set.
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsChannelInstance>></returns>
 
-			int localVarStatusCode = (int)localVarResponse.StatusCode;
+        public System.Threading.Tasks.Task StartStreamSet(string webId, IObserver<PIItemsStreamValues> observer, System.Threading.CancellationToken cancellationToken)
+        {
+            string url = string.Format(this.ChannelsBaseUrl + "/streamsets/{0}/channel", webId);
+            return RunClient(url, observer, cancellationToken);
+        }
 
-			if (ExceptionFactory != null)
-			{
-				Exception exception = ExceptionFactory("InstancesAsyncWithHttpInfo", localVarResponse);
-				if (exception != null) throw exception;
-			}
+        /// <summary>
+        /// Retrieves continuous updates about multiple streams.
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsChannelInstance>></returns>
+        /// 
+        public System.Threading.Tasks.Task StartStreamSets(List<string> webIds, IObserver<PIItemsStreamValues> observer, System.Threading.CancellationToken cancellationToken)
+        {
+            string url = this.ChannelsBaseUrl + "/streamsets/channel?";
+            foreach (string webId in webIds)
+            {
+                url = url + string.Format("webId={0}&", webId);
+            }
+            url = url.Substring(0, url.Length - 1);
+            return RunClient(url, observer, cancellationToken);
+        }
 
-			return new ApiResponse<PIItemsChannelInstance>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
-				(PIItemsChannelInstance)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsChannelInstance)));
-		}
+        private async System.Threading.Tasks.Task RunClient(string url, IObserver<PIItemsStreamValues> observer, System.Threading.CancellationToken cancellationToken)
+        {
+            Uri uri = new Uri(url);
+            System.Net.WebSockets.WebSocketReceiveResult receiveResult;
+            byte[] receiveBuffer = new byte[65536];
+            ArraySegment<byte> receiveSegment = new ArraySegment<byte>(receiveBuffer);
 
-		public string ChannelsBaseUrl
-		{
-			get
-			{
-				return this.Configuration.ApiClient.RestClient.BaseUrl.ToString().Replace("https", "wss");
-			}
-		}
-		/// <summary>
-		/// Retrieves continuous updates about a stream.
-		/// </summary>
-		/// <remarks>
+            using (System.Net.WebSockets.ClientWebSocket webSocket = new System.Net.WebSockets.ClientWebSocket())
+            {
+                if ((this.Configuration.ApiClient.Username == null) || (this.Configuration.ApiClient.Password == null))
+                {
+                    webSocket.Options.UseDefaultCredentials = true;
+                }
+                else
+                {
+                    webSocket.Options.Credentials = new System.Net.NetworkCredential(this.Configuration.ApiClient.Username, this.Configuration.ApiClient.Password);
+                }
 
-		/// </remarks>
-		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
-		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsChannelInstance>></returns>
+                try
+                {
+                    await webSocket.ConnectAsync(uri, System.Threading.CancellationToken.None);
+                }
+                catch (System.Net.WebSockets.WebSocketException e)
+                {
+                    Console.WriteLine("Could not connect to server.");
+                    observer.OnError(e);
+                    return;
+                }
+                while (true)
+                {
+                    try
+                    {
+                        receiveResult = await webSocket.ReceiveAsync(receiveSegment, cancellationToken);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        observer.OnCompleted();
+                        break;
+                    }
 
-		public System.Threading.Tasks.Task StartStream(string webId, IObserver<PIItemsStreamValues> observer, System.Threading.CancellationToken cancellationToken)
-		{
-			string url = string.Format(this.ChannelsBaseUrl + "/streams/{0}/channel", webId);
-			return RunClient(url, observer, cancellationToken);
-		}
-		/// <summary>
-		/// Retrieves continuous updates about a stream set.
-		/// </summary>
-		/// <remarks>
-		/// 
-		/// </remarks>
-		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
-		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsChannelInstance>></returns>
-		
-		public System.Threading.Tasks.Task StartStreamSet(string webId, IObserver<PIItemsStreamValues> observer, System.Threading.CancellationToken cancellationToken)
-		{
-			string url = string.Format(this.ChannelsBaseUrl + "/streamsets/{0}/channel", webId);
-			return RunClient(url, observer, cancellationToken);
-		}
-		
-		/// <summary>
-		/// Retrieves continuous updates about multiple streams.
-		/// </summary>
-		/// <remarks>
-		/// 
-		/// </remarks>
-		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
-		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsChannelInstance>></returns>
-		/// 
-		public System.Threading.Tasks.Task StartStreamSets(List<string> webIds, IObserver<PIItemsStreamValues> observer, System.Threading.CancellationToken cancellationToken)
-		{
-			string url = this.ChannelsBaseUrl + "/streamsets/channel?";
-			foreach (string webId in webIds)
-			{
-				url = url + string.Format("webId={0}&", webId);
-			}
-			url = url.Substring(0, url.Length - 1);
-			return RunClient(url, observer, cancellationToken);
-		}
-		
-		private async System.Threading.Tasks.Task RunClient(string url, IObserver<PIItemsStreamValues> observer, System.Threading.CancellationToken cancellationToken)
-		{
-			Uri uri = new Uri(url);
-			System.Net.WebSockets.WebSocketReceiveResult receiveResult;
-			byte[] receiveBuffer = new byte[65536];
-			ArraySegment<byte> receiveSegment = new ArraySegment<byte>(receiveBuffer);
-			
-			using (System.Net.WebSockets.ClientWebSocket webSocket = new System.Net.WebSockets.ClientWebSocket())
-			{
-				if ((this.Configuration.Username == null) || (this.Configuration.Password == null))
-				{
-					webSocket.Options.UseDefaultCredentials = true;
-				}
-				else
-				{
-					webSocket.Options.Credentials = new System.Net.NetworkCredential(this.Configuration.Username, this.Configuration.Password);
-				}
-		
-				try
-				{
-					await webSocket.ConnectAsync(uri, System.Threading.CancellationToken.None);
-				}
-				catch (System.Net.WebSockets.WebSocketException e)
-				{
-					Console.WriteLine("Could not connect to server.");
-					observer.OnError(e);
-					return;
-				}
-				while (true)
-				{
-					try
-					{
-						receiveResult = await webSocket.ReceiveAsync(receiveSegment, cancellationToken);
-					}
-					catch (OperationCanceledException)
-					{
-						observer.OnCompleted();
-						break;
-					}
-			
-					if (receiveResult.MessageType != System.Net.WebSockets.WebSocketMessageType.Text)
-					{
-						await webSocket.CloseAsync(
-							System.Net.WebSockets.WebSocketCloseStatus.InvalidMessageType,
-							"Message type is not text.",
-							System.Threading.CancellationToken.None);
-						observer.OnError(new Exception("Message type is not text."));
-						return;
-					}
-					else if (receiveResult.Count > receiveBuffer.Length)
-					{
-			
-						await webSocket.CloseAsync(
-							System.Net.WebSockets.WebSocketCloseStatus.InvalidPayloadData,
-							"Message is too long.",
-							System.Threading.CancellationToken.None);
-						observer.OnError(new Exception("Message is too long."));
-						return;
-					}
-					try
-					{
-						string message = System.Text.Encoding.UTF8.GetString(receiveBuffer, 0, receiveResult.Count);
-						PIItemsStreamValues values = Newtonsoft.Json.JsonConvert.DeserializeObject<PIItemsStreamValues>(message);
-						observer.OnNext(values);
-					}
-					catch (Exception e)
-					{
-					observer.OnError(e);
-					}
-				}
-				await webSocket.CloseAsync(
-				System.Net.WebSockets.WebSocketCloseStatus.NormalClosure,
-				"Closing connection.",
-					System.Threading.CancellationToken.None);
-					observer.OnCompleted();
-			}
-		}
-		#endregion
-	}
+                    if (receiveResult.MessageType != System.Net.WebSockets.WebSocketMessageType.Text)
+                    {
+                        await webSocket.CloseAsync(
+                            System.Net.WebSockets.WebSocketCloseStatus.InvalidMessageType,
+                            "Message type is not text.",
+                            System.Threading.CancellationToken.None);
+                        observer.OnError(new Exception("Message type is not text."));
+                        return;
+                    }
+                    else if (receiveResult.Count > receiveBuffer.Length)
+                    {
+
+                        await webSocket.CloseAsync(
+                            System.Net.WebSockets.WebSocketCloseStatus.InvalidPayloadData,
+                            "Message is too long.",
+                            System.Threading.CancellationToken.None);
+                        observer.OnError(new Exception("Message is too long."));
+                        return;
+                    }
+                    try
+                    {
+                        string message = System.Text.Encoding.UTF8.GetString(receiveBuffer, 0, receiveResult.Count);
+                        PIItemsStreamValues values = Newtonsoft.Json.JsonConvert.DeserializeObject<PIItemsStreamValues>(message);
+                        observer.OnNext(values);
+                    }
+                    catch (Exception e)
+                    {
+                        observer.OnError(e);
+                    }
+                }
+                await webSocket.CloseAsync(
+                System.Net.WebSockets.WebSocketCloseStatus.NormalClosure,
+                "Closing connection.",
+                    System.Threading.CancellationToken.None);
+                observer.OnCompleted();
+            }
+        }
+        #endregion
+    }
 }

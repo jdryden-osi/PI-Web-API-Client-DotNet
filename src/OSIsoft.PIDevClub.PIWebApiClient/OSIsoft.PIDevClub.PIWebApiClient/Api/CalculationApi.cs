@@ -15,10 +15,11 @@
 // ************************************************************************
 
 using System;
+using System.Threading;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Net.Http;
 using System.Linq;
-using RestSharp;
 using OSIsoft.PIDevClub.PIWebApiClient.Client;
 using OSIsoft.PIDevClub.PIWebApiClient.Model;
 
@@ -181,8 +182,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="webId">The ID of the target object of the expression. A target object can be a Data Server, a database, an element, an event frame or an attribute. References to attributes or points are based on the target. If this parameter is not provided, the target object is set to null.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PITimedValues></returns>
-		System.Threading.Tasks.Task<PITimedValues> GetAtIntervalsAsync(string endTime = null, string expression = null, string sampleInterval = null, string selectedFields = null, string startTime = null, string webId = null);
+		System.Threading.Tasks.Task<PITimedValues> GetAtIntervalsAsync(string endTime = null, string expression = null, string sampleInterval = null, string selectedFields = null, string startTime = null, string webId = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns results of evaluating the expression over the time range from the start time to the end time at a defined interval.
@@ -197,8 +199,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="webId">The ID of the target object of the expression. A target object can be a Data Server, a database, an element, an event frame or an attribute. References to attributes or points are based on the target. If this parameter is not provided, the target object is set to null.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PITimedValues>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PITimedValues>> GetAtIntervalsAsyncWithHttpInfo(string endTime = null, string expression = null, string sampleInterval = null, string selectedFields = null, string startTime = null, string webId = null);
+		System.Threading.Tasks.Task<ApiResponse<PITimedValues>> GetAtIntervalsAsyncWithHttpInfo(string endTime = null, string expression = null, string sampleInterval = null, string selectedFields = null, string startTime = null, string webId = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns the result of evaluating the expression at each point in time over the time range from the start time to the end time where a recorded value exists for a member of the expression.
@@ -212,8 +215,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="webId">The ID of the target object of the expression. A target object can be a Data Server, a database, an element, an event frame or an attribute. References to attributes or points are based on the target. If this parameter is not provided, the target object is set to null.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PITimedValues></returns>
-		System.Threading.Tasks.Task<PITimedValues> GetAtRecordedAsync(string endTime = null, string expression = null, string selectedFields = null, string startTime = null, string webId = null);
+		System.Threading.Tasks.Task<PITimedValues> GetAtRecordedAsync(string endTime = null, string expression = null, string selectedFields = null, string startTime = null, string webId = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns the result of evaluating the expression at each point in time over the time range from the start time to the end time where a recorded value exists for a member of the expression.
@@ -227,8 +231,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="webId">The ID of the target object of the expression. A target object can be a Data Server, a database, an element, an event frame or an attribute. References to attributes or points are based on the target. If this parameter is not provided, the target object is set to null.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PITimedValues>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PITimedValues>> GetAtRecordedAsyncWithHttpInfo(string endTime = null, string expression = null, string selectedFields = null, string startTime = null, string webId = null);
+		System.Threading.Tasks.Task<ApiResponse<PITimedValues>> GetAtRecordedAsyncWithHttpInfo(string endTime = null, string expression = null, string selectedFields = null, string startTime = null, string webId = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns the result of evaluating the expression over the time range from the start time to the end time. The time range is first divided into a number of summary intervals. Then the calculation is performed for the specified summaries over each interval.
@@ -248,8 +253,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="summaryType">Specifies the kinds of summaries to produce over the range. The default is 'Total'. Multiple summary types may be specified by using multiple instances of summaryType.</param>
 		/// <param name="timeType">Specifies how to calculate the timestamp for each interval. The default is 'Auto'.</param>
 		/// <param name="webId">The ID of the target object of the expression. A target object can be a Data Server, a database, an element, an event frame or an attribute. References to attributes or points are based on the target. If this parameter is not provided, the target object is set to null.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsSummaryValue></returns>
-		System.Threading.Tasks.Task<PIItemsSummaryValue> GetSummaryAsync(string calculationBasis = null, string endTime = null, string expression = null, string sampleInterval = null, string sampleType = null, string selectedFields = null, string startTime = null, string summaryDuration = null, List<string> summaryType = null, string timeType = null, string webId = null);
+		System.Threading.Tasks.Task<PIItemsSummaryValue> GetSummaryAsync(string calculationBasis = null, string endTime = null, string expression = null, string sampleInterval = null, string sampleType = null, string selectedFields = null, string startTime = null, string summaryDuration = null, List<string> summaryType = null, string timeType = null, string webId = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns the result of evaluating the expression over the time range from the start time to the end time. The time range is first divided into a number of summary intervals. Then the calculation is performed for the specified summaries over each interval.
@@ -269,8 +275,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="summaryType">Specifies the kinds of summaries to produce over the range. The default is 'Total'. Multiple summary types may be specified by using multiple instances of summaryType.</param>
 		/// <param name="timeType">Specifies how to calculate the timestamp for each interval. The default is 'Auto'.</param>
 		/// <param name="webId">The ID of the target object of the expression. A target object can be a Data Server, a database, an element, an event frame or an attribute. References to attributes or points are based on the target. If this parameter is not provided, the target object is set to null.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsSummaryValue>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsSummaryValue>> GetSummaryAsyncWithHttpInfo(string calculationBasis = null, string endTime = null, string expression = null, string sampleInterval = null, string sampleType = null, string selectedFields = null, string startTime = null, string summaryDuration = null, List<string> summaryType = null, string timeType = null, string webId = null);
+		System.Threading.Tasks.Task<ApiResponse<PIItemsSummaryValue>> GetSummaryAsyncWithHttpInfo(string calculationBasis = null, string endTime = null, string expression = null, string sampleInterval = null, string sampleType = null, string selectedFields = null, string startTime = null, string summaryDuration = null, List<string> summaryType = null, string timeType = null, string webId = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns the result of evaluating the expression at the specified timestamps.
@@ -284,8 +291,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'.</param>
 		/// <param name="time">A list of timestamps at which to calculate the expression.</param>
 		/// <param name="webId">The ID of the target object of the expression. A target object can be a Data Server, a database, an element, an event frame or an attribute. References to attributes or points are based on the target. If this parameter is not provided, the target object is set to null.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PITimedValues></returns>
-		System.Threading.Tasks.Task<PITimedValues> GetAtTimesAsync(string expression = null, string selectedFields = null, string sortOrder = null, List<string> time = null, string webId = null);
+		System.Threading.Tasks.Task<PITimedValues> GetAtTimesAsync(string expression = null, string selectedFields = null, string sortOrder = null, List<string> time = null, string webId = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns the result of evaluating the expression at the specified timestamps.
@@ -299,8 +307,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'.</param>
 		/// <param name="time">A list of timestamps at which to calculate the expression.</param>
 		/// <param name="webId">The ID of the target object of the expression. A target object can be a Data Server, a database, an element, an event frame or an attribute. References to attributes or points are based on the target. If this parameter is not provided, the target object is set to null.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PITimedValues>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PITimedValues>> GetAtTimesAsyncWithHttpInfo(string expression = null, string selectedFields = null, string sortOrder = null, List<string> time = null, string webId = null);
+		System.Threading.Tasks.Task<ApiResponse<PITimedValues>> GetAtTimesAsyncWithHttpInfo(string expression = null, string selectedFields = null, string sortOrder = null, List<string> time = null, string webId = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		#endregion
 	}
@@ -310,11 +319,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		private OSIsoft.PIDevClub.PIWebApiClient.Client.ExceptionFactory _exceptionFactory = (name, response) => null;
 		public CalculationApi(Configuration configuration = null)
 		{
-			if (configuration == null)
-				this.Configuration = Configuration.Default;
-			else
-				this.Configuration = configuration;
-
+			this.Configuration = configuration;
 			ExceptionFactory = OSIsoft.PIDevClub.PIWebApiClient.Client.Configuration.DefaultExceptionFactory;
 			if (Configuration.ApiClient.Configuration == null)
 			{
@@ -380,26 +385,17 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (endTime!= null) localVarQueryParams.Add("endTime", Configuration.ApiClient.ParameterToString(endTime));
-			if (expression!= null) localVarQueryParams.Add("expression", Configuration.ApiClient.ParameterToString(expression));
-			if (sampleInterval!= null) localVarQueryParams.Add("sampleInterval", Configuration.ApiClient.ParameterToString(sampleInterval));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (startTime!= null) localVarQueryParams.Add("startTime", Configuration.ApiClient.ParameterToString(startTime));
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
+			if (endTime!= null) localVarQueryParams.Add("endTime", endTime, false);
+			if (expression!= null) localVarQueryParams.Add("expression", expression, false);
+			if (sampleInterval!= null) localVarQueryParams.Add("sampleInterval", sampleInterval, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (startTime!= null) localVarQueryParams.Add("startTime", startTime, false);
+			if (webId!= null) localVarQueryParams.Add("webId", webId, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -410,7 +406,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PITimedValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PITimedValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PITimedValues)));
 		}
 
@@ -454,25 +450,16 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (endTime!= null) localVarQueryParams.Add("endTime", Configuration.ApiClient.ParameterToString(endTime));
-			if (expression!= null) localVarQueryParams.Add("expression", Configuration.ApiClient.ParameterToString(expression));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (startTime!= null) localVarQueryParams.Add("startTime", Configuration.ApiClient.ParameterToString(startTime));
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
+			if (endTime!= null) localVarQueryParams.Add("endTime", endTime, false);
+			if (expression!= null) localVarQueryParams.Add("expression", expression, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (startTime!= null) localVarQueryParams.Add("startTime", startTime, false);
+			if (webId!= null) localVarQueryParams.Add("webId", webId, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -483,7 +470,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PITimedValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PITimedValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PITimedValues)));
 		}
 
@@ -539,31 +526,22 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (calculationBasis!= null) localVarQueryParams.Add("calculationBasis", Configuration.ApiClient.ParameterToString(calculationBasis));
-			if (endTime!= null) localVarQueryParams.Add("endTime", Configuration.ApiClient.ParameterToString(endTime));
-			if (expression!= null) localVarQueryParams.Add("expression", Configuration.ApiClient.ParameterToString(expression));
-			if (sampleInterval!= null) localVarQueryParams.Add("sampleInterval", Configuration.ApiClient.ParameterToString(sampleInterval));
-			if (sampleType!= null) localVarQueryParams.Add("sampleType", Configuration.ApiClient.ParameterToString(sampleType));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (startTime!= null) localVarQueryParams.Add("startTime", Configuration.ApiClient.ParameterToString(startTime));
-			if (summaryDuration!= null) localVarQueryParams.Add("summaryDuration", Configuration.ApiClient.ParameterToString(summaryDuration));
-			if (summaryType!= null) localVarQueryParams.Add("summaryType", Configuration.ApiClient.ParameterToString(summaryType));
-			if (timeType!= null) localVarQueryParams.Add("timeType", Configuration.ApiClient.ParameterToString(timeType));
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
+			if (calculationBasis!= null) localVarQueryParams.Add("calculationBasis", calculationBasis, false);
+			if (endTime!= null) localVarQueryParams.Add("endTime", endTime, false);
+			if (expression!= null) localVarQueryParams.Add("expression", expression, false);
+			if (sampleInterval!= null) localVarQueryParams.Add("sampleInterval", sampleInterval, false);
+			if (sampleType!= null) localVarQueryParams.Add("sampleType", sampleType, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (startTime!= null) localVarQueryParams.Add("startTime", startTime, false);
+			if (summaryDuration!= null) localVarQueryParams.Add("summaryDuration", summaryDuration, false);
+			if (summaryType!= null) localVarQueryParams.Add("summaryType", summaryType, true);
+			if (timeType!= null) localVarQueryParams.Add("timeType", timeType, false);
+			if (webId!= null) localVarQueryParams.Add("webId", webId, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -574,7 +552,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsSummaryValue>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsSummaryValue)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsSummaryValue)));
 		}
 
@@ -618,25 +596,16 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (expression!= null) localVarQueryParams.Add("expression", Configuration.ApiClient.ParameterToString(expression));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (time!= null) localVarQueryParams.Add("time", Configuration.ApiClient.ParameterToString(time));
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
+			if (expression!= null) localVarQueryParams.Add("expression", expression, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (time!= null) localVarQueryParams.Add("time", time, true);
+			if (webId!= null) localVarQueryParams.Add("webId", webId, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -647,7 +616,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PITimedValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PITimedValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PITimedValues)));
 		}
 
@@ -666,10 +635,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="webId">The ID of the target object of the expression. A target object can be a Data Server, a database, an element, an event frame or an attribute. References to attributes or points are based on the target. If this parameter is not provided, the target object is set to null.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PITimedValues></returns>
-		public async System.Threading.Tasks.Task<PITimedValues> GetAtIntervalsAsync(string endTime = null, string expression = null, string sampleInterval = null, string selectedFields = null, string startTime = null, string webId = null)
+		public async System.Threading.Tasks.Task<PITimedValues> GetAtIntervalsAsync(string endTime = null, string expression = null, string sampleInterval = null, string selectedFields = null, string startTime = null, string webId = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PITimedValues> localVarResponse = await GetAtIntervalsAsyncWithHttpInfo(endTime, expression, sampleInterval, selectedFields, startTime, webId);
+			ApiResponse<PITimedValues> localVarResponse = await GetAtIntervalsAsyncWithHttpInfo(endTime, expression, sampleInterval, selectedFields, startTime, webId, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -686,8 +656,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="webId">The ID of the target object of the expression. A target object can be a Data Server, a database, an element, an event frame or an attribute. References to attributes or points are based on the target. If this parameter is not provided, the target object is set to null.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PITimedValues>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PITimedValues>> GetAtIntervalsAsyncWithHttpInfo(string endTime = null, string expression = null, string sampleInterval = null, string selectedFields = null, string startTime = null, string webId = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PITimedValues>> GetAtIntervalsAsyncWithHttpInfo(string endTime = null, string expression = null, string sampleInterval = null, string selectedFields = null, string startTime = null, string webId = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			var localVarPath = "/calculation/intervals";
@@ -695,26 +666,17 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (endTime!= null) localVarQueryParams.Add("endTime", Configuration.ApiClient.ParameterToString(endTime));
-			if (expression!= null) localVarQueryParams.Add("expression", Configuration.ApiClient.ParameterToString(expression));
-			if (sampleInterval!= null) localVarQueryParams.Add("sampleInterval", Configuration.ApiClient.ParameterToString(sampleInterval));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (startTime!= null) localVarQueryParams.Add("startTime", Configuration.ApiClient.ParameterToString(startTime));
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
+			if (endTime!= null) localVarQueryParams.Add("endTime", endTime, false);
+			if (expression!= null) localVarQueryParams.Add("expression", expression, false);
+			if (sampleInterval!= null) localVarQueryParams.Add("sampleInterval", sampleInterval, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (startTime!= null) localVarQueryParams.Add("startTime", startTime, false);
+			if (webId!= null) localVarQueryParams.Add("webId", webId, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -725,7 +687,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PITimedValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PITimedValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PITimedValues)));
 		}
 
@@ -741,10 +703,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="webId">The ID of the target object of the expression. A target object can be a Data Server, a database, an element, an event frame or an attribute. References to attributes or points are based on the target. If this parameter is not provided, the target object is set to null.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PITimedValues></returns>
-		public async System.Threading.Tasks.Task<PITimedValues> GetAtRecordedAsync(string endTime = null, string expression = null, string selectedFields = null, string startTime = null, string webId = null)
+		public async System.Threading.Tasks.Task<PITimedValues> GetAtRecordedAsync(string endTime = null, string expression = null, string selectedFields = null, string startTime = null, string webId = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PITimedValues> localVarResponse = await GetAtRecordedAsyncWithHttpInfo(endTime, expression, selectedFields, startTime, webId);
+			ApiResponse<PITimedValues> localVarResponse = await GetAtRecordedAsyncWithHttpInfo(endTime, expression, selectedFields, startTime, webId, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -760,8 +723,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="webId">The ID of the target object of the expression. A target object can be a Data Server, a database, an element, an event frame or an attribute. References to attributes or points are based on the target. If this parameter is not provided, the target object is set to null.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PITimedValues>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PITimedValues>> GetAtRecordedAsyncWithHttpInfo(string endTime = null, string expression = null, string selectedFields = null, string startTime = null, string webId = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PITimedValues>> GetAtRecordedAsyncWithHttpInfo(string endTime = null, string expression = null, string selectedFields = null, string startTime = null, string webId = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			var localVarPath = "/calculation/recorded";
@@ -769,25 +733,16 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (endTime!= null) localVarQueryParams.Add("endTime", Configuration.ApiClient.ParameterToString(endTime));
-			if (expression!= null) localVarQueryParams.Add("expression", Configuration.ApiClient.ParameterToString(expression));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (startTime!= null) localVarQueryParams.Add("startTime", Configuration.ApiClient.ParameterToString(startTime));
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
+			if (endTime!= null) localVarQueryParams.Add("endTime", endTime, false);
+			if (expression!= null) localVarQueryParams.Add("expression", expression, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (startTime!= null) localVarQueryParams.Add("startTime", startTime, false);
+			if (webId!= null) localVarQueryParams.Add("webId", webId, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -798,7 +753,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PITimedValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PITimedValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PITimedValues)));
 		}
 
@@ -820,10 +775,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="summaryType">Specifies the kinds of summaries to produce over the range. The default is 'Total'. Multiple summary types may be specified by using multiple instances of summaryType.</param>
 		/// <param name="timeType">Specifies how to calculate the timestamp for each interval. The default is 'Auto'.</param>
 		/// <param name="webId">The ID of the target object of the expression. A target object can be a Data Server, a database, an element, an event frame or an attribute. References to attributes or points are based on the target. If this parameter is not provided, the target object is set to null.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsSummaryValue></returns>
-		public async System.Threading.Tasks.Task<PIItemsSummaryValue> GetSummaryAsync(string calculationBasis = null, string endTime = null, string expression = null, string sampleInterval = null, string sampleType = null, string selectedFields = null, string startTime = null, string summaryDuration = null, List<string> summaryType = null, string timeType = null, string webId = null)
+		public async System.Threading.Tasks.Task<PIItemsSummaryValue> GetSummaryAsync(string calculationBasis = null, string endTime = null, string expression = null, string sampleInterval = null, string sampleType = null, string selectedFields = null, string startTime = null, string summaryDuration = null, List<string> summaryType = null, string timeType = null, string webId = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsSummaryValue> localVarResponse = await GetSummaryAsyncWithHttpInfo(calculationBasis, endTime, expression, sampleInterval, sampleType, selectedFields, startTime, summaryDuration, summaryType, timeType, webId);
+			ApiResponse<PIItemsSummaryValue> localVarResponse = await GetSummaryAsyncWithHttpInfo(calculationBasis, endTime, expression, sampleInterval, sampleType, selectedFields, startTime, summaryDuration, summaryType, timeType, webId, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -845,8 +801,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="summaryType">Specifies the kinds of summaries to produce over the range. The default is 'Total'. Multiple summary types may be specified by using multiple instances of summaryType.</param>
 		/// <param name="timeType">Specifies how to calculate the timestamp for each interval. The default is 'Auto'.</param>
 		/// <param name="webId">The ID of the target object of the expression. A target object can be a Data Server, a database, an element, an event frame or an attribute. References to attributes or points are based on the target. If this parameter is not provided, the target object is set to null.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsSummaryValue>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsSummaryValue>> GetSummaryAsyncWithHttpInfo(string calculationBasis = null, string endTime = null, string expression = null, string sampleInterval = null, string sampleType = null, string selectedFields = null, string startTime = null, string summaryDuration = null, List<string> summaryType = null, string timeType = null, string webId = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsSummaryValue>> GetSummaryAsyncWithHttpInfo(string calculationBasis = null, string endTime = null, string expression = null, string sampleInterval = null, string sampleType = null, string selectedFields = null, string startTime = null, string summaryDuration = null, List<string> summaryType = null, string timeType = null, string webId = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			var localVarPath = "/calculation/summary";
@@ -854,31 +811,22 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (calculationBasis!= null) localVarQueryParams.Add("calculationBasis", Configuration.ApiClient.ParameterToString(calculationBasis));
-			if (endTime!= null) localVarQueryParams.Add("endTime", Configuration.ApiClient.ParameterToString(endTime));
-			if (expression!= null) localVarQueryParams.Add("expression", Configuration.ApiClient.ParameterToString(expression));
-			if (sampleInterval!= null) localVarQueryParams.Add("sampleInterval", Configuration.ApiClient.ParameterToString(sampleInterval));
-			if (sampleType!= null) localVarQueryParams.Add("sampleType", Configuration.ApiClient.ParameterToString(sampleType));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (startTime!= null) localVarQueryParams.Add("startTime", Configuration.ApiClient.ParameterToString(startTime));
-			if (summaryDuration!= null) localVarQueryParams.Add("summaryDuration", Configuration.ApiClient.ParameterToString(summaryDuration));
-			if (summaryType!= null) localVarQueryParams.Add("summaryType", Configuration.ApiClient.ParameterToString(summaryType));
-			if (timeType!= null) localVarQueryParams.Add("timeType", Configuration.ApiClient.ParameterToString(timeType));
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
+			if (calculationBasis!= null) localVarQueryParams.Add("calculationBasis", calculationBasis, false);
+			if (endTime!= null) localVarQueryParams.Add("endTime", endTime, false);
+			if (expression!= null) localVarQueryParams.Add("expression", expression, false);
+			if (sampleInterval!= null) localVarQueryParams.Add("sampleInterval", sampleInterval, false);
+			if (sampleType!= null) localVarQueryParams.Add("sampleType", sampleType, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (startTime!= null) localVarQueryParams.Add("startTime", startTime, false);
+			if (summaryDuration!= null) localVarQueryParams.Add("summaryDuration", summaryDuration, false);
+			if (summaryType!= null) localVarQueryParams.Add("summaryType", summaryType, true);
+			if (timeType!= null) localVarQueryParams.Add("timeType", timeType, false);
+			if (webId!= null) localVarQueryParams.Add("webId", webId, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -889,7 +837,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsSummaryValue>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsSummaryValue)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsSummaryValue)));
 		}
 
@@ -905,10 +853,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'.</param>
 		/// <param name="time">A list of timestamps at which to calculate the expression.</param>
 		/// <param name="webId">The ID of the target object of the expression. A target object can be a Data Server, a database, an element, an event frame or an attribute. References to attributes or points are based on the target. If this parameter is not provided, the target object is set to null.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PITimedValues></returns>
-		public async System.Threading.Tasks.Task<PITimedValues> GetAtTimesAsync(string expression = null, string selectedFields = null, string sortOrder = null, List<string> time = null, string webId = null)
+		public async System.Threading.Tasks.Task<PITimedValues> GetAtTimesAsync(string expression = null, string selectedFields = null, string sortOrder = null, List<string> time = null, string webId = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PITimedValues> localVarResponse = await GetAtTimesAsyncWithHttpInfo(expression, selectedFields, sortOrder, time, webId);
+			ApiResponse<PITimedValues> localVarResponse = await GetAtTimesAsyncWithHttpInfo(expression, selectedFields, sortOrder, time, webId, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -924,8 +873,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'.</param>
 		/// <param name="time">A list of timestamps at which to calculate the expression.</param>
 		/// <param name="webId">The ID of the target object of the expression. A target object can be a Data Server, a database, an element, an event frame or an attribute. References to attributes or points are based on the target. If this parameter is not provided, the target object is set to null.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PITimedValues>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PITimedValues>> GetAtTimesAsyncWithHttpInfo(string expression = null, string selectedFields = null, string sortOrder = null, List<string> time = null, string webId = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PITimedValues>> GetAtTimesAsyncWithHttpInfo(string expression = null, string selectedFields = null, string sortOrder = null, List<string> time = null, string webId = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 
 			var localVarPath = "/calculation/times";
@@ -933,25 +883,16 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (expression!= null) localVarQueryParams.Add("expression", Configuration.ApiClient.ParameterToString(expression));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (time!= null) localVarQueryParams.Add("time", Configuration.ApiClient.ParameterToString(time));
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
+			if (expression!= null) localVarQueryParams.Add("expression", expression, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (time!= null) localVarQueryParams.Add("time", time, true);
+			if (webId!= null) localVarQueryParams.Add("webId", webId, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -962,7 +903,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PITimedValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PITimedValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PITimedValues)));
 		}
 

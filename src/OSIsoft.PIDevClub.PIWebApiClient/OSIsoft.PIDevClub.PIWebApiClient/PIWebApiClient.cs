@@ -2,7 +2,6 @@
 using OSIsoft.PIDevClub.PIWebApiClient.Client;
 using OSIsoft.PIDevClub.PIWebApiClient.Model;
 using OSIsoft.PIDevClub.PIWebApiClient.WebID;
-using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,50 +18,33 @@ namespace OSIsoft.PIDevClub.PIWebApiClient
         public string BaseUrl { get; private set; }
         public bool UseKerberos { get; private set; }
         public string UserName { get; private set; }
-        private PISystemLanding systemLanding = null;
 
         private string Password;
-        public bool CacheDisabled { get; set; }
 
         public PIWebApiClient(string baseUrl, bool useKerberos = true, string username = null, string password = null)
         {
-            BaseUrl = baseUrl;
+            if (baseUrl.Last() == '/')
+            {
+                baseUrl = baseUrl.Substring(0, baseUrl.Length - 1);
+            }
+
             UseKerberos = useKerberos;
             UserName = username;
             Password = password;
-            CacheDisabled = true;
-            client = new ApiClient(baseUrl);
+            client = new ApiClient(baseUrl, useKerberos, username, password);
 
         }
 
         private Configuration GetConfiguration(bool NoCacheHeaderCompatible)
         {
-            Configuration config = null;
-            if ((UseKerberos == false) && (UserName != null) && (Password != null))
-            {
-                config = new Configuration(client, null, UserName, Password);
-            }
-            else
-            {
-                config = new Configuration(client);
-                client.RestClient.Authenticator = new DefaultAuthenticator();
-            }
-
-            if ((NoCacheHeaderCompatible == true) && (CacheDisabled == true))
+            Configuration config = new Configuration(client);
+            if (NoCacheHeaderCompatible == true)
             {
                 config.DefaultHeader.Add("Cache-Control", "no-cache");
             }
             return config;
         }
 
-
-        public class DefaultAuthenticator : IAuthenticator
-        {
-            public void Authenticate(IRestClient client, IRestRequest request)
-            {
-                request.UseDefaultCredentials = true;
-            }
-        }
 
         public IAnalysisApi Analysis
         {
@@ -390,6 +372,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient
         {
             get
             {
+                PISystemLanding systemLanding = null;
                 if (systemLanding == null)
                 {
                     systemLanding = System.Landing();

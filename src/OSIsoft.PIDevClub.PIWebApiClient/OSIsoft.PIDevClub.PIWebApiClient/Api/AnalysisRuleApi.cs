@@ -15,10 +15,11 @@
 // ************************************************************************
 
 using System;
+using System.Threading;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Net.Http;
 using System.Linq;
-using RestSharp;
 using OSIsoft.PIDevClub.PIWebApiClient.Client;
 using OSIsoft.PIDevClub.PIWebApiClient.Model;
 
@@ -206,8 +207,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="path">The path to the Analysis Rule.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIAnalysisRule></returns>
-		System.Threading.Tasks.Task<PIAnalysisRule> GetByPathAsync(string path, string selectedFields = null, string webIdType = null);
+		System.Threading.Tasks.Task<PIAnalysisRule> GetByPathAsync(string path, string selectedFields = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Retrieve an Analysis Rule by path.
@@ -219,8 +221,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="path">The path to the Analysis Rule.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIAnalysisRule>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIAnalysisRule>> GetByPathAsyncWithHttpInfo(string path, string selectedFields = null, string webIdType = null);
+		System.Threading.Tasks.Task<ApiResponse<PIAnalysisRule>> GetByPathAsyncWithHttpInfo(string path, string selectedFields = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Retrieve an Analysis Rule.
@@ -232,8 +235,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="webId">The ID of the Analysis Rule.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIAnalysisRule></returns>
-		System.Threading.Tasks.Task<PIAnalysisRule> GetAsync(string webId, string selectedFields = null, string webIdType = null);
+		System.Threading.Tasks.Task<PIAnalysisRule> GetAsync(string webId, string selectedFields = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Retrieve an Analysis Rule.
@@ -245,8 +249,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="webId">The ID of the Analysis Rule.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIAnalysisRule>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIAnalysisRule>> GetAsyncWithHttpInfo(string webId, string selectedFields = null, string webIdType = null);
+		System.Threading.Tasks.Task<ApiResponse<PIAnalysisRule>> GetAsyncWithHttpInfo(string webId, string selectedFields = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Update an Analysis Rule by replacing items in its definition.
@@ -257,8 +262,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
 		/// <param name="webId">The ID of the Analysis Rule.</param>
 		/// <param name="analysisRule">A partial Analysis Rule containing the desired changes.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<Object></returns>
-		System.Threading.Tasks.Task<Object> UpdateAsync(string webId, PIAnalysisRule analysisRule);
+		System.Threading.Tasks.Task<Object> UpdateAsync(string webId, PIAnalysisRule analysisRule, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Update an Analysis Rule by replacing items in its definition.
@@ -269,8 +275,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
 		/// <param name="webId">The ID of the Analysis Rule.</param>
 		/// <param name="analysisRule">A partial Analysis Rule containing the desired changes.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<Object>></returns>
-		System.Threading.Tasks.Task<ApiResponse<Object>> UpdateAsyncWithHttpInfo(string webId, PIAnalysisRule analysisRule);
+		System.Threading.Tasks.Task<ApiResponse<Object>> UpdateAsyncWithHttpInfo(string webId, PIAnalysisRule analysisRule, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Delete an Analysis Rule.
@@ -280,8 +287,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// </remarks>
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
 		/// <param name="webId">The ID of the Analysis Rule.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<Object></returns>
-		System.Threading.Tasks.Task<Object> DeleteAsync(string webId);
+		System.Threading.Tasks.Task<Object> DeleteAsync(string webId, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Delete an Analysis Rule.
@@ -291,8 +299,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// </remarks>
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
 		/// <param name="webId">The ID of the Analysis Rule.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<Object>></returns>
-		System.Threading.Tasks.Task<ApiResponse<Object>> DeleteAsyncWithHttpInfo(string webId);
+		System.Threading.Tasks.Task<ApiResponse<Object>> DeleteAsyncWithHttpInfo(string webId, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Get the child Analysis Rules of the Analysis Rule.
@@ -310,8 +319,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'.</param>
 		/// <param name="startIndex">The starting index (zero based) of the items to be returned. The default is 0.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsAnalysisRule></returns>
-		System.Threading.Tasks.Task<PIItemsAnalysisRule> GetAnalysisRulesAsync(string webId, int? maxCount = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, string sortField = null, string sortOrder = null, int? startIndex = null, string webIdType = null);
+		System.Threading.Tasks.Task<PIItemsAnalysisRule> GetAnalysisRulesAsync(string webId, int? maxCount = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, string sortField = null, string sortOrder = null, int? startIndex = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Get the child Analysis Rules of the Analysis Rule.
@@ -329,8 +339,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'.</param>
 		/// <param name="startIndex">The starting index (zero based) of the items to be returned. The default is 0.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsAnalysisRule>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsAnalysisRule>> GetAnalysisRulesAsyncWithHttpInfo(string webId, int? maxCount = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, string sortField = null, string sortOrder = null, int? startIndex = null, string webIdType = null);
+		System.Threading.Tasks.Task<ApiResponse<PIItemsAnalysisRule>> GetAnalysisRulesAsyncWithHttpInfo(string webId, int? maxCount = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, string sortField = null, string sortOrder = null, int? startIndex = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Create a new Analysis Rule as a child of an existing Analysis Rule.
@@ -342,8 +353,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="webId">The ID of the parent Analysis Rule, on which to create the child Analysis Rule.</param>
 		/// <param name="analysisRule">The definition of the new Analysis Rule.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<Object></returns>
-		System.Threading.Tasks.Task<Object> CreateAnalysisRuleAsync(string webId, PIAnalysisRule analysisRule, string webIdType = null);
+		System.Threading.Tasks.Task<Object> CreateAnalysisRuleAsync(string webId, PIAnalysisRule analysisRule, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Create a new Analysis Rule as a child of an existing Analysis Rule.
@@ -355,8 +367,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="webId">The ID of the parent Analysis Rule, on which to create the child Analysis Rule.</param>
 		/// <param name="analysisRule">The definition of the new Analysis Rule.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<Object>></returns>
-		System.Threading.Tasks.Task<ApiResponse<Object>> CreateAnalysisRuleAsyncWithHttpInfo(string webId, PIAnalysisRule analysisRule, string webIdType = null);
+		System.Threading.Tasks.Task<ApiResponse<Object>> CreateAnalysisRuleAsyncWithHttpInfo(string webId, PIAnalysisRule analysisRule, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		#endregion
 	}
@@ -366,11 +379,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		private OSIsoft.PIDevClub.PIWebApiClient.Client.ExceptionFactory _exceptionFactory = (name, response) => null;
 		public AnalysisRuleApi(Configuration configuration = null)
 		{
-			if (configuration == null)
-				this.Configuration = Configuration.Default;
-			else
-				this.Configuration = configuration;
-
+			this.Configuration = configuration;
 			ExceptionFactory = OSIsoft.PIDevClub.PIWebApiClient.Client.Configuration.DefaultExceptionFactory;
 			if (Configuration.ApiClient.Configuration == null)
 			{
@@ -433,23 +442,14 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (path!= null) localVarQueryParams.Add("path", Configuration.ApiClient.ParameterToString(path));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (path!= null) localVarQueryParams.Add("path", path, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -460,7 +460,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIAnalysisRule>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIAnalysisRule)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIAnalysisRule)));
 		}
 
@@ -503,23 +503,14 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -530,7 +521,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIAnalysisRule>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIAnalysisRule)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIAnalysisRule)));
 		}
 
@@ -574,29 +565,13 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (analysisRule != null && analysisRule.GetType() != typeof(byte[]))
-			{
-				localVarPostBody = Configuration.ApiClient.Serialize(analysisRule);
-			}
-			else
-			{
-				localVarPostBody = analysisRule;
-			}
+			localVarPostBody = Configuration.ApiClient.Serialize(analysisRule);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.PATCH, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("PATCH"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -607,7 +582,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<Object>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(Object)Configuration.ApiClient.Deserialize(localVarResponse, typeof(Object)));
 		}
 
@@ -646,21 +621,12 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.DELETE, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("DELETE"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -671,7 +637,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<Object>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(Object)Configuration.ApiClient.Deserialize(localVarResponse, typeof(Object)));
 		}
 
@@ -726,29 +692,20 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (maxCount!= null) localVarQueryParams.Add("maxCount", Configuration.ApiClient.ParameterToString(maxCount));
-			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", Configuration.ApiClient.ParameterToString(nameFilter));
-			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", Configuration.ApiClient.ParameterToString(searchFullHierarchy));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (sortField!= null) localVarQueryParams.Add("sortField", Configuration.ApiClient.ParameterToString(sortField));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (startIndex!= null) localVarQueryParams.Add("startIndex", Configuration.ApiClient.ParameterToString(startIndex));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (maxCount!= null) localVarQueryParams.Add("maxCount", maxCount, false);
+			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", nameFilter, false);
+			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", searchFullHierarchy, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (sortField!= null) localVarQueryParams.Add("sortField", sortField, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (startIndex!= null) localVarQueryParams.Add("startIndex", startIndex, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -759,7 +716,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsAnalysisRule>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsAnalysisRule)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsAnalysisRule)));
 		}
 
@@ -805,30 +762,14 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (analysisRule != null && analysisRule.GetType() != typeof(byte[]))
-			{
-				localVarPostBody = Configuration.ApiClient.Serialize(analysisRule);
-			}
-			else
-			{
-				localVarPostBody = analysisRule;
-			}
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			localVarPostBody = Configuration.ApiClient.Serialize(analysisRule);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.POST, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("POST"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -839,7 +780,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<Object>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(Object)Configuration.ApiClient.Deserialize(localVarResponse, typeof(Object)));
 		}
 
@@ -855,10 +796,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="path">The path to the Analysis Rule.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIAnalysisRule></returns>
-		public async System.Threading.Tasks.Task<PIAnalysisRule> GetByPathAsync(string path, string selectedFields = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<PIAnalysisRule> GetByPathAsync(string path, string selectedFields = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIAnalysisRule> localVarResponse = await GetByPathAsyncWithHttpInfo(path, selectedFields, webIdType);
+			ApiResponse<PIAnalysisRule> localVarResponse = await GetByPathAsyncWithHttpInfo(path, selectedFields, webIdType, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -872,8 +814,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="path">The path to the Analysis Rule.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIAnalysisRule>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIAnalysisRule>> GetByPathAsyncWithHttpInfo(string path, string selectedFields = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIAnalysisRule>> GetByPathAsyncWithHttpInfo(string path, string selectedFields = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'path' is set
 			if (path == null)
@@ -884,23 +827,14 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (path!= null) localVarQueryParams.Add("path", Configuration.ApiClient.ParameterToString(path));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (path!= null) localVarQueryParams.Add("path", path, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -911,7 +845,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIAnalysisRule>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIAnalysisRule)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIAnalysisRule)));
 		}
 
@@ -925,10 +859,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="webId">The ID of the Analysis Rule.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIAnalysisRule></returns>
-		public async System.Threading.Tasks.Task<PIAnalysisRule> GetAsync(string webId, string selectedFields = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<PIAnalysisRule> GetAsync(string webId, string selectedFields = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIAnalysisRule> localVarResponse = await GetAsyncWithHttpInfo(webId, selectedFields, webIdType);
+			ApiResponse<PIAnalysisRule> localVarResponse = await GetAsyncWithHttpInfo(webId, selectedFields, webIdType, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -942,8 +877,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="webId">The ID of the Analysis Rule.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIAnalysisRule>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIAnalysisRule>> GetAsyncWithHttpInfo(string webId, string selectedFields = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIAnalysisRule>> GetAsyncWithHttpInfo(string webId, string selectedFields = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'webId' is set
 			if (webId == null)
@@ -954,23 +890,14 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -981,7 +908,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIAnalysisRule>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIAnalysisRule)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIAnalysisRule)));
 		}
 
@@ -994,10 +921,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
 		/// <param name="webId">The ID of the Analysis Rule.</param>
 		/// <param name="analysisRule">A partial Analysis Rule containing the desired changes.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<Object></returns>
-		public async System.Threading.Tasks.Task<Object> UpdateAsync(string webId, PIAnalysisRule analysisRule)
+		public async System.Threading.Tasks.Task<Object> UpdateAsync(string webId, PIAnalysisRule analysisRule, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<Object> localVarResponse = await UpdateAsyncWithHttpInfo(webId, analysisRule);
+			ApiResponse<Object> localVarResponse = await UpdateAsyncWithHttpInfo(webId, analysisRule, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -1010,8 +938,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
 		/// <param name="webId">The ID of the Analysis Rule.</param>
 		/// <param name="analysisRule">A partial Analysis Rule containing the desired changes.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<Object>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<Object>> UpdateAsyncWithHttpInfo(string webId, PIAnalysisRule analysisRule)
+		public async System.Threading.Tasks.Task<ApiResponse<Object>> UpdateAsyncWithHttpInfo(string webId, PIAnalysisRule analysisRule, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'webId' is set
 			if (webId == null)
@@ -1025,29 +954,13 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (analysisRule != null && analysisRule.GetType() != typeof(byte[]))
-			{
-				localVarPostBody = Configuration.ApiClient.Serialize(analysisRule);
-			}
-			else
-			{
-				localVarPostBody = analysisRule;
-			}
+			localVarPostBody = Configuration.ApiClient.Serialize(analysisRule);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.PATCH, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("PATCH"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -1058,7 +971,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<Object>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(Object)Configuration.ApiClient.Deserialize(localVarResponse, typeof(Object)));
 		}
 
@@ -1070,10 +983,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// </remarks>
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
 		/// <param name="webId">The ID of the Analysis Rule.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<Object></returns>
-		public async System.Threading.Tasks.Task<Object> DeleteAsync(string webId)
+		public async System.Threading.Tasks.Task<Object> DeleteAsync(string webId, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<Object> localVarResponse = await DeleteAsyncWithHttpInfo(webId);
+			ApiResponse<Object> localVarResponse = await DeleteAsyncWithHttpInfo(webId, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -1085,8 +999,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// </remarks>
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
 		/// <param name="webId">The ID of the Analysis Rule.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<Object>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<Object>> DeleteAsyncWithHttpInfo(string webId)
+		public async System.Threading.Tasks.Task<ApiResponse<Object>> DeleteAsyncWithHttpInfo(string webId, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'webId' is set
 			if (webId == null)
@@ -1097,21 +1012,12 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.DELETE, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("DELETE"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -1122,7 +1028,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<Object>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(Object)Configuration.ApiClient.Deserialize(localVarResponse, typeof(Object)));
 		}
 
@@ -1142,10 +1048,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'.</param>
 		/// <param name="startIndex">The starting index (zero based) of the items to be returned. The default is 0.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsAnalysisRule></returns>
-		public async System.Threading.Tasks.Task<PIItemsAnalysisRule> GetAnalysisRulesAsync(string webId, int? maxCount = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, string sortField = null, string sortOrder = null, int? startIndex = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<PIItemsAnalysisRule> GetAnalysisRulesAsync(string webId, int? maxCount = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, string sortField = null, string sortOrder = null, int? startIndex = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsAnalysisRule> localVarResponse = await GetAnalysisRulesAsyncWithHttpInfo(webId, maxCount, nameFilter, searchFullHierarchy, selectedFields, sortField, sortOrder, startIndex, webIdType);
+			ApiResponse<PIItemsAnalysisRule> localVarResponse = await GetAnalysisRulesAsyncWithHttpInfo(webId, maxCount, nameFilter, searchFullHierarchy, selectedFields, sortField, sortOrder, startIndex, webIdType, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -1165,8 +1072,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'.</param>
 		/// <param name="startIndex">The starting index (zero based) of the items to be returned. The default is 0.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsAnalysisRule>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsAnalysisRule>> GetAnalysisRulesAsyncWithHttpInfo(string webId, int? maxCount = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, string sortField = null, string sortOrder = null, int? startIndex = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsAnalysisRule>> GetAnalysisRulesAsyncWithHttpInfo(string webId, int? maxCount = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, string sortField = null, string sortOrder = null, int? startIndex = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'webId' is set
 			if (webId == null)
@@ -1177,29 +1085,20 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (maxCount!= null) localVarQueryParams.Add("maxCount", Configuration.ApiClient.ParameterToString(maxCount));
-			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", Configuration.ApiClient.ParameterToString(nameFilter));
-			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", Configuration.ApiClient.ParameterToString(searchFullHierarchy));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (sortField!= null) localVarQueryParams.Add("sortField", Configuration.ApiClient.ParameterToString(sortField));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (startIndex!= null) localVarQueryParams.Add("startIndex", Configuration.ApiClient.ParameterToString(startIndex));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (maxCount!= null) localVarQueryParams.Add("maxCount", maxCount, false);
+			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", nameFilter, false);
+			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", searchFullHierarchy, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (sortField!= null) localVarQueryParams.Add("sortField", sortField, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (startIndex!= null) localVarQueryParams.Add("startIndex", startIndex, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -1210,7 +1109,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsAnalysisRule>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsAnalysisRule)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsAnalysisRule)));
 		}
 
@@ -1224,10 +1123,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="webId">The ID of the parent Analysis Rule, on which to create the child Analysis Rule.</param>
 		/// <param name="analysisRule">The definition of the new Analysis Rule.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<Object></returns>
-		public async System.Threading.Tasks.Task<Object> CreateAnalysisRuleAsync(string webId, PIAnalysisRule analysisRule, string webIdType = null)
+		public async System.Threading.Tasks.Task<Object> CreateAnalysisRuleAsync(string webId, PIAnalysisRule analysisRule, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<Object> localVarResponse = await CreateAnalysisRuleAsyncWithHttpInfo(webId, analysisRule, webIdType);
+			ApiResponse<Object> localVarResponse = await CreateAnalysisRuleAsyncWithHttpInfo(webId, analysisRule, webIdType, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -1241,8 +1141,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="webId">The ID of the parent Analysis Rule, on which to create the child Analysis Rule.</param>
 		/// <param name="analysisRule">The definition of the new Analysis Rule.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<Object>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<Object>> CreateAnalysisRuleAsyncWithHttpInfo(string webId, PIAnalysisRule analysisRule, string webIdType = null)
+		public async System.Threading.Tasks.Task<ApiResponse<Object>> CreateAnalysisRuleAsyncWithHttpInfo(string webId, PIAnalysisRule analysisRule, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'webId' is set
 			if (webId == null)
@@ -1256,30 +1157,14 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (analysisRule != null && analysisRule.GetType() != typeof(byte[]))
-			{
-				localVarPostBody = Configuration.ApiClient.Serialize(analysisRule);
-			}
-			else
-			{
-				localVarPostBody = analysisRule;
-			}
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			localVarPostBody = Configuration.ApiClient.Serialize(analysisRule);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.POST, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("POST"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -1290,7 +1175,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<Object>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(Object)Configuration.ApiClient.Deserialize(localVarResponse, typeof(Object)));
 		}
 

@@ -1,6 +1,6 @@
 ﻿// ************************************************************************
 //
-// * Copyright 2017 OSIsoft, LLC
+// * Copyright 2018 OSIsoft, LLC
 // * Licensed under the Apache License, Version 2.0 (the "License");
 // * you may not use this file except in compliance with the License.
 // * You may obtain a copy of the License at
@@ -21,6 +21,8 @@ using OSIsoft.PIDevClub.PIWebApiClient.Model;
 using OSIsoft.PIDevClub.PIWebApiClient.WebID;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,9 +35,18 @@ namespace LibraryTest
         {
             //Create an instance of the PI Web API top level object.
             PIWebApiClient client = new PIWebApiClient("https://marc-web-sql.marc.net/piwebapi", true);
-           
-            //Get the PI Data Archive object
+
+            var homeLanding = client.Home.Get();
+            ////Get the PI Data Archive object
             PIDataServer dataServer = client.DataServer.GetByPath("\\\\MARC-PI2016");
+            string expression = "'sinusoid'*2 + 'cdt158'";
+            PITimedValues values = client.Calculation.GetAtTimes(webId: dataServer.WebId, expression: expression, time: new List<string>() { "*-1d" });
+
+            string expression2 = "'cdt158'+tagval('sinusoid','*-1d')";
+            PITimedValues values2 = client.Calculation.GetAtTimes(webId: dataServer.WebId, expression: expression2, time: new List<string>() { "*-1d" });
+
+            PIItemsSummaryValue itemsSummaryValue = client.Calculation.GetSummary(expression: expression2, startTime: "*-1d", endTime: "*", webId: dataServer.WebId,
+                summaryType: new List<string>() { "Average", "Maximum" });
 
             //Get PI Point
             PIPoint createdPoint = client.Point.GetByPath("\\\\MARC-PI2016\\SINUSOIDR1259", null);
@@ -52,6 +63,8 @@ namespace LibraryTest
             createdPoint.Path = null;
             createdPoint.PointClass = null;
             createdPoint.PointType = null;
+            createdPoint.Span = null;
+            createdPoint.Zero = null;
             createdPoint.WebId = null;
 
             //Update PI Point
@@ -62,10 +75,9 @@ namespace LibraryTest
 
             //Get PI Points WebIds
             PIPoint point1 = client.Point.GetByPath("\\\\marc-pi2016\\sinusoid");
-            PIPoint point2 = client.Point.GetByPath("\\\\marc-pi2016\\sinusoidu");
+            PIPoint point2 = client.Point.GetByPath("\\\\marc-pi2016\\sinusoidu", selectedFields: "webId;name");
             PIPoint point3 = client.Point.GetByPath("\\\\marc-pi2016\\cdt158");
             List<string> webIds = new List<string>() { point1.WebId, point2.WebId, point3.WebId };
-
 
 
 
@@ -133,7 +145,51 @@ namespace LibraryTest
             //Get the attribute's end of the stream value
             PITimedValue value = client.Stream.GetEnd(attribute.WebId);
 
+            //Cancelling the HTTP request with the CancellationToken
+            Stopwatch watch = Stopwatch.StartNew();
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            PIItemsStreamValues bulkValues = null;
+            try
+            {
+                Task t = Task.Run(async () =>
+                {
+                    bulkValues = await client.StreamSet.GetRecordedAdHocAsync(webId: webIds, startTime: "*-1800d", endTime: "*", maxCount: 50000, cancellationToken: cancellationTokenSource.Token);
+
+                });
+                //Cancel the request after 4s
+                System.Threading.Thread.Sleep(4000);
+                cancellationTokenSource.Cancel();
+                t.Wait();
+                Console.WriteLine("Completed task: Time elapsed: {0}s", 0.001 * watch.ElapsedMilliseconds);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Cancelled task: Time elapsed: {0}s", 0.001 * watch.ElapsedMilliseconds);
+            };
+
+
+            //Stream Updates
+            PIItemsStreamUpdatesRegister piItemsStreamUpdatesRegister = client.StreamSet.RegisterStreamSetUpdates(webIds);
+            List<string> markers = piItemsStreamUpdatesRegister.Items.Select(i => i.LatestMarker).ToList();
+            int k = 3;
+            while (k > 0)
+            {
+                PIItemsStreamUpdatesRetrieve piItemsStreamUpdatesRetrieve = client.StreamSet.RetrieveStreamSetUpdates(markers);
+                markers = piItemsStreamUpdatesRetrieve.Items.Select(i => i.LatestMarker).ToList();
+                foreach (PIStreamUpdatesRetrieve item in piItemsStreamUpdatesRetrieve.Items)
+                {
+                    foreach (PIDataPipeEvent piEvent in item.Events)
+                    {
+                        Console.WriteLine("Action={0}, Value={1}, SourcePath={2}", piEvent.Action, piEvent.Value, item.SourcePath);
+                    }
+                }
+                System.Threading.Thread.Sleep(30000);
+                k--;
+            }
+
             ChannelsExamples(client, webIds);
+            Console.WriteLine("Finished");
+            Console.ReadKey();
 
         }
 

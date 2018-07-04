@@ -33,13 +33,11 @@
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="RestSharp, Version=105.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RestSharp.105.1.0\lib\net452\RestSharp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -87,9 +85,12 @@
     <Compile Include="Client\ApiException.cs" />
     <Compile Include="Client\ApiResponse.cs" />
     <Compile Include="Client\Configuration.cs" />
+    <Compile Include="Client\CustomDictionaryForQueryString.cs" />
     <Compile Include="Client\ExceptionFactory.cs" />
     <Compile Include="Client\IApiAccessor.cs" />
-    <Compile Include="CustomDictionaryForQueryString.cs" />
+    <Compile Include="Client\IRestResponse.cs" />
+    <Compile Include="Client\RestResponse.cs" />
+    <Compile Include="Model\PIAmbiguous.cs" />
     <Compile Include="Model\PIAnalysis.cs" />
     <Compile Include="Model\PIAnalysisCategory.cs" />
     <Compile Include="Model\PIAnalysisCategoryLinks.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="Model\PIAttributeTraitLinks.cs" />
     <Compile Include="Model\PICacheInstance.cs" />
     <Compile Include="Model\PIChannelInstance.cs" />
+    <Compile Include="Model\PIDataPipeEvent.cs" />
     <Compile Include="Model\PIDataServer.cs" />
     <Compile Include="Model\PIDataServerLicense.cs" />
     <Compile Include="Model\PIDataServerLicenseLinks.cs" />
@@ -133,6 +135,8 @@
     <Compile Include="Model\PIErrors.cs" />
     <Compile Include="Model\PIEventFrame.cs" />
     <Compile Include="Model\PIEventFrameLinks.cs" />
+    <Compile Include="Model\PIExtendedTimedValue.cs" />
+    <Compile Include="Model\PIExtendedTimedValues.cs" />
     <Compile Include="Model\PIItemAttribute.cs" />
     <Compile Include="Model\PIItemElement.cs" />
     <Compile Include="Model\PIItemEventFrame.cs" />
@@ -163,6 +167,10 @@
     <Compile Include="Model\PIItemsItemEventFrame.cs" />
     <Compile Include="Model\PIItemsItemPoint.cs" />
     <Compile Include="Model\PIItemsItemsSubstatus.cs" />
+    <Compile Include="Model\PIItemsNotificationContactTemplate.cs" />
+    <Compile Include="Model\PIItemsNotificationRule.cs" />
+    <Compile Include="Model\PIItemsNotificationRuleSubscriber.cs" />
+    <Compile Include="Model\PIItemsNotificationRuleTemplate.cs" />
     <Compile Include="Model\PIItemsPoint.cs" />
     <Compile Include="Model\PIItemsPointAttribute.cs" />
     <Compile Include="Model\PIItemsSecurityEntry.cs" />
@@ -170,8 +178,11 @@
     <Compile Include="Model\PIItemsSecurityMapping.cs" />
     <Compile Include="Model\PIItemsSecurityRights.cs" />
     <Compile Include="Model\PIItemsStreamSummaries.cs" />
+    <Compile Include="Model\PIItemsStreamUpdatesRegister.cs" />
+    <Compile Include="Model\PIItemsStreamUpdatesRetrieve.cs" />
     <Compile Include="Model\PIItemsStreamValue.cs" />
     <Compile Include="Model\PIItemsStreamValues.cs" />
+    <Compile Include="Model\PIItemsstring.cs" />
     <Compile Include="Model\PIItemsSubstatus.cs" />
     <Compile Include="Model\PIItemsSummaryValue.cs" />
     <Compile Include="Model\PIItemsTable.cs" />
@@ -180,6 +191,13 @@
     <Compile Include="Model\PIItemsUnitClass.cs" />
     <Compile Include="Model\PILanding.cs" />
     <Compile Include="Model\PILandingLinks.cs" />
+    <Compile Include="Model\PIMediaMetadata.cs" />
+    <Compile Include="Model\PIMediaMetadataLinks.cs" />
+    <Compile Include="Model\PINotificationContactTemplate.cs" />
+    <Compile Include="Model\PINotificationContactTemplateLinks.cs" />
+    <Compile Include="Model\PINotificationRule.cs" />
+    <Compile Include="Model\PINotificationRuleSubscriber.cs" />
+    <Compile Include="Model\PINotificationRuleTemplate.cs" />
     <Compile Include="Model\PIPaginationLinks.cs" />
     <Compile Include="Model\PIPoint.cs" />
     <Compile Include="Model\PIPointAttribute.cs" />
@@ -199,8 +217,11 @@
     <Compile Include="Model\PISecurityMappingLinks.cs" />
     <Compile Include="Model\PISecurityRights.cs" />
     <Compile Include="Model\PISecurityRightsLinks.cs" />
+    <Compile Include="Model\PIStreamAnnotation.cs" />
     <Compile Include="Model\PIStreamSummaries.cs" />
     <Compile Include="Model\PIStreamSummariesLinks.cs" />
+    <Compile Include="Model\PIStreamUpdatesRegister.cs" />
+    <Compile Include="Model\PIStreamUpdatesRetrieve.cs" />
     <Compile Include="Model\PIStreamValue.cs" />
     <Compile Include="Model\PIStreamValueLinks.cs" />
     <Compile Include="Model\PIStreamValues.cs" />

@@ -1,13 +1,15 @@
-PI Web API client library for .NET Framework (2017 R2)
+PI Web API client library for .NET Framework (2018)
 ===
 
 
 ## Overview
-This repository has the source code package of the PI Web API Client libraries for .NET Framework. Although PI AF SDK can also be used with .NET Framework, the advantage of using this client library is that you don't need to install PI AF Client on your machine. This version was developed on top of the PI Web API 2017 R2 swagger specification. 
+This repository has the source code package of the PI Web API Client libraries for .NET Framework. Although PI AF SDK can also be used with .NET Framework, the advantage of using this client library is that you don't need to install PI AF Client on your machine. This version was developed on top of the PI Web API 2018 swagger specification. 
+
+This repository is very similar to the PI Web API client library for .NET Standard. Nevertheless, PI Web API Channels methods only work with this library in .NET Framework.
 
 ## Requirements
 
- - PI Web API 2017 R2 installed within your domain using Kerberos or Basic Authentication. If you are using an older version, some methods might not work.
+ - PI Web API 2018 installed within your domain using Kerberos or Basic Authentication. If you are using an older version, some methods might not work.
  - .NET Framework 4.5.2
 
 ## Installation
@@ -196,6 +198,55 @@ If you want to use basic authentication instead of Kerberos, set useKerberos to 
 	string webId1 = client.WebIdHelper.GenerateWebIdByPath(Constants.AF_ATTRIBUTE_PATH, typeof(PIAttribute), typeof(PIElement));
 	string webId2 = client.WebIdHelper.GenerateWebIdByPath(Constants.PI_DATA_SERVER_PATH, typeof(PIDataServer));
 ```
+
+
+### Cancelling the HTTP request with the CancellationToken
+
+```cs
+	Stopwatch watch = Stopwatch.StartNew();
+	CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+	PIItemsStreamValues bulkValues = null;
+	try
+	{
+		Task t = Task.Run(async () =>
+		{
+			bulkValues = await client.StreamSet.GetRecordedAdHocAsync(webId: webIds, startTime: "*-1800d", endTime: "*", maxCount: 50000, cancellationToken: cancellationTokenSource.Token);
+		});
+		//Cancel the request after 1s
+		System.Threading.Thread.Sleep(1000);
+		cancellationTokenSource.Cancel();
+		t.Wait();
+		Console.WriteLine("Completed task: Time elapsed: {0}s", 0.001 * watch.ElapsedMilliseconds);
+	}
+	catch (Exception)
+	{
+		Console.WriteLine("Cancelled task: Time elapsed: {0}s", 0.001 * watch.ElapsedMilliseconds);
+	};
+```
+
+
+### Using StreamUpdates
+
+```cs
+	PIItemsStreamUpdatesRegister piItemsStreamUpdatesRegister = client.StreamSet.RegisterStreamSetUpdates(webIds);
+	List<string> markers = piItemsStreamUpdatesRegister.Items.Select(i => i.LatestMarker).ToList();
+	int k = 3;
+	while (k > 0)
+	{
+		PIItemsStreamUpdatesRetrieve piItemsStreamUpdatesRetrieve = client.StreamSet.RetrieveStreamSetUpdates(markers);
+		markers = piItemsStreamUpdatesRetrieve.Items.Select(i => i.LatestMarker).ToList();
+		foreach (PIStreamUpdatesRetrieve item in piItemsStreamUpdatesRetrieve.Items)
+		{
+			foreach (PIDataPipeEvent piEvent in item.Events)
+			{
+				Console.WriteLine("Action={0}, Value={1}, SourcePath={2}", piEvent.Action, piEvent.Value, item.SourcePath);
+			}
+		}
+		System.Threading.Thread.Sleep(30000);
+		k--;
+	}
+```
+
 
 
 ## Licensing

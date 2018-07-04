@@ -15,10 +15,11 @@
 // ************************************************************************
 
 using System;
+using System.Threading;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Net.Http;
 using System.Linq;
-using RestSharp;
 using OSIsoft.PIDevClub.PIWebApiClient.Client;
 using OSIsoft.PIDevClub.PIWebApiClient.Model;
 
@@ -86,7 +87,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
@@ -107,7 +108,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
@@ -132,8 +133,8 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
-		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'.</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="syncTime">An optional start time anchor, in AFTime format. When specified, interpolated data retrieval will use the sync time as the origin for calculating the interval times.</param>
 		/// <param name="syncTimeBoundaryType">An optional string specifying the boundary type to use when applying a syncTime. The allowed values are 'Inside' and 'Outside'. The default is 'Inside'.</param>
@@ -161,8 +162,8 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
-		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'.</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="syncTime">An optional start time anchor, in AFTime format. When specified, interpolated data retrieval will use the sync time as the origin for calculating the interval times.</param>
 		/// <param name="syncTimeBoundaryType">An optional string specifying the boundary type to use when applying a syncTime. The allowed values are 'Inside' and 'Outside'. The default is 'Inside'.</param>
@@ -236,7 +237,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
@@ -261,7 +262,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
@@ -289,7 +290,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
@@ -317,7 +318,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
@@ -516,7 +517,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="time">An AF time string, which is used as the time context to get stream values if it is provided. By default, it is not specified, and the default time context of the AF object will be used.</param>
@@ -539,7 +540,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="time">An AF time string, which is used as the time context to get stream values if it is provided. By default, it is not specified, and the default time context of the AF object will be used.</param>
@@ -613,7 +614,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
 		/// <param name="webId">The ID of a stream. Multiple streams may be specified with multiple instances of the parameter.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
 		/// <returns>PIItemsStreamValues</returns>
@@ -628,7 +629,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
 		/// <param name="webId">The ID of a stream. Multiple streams may be specified with multiple instances of the parameter.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
 		/// <returns>ApiResponse<PIItemsStreamValues></returns>
@@ -647,7 +648,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="includeFilteredValues">Specify 'true' to indicate that values which fail the filter criteria are present in the returned data at the times where they occurred with a value set to a 'Filtered' enumeration value with bad status. Repeated consecutive failures are omitted.</param>
 		/// <param name="interval">The sampling interval, in AFTimeSpan format.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d'.</param>
 		/// <param name="syncTime">An optional start time anchor, in AFTime format. When specified, interpolated data retrieval will use the sync time as the origin for calculating the interval times.</param>
@@ -670,7 +671,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="includeFilteredValues">Specify 'true' to indicate that values which fail the filter criteria are present in the returned data at the times where they occurred with a value set to a 'Filtered' enumeration value with bad status. Repeated consecutive failures are omitted.</param>
 		/// <param name="interval">The sampling interval, in AFTimeSpan format.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d'.</param>
 		/// <param name="syncTime">An optional start time anchor, in AFTime format. When specified, interpolated data retrieval will use the sync time as the origin for calculating the interval times.</param>
@@ -727,7 +728,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="endTime">An optional end time. The default is '*'. Note that if endTime is earlier than startTime, the resulting values will be in time-descending order.</param>
 		/// <param name="intervals">The number of intervals to plot over. Typically, this would be the number of horizontal pixels in the trend. The default is '24'. For each interval, the data available is examined and significant values are returned. Each interval can produce up to 5 values if they are unique, the first value in the interval, the last value, the highest value, the lowest value and at most one exceptional point (bad status or digital state).</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
@@ -746,7 +747,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="endTime">An optional end time. The default is '*'. Note that if endTime is earlier than startTime, the resulting values will be in time-descending order.</param>
 		/// <param name="intervals">The number of intervals to plot over. Typically, this would be the number of horizontal pixels in the trend. The default is '24'. For each interval, the data available is examined and significant values are returned. Each interval can produce up to 5 values if they are unique, the first value in the interval, the last value, the highest value, the lowest value and at most one exceptional point (bad status or digital state).</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
@@ -768,7 +769,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="includeFilteredValues">Specify 'true' to indicate that values which fail the filter criteria are present in the returned data at the times where they occurred with a value set to a 'Filtered' enumeration value with bad status. Repeated consecutive failures are omitted.</param>
 		/// <param name="maxCount">The maximum number of values to be returned. The default is 1000.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
@@ -790,7 +791,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="includeFilteredValues">Specify 'true' to indicate that values which fail the filter criteria are present in the returned data at the times where they occurred with a value set to a 'Filtered' enumeration value with bad status. Repeated consecutive failures are omitted.</param>
 		/// <param name="maxCount">The maximum number of values to be returned. The default is 1000.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
@@ -937,6 +938,58 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		ApiResponse<PIItemsStreamSummaries> GetSummariesAdHocWithHttpInfo(List<string> webId, string calculationBasis = null, string endTime = null, string filterExpression = null, string sampleInterval = null, string sampleType = null, string selectedFields = null, string startTime = null, string summaryDuration = null, List<string> summaryType = null, string timeType = null, string timeZone = null, string webIdType = null);
 
 		/// <summary>
+		/// Receive stream updates
+		/// </summary>
+		/// <remarks>
+		/// The supplied markers will identify the set of stream updates to retrieve. For a 200 response, the returned location header will contain the url for retrieving the stream updates.
+		/// </remarks>
+		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+		/// <param name="marker">Identifier of stream source and current position. Multiple markers may be specified with multiple instances of the parameter.</param>
+		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
+		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <returns>PIItemsStreamUpdatesRetrieve</returns>
+		PIItemsStreamUpdatesRetrieve RetrieveStreamSetUpdates(List<string> marker, string selectedFields = null, string webIdType = null);
+
+		/// <summary>
+		/// Receive stream updates
+		/// </summary>
+		/// <remarks>
+		/// The supplied markers will identify the set of stream updates to retrieve. For a 200 response, the returned location header will contain the url for retrieving the stream updates.
+		/// </remarks>
+		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+		/// <param name="marker">Identifier of stream source and current position. Multiple markers may be specified with multiple instances of the parameter.</param>
+		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
+		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <returns>ApiResponse<PIItemsStreamUpdatesRetrieve></returns>
+		ApiResponse<PIItemsStreamUpdatesRetrieve> RetrieveStreamSetUpdatesWithHttpInfo(List<string> marker, string selectedFields = null, string webIdType = null);
+
+		/// <summary>
+		/// Register for stream updates
+		/// </summary>
+		/// <remarks>
+		/// The supplied webIds will register for stream updates. For a 200 response, the returned location header will contain the url for retrieving the next set of stream updates.
+		/// </remarks>
+		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+		/// <param name="webId">The ID of a stream. Multiple streams may be specified with multiple instances of the parameter.</param>
+		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
+		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <returns>PIItemsStreamUpdatesRegister</returns>
+		PIItemsStreamUpdatesRegister RegisterStreamSetUpdates(List<string> webId, string selectedFields = null, string webIdType = null);
+
+		/// <summary>
+		/// Register for stream updates
+		/// </summary>
+		/// <remarks>
+		/// The supplied webIds will register for stream updates. For a 200 response, the returned location header will contain the url for retrieving the next set of stream updates.
+		/// </remarks>
+		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+		/// <param name="webId">The ID of a stream. Multiple streams may be specified with multiple instances of the parameter.</param>
+		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
+		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <returns>ApiResponse<PIItemsStreamUpdatesRegister></returns>
+		ApiResponse<PIItemsStreamUpdatesRegister> RegisterStreamSetUpdatesWithHttpInfo(List<string> webId, string selectedFields = null, string webIdType = null);
+
+		/// <summary>
 		/// Returns values of the specified streams.
 		/// </summary>
 		/// <remarks>
@@ -945,7 +998,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
 		/// <param name="webId">The ID of a stream. Multiple streams may be specified with multiple instances of the parameter.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="time">An AF time string, which is used as the time context to get stream values if it is provided. By default, it is not specified, and the default time context of the AF object will be used.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
@@ -962,7 +1015,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
 		/// <param name="webId">The ID of a stream. Multiple streams may be specified with multiple instances of the parameter.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="time">An AF time string, which is used as the time context to get stream values if it is provided. By default, it is not specified, and the default time context of the AF object will be used.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
@@ -1015,8 +1068,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValue></returns>
-		System.Threading.Tasks.Task<PIItemsStreamValue> GetChannelAsync(string webId, string categoryName = null, int? heartbeatRate = null, bool? includeInitialValues = null, string nameFilter = null, bool? searchFullHierarchy = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string webIdType = null);
+		System.Threading.Tasks.Task<PIItemsStreamValue> GetChannelAsync(string webId, string categoryName = null, int? heartbeatRate = null, bool? includeInitialValues = null, string nameFilter = null, bool? searchFullHierarchy = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Opens a channel that will send messages about any value changes for the attributes of an Element, Event Frame, or Attribute.
@@ -1035,8 +1089,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>> GetChannelAsyncWithHttpInfo(string webId, string categoryName = null, int? heartbeatRate = null, bool? includeInitialValues = null, string nameFilter = null, bool? searchFullHierarchy = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string webIdType = null);
+		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>> GetChannelAsyncWithHttpInfo(string webId, string categoryName = null, int? heartbeatRate = null, bool? includeInitialValues = null, string nameFilter = null, bool? searchFullHierarchy = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns End of stream values of the attributes for an Element, Event Frame or Attribute
@@ -1052,12 +1107,13 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValue></returns>
-		System.Threading.Tasks.Task<PIItemsStreamValue> GetEndAsync(string webId, string categoryName = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string templateName = null, string webIdType = null);
+		System.Threading.Tasks.Task<PIItemsStreamValue> GetEndAsync(string webId, string categoryName = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string templateName = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns End of stream values of the attributes for an Element, Event Frame or Attribute
@@ -1073,12 +1129,13 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>> GetEndAsyncWithHttpInfo(string webId, string categoryName = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string templateName = null, string webIdType = null);
+		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>> GetEndAsyncWithHttpInfo(string webId, string categoryName = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string templateName = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns interpolated values of attributes for an element, event frame or attribute over the specified time range at the specified sampling interval.
@@ -1098,16 +1155,17 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
-		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'.</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="syncTime">An optional start time anchor, in AFTime format. When specified, interpolated data retrieval will use the sync time as the origin for calculating the interval times.</param>
 		/// <param name="syncTimeBoundaryType">An optional string specifying the boundary type to use when applying a syncTime. The allowed values are 'Inside' and 'Outside'. The default is 'Inside'.</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValues></returns>
-		System.Threading.Tasks.Task<PIItemsStreamValues> GetInterpolatedAsync(string webId, string categoryName = null, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, string interval = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string startTime = null, string syncTime = null, string syncTimeBoundaryType = null, string templateName = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<PIItemsStreamValues> GetInterpolatedAsync(string webId, string categoryName = null, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, string interval = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string startTime = null, string syncTime = null, string syncTimeBoundaryType = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns interpolated values of attributes for an element, event frame or attribute over the specified time range at the specified sampling interval.
@@ -1127,16 +1185,17 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
-		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'.</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="syncTime">An optional start time anchor, in AFTime format. When specified, interpolated data retrieval will use the sync time as the origin for calculating the interval times.</param>
 		/// <param name="syncTimeBoundaryType">An optional string specifying the boundary type to use when applying a syncTime. The allowed values are 'Inside' and 'Outside'. The default is 'Inside'.</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetInterpolatedAsyncWithHttpInfo(string webId, string categoryName = null, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, string interval = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string startTime = null, string syncTime = null, string syncTimeBoundaryType = null, string templateName = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetInterpolatedAsyncWithHttpInfo(string webId, string categoryName = null, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, string interval = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string startTime = null, string syncTime = null, string syncTimeBoundaryType = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns interpolated values of attributes for an element, event frame or attribute at the specified times.
@@ -1159,8 +1218,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValues></returns>
-		System.Threading.Tasks.Task<PIItemsStreamValues> GetInterpolatedAtTimesAsync(string webId, List<string> time, string categoryName = null, string filterExpression = null, bool? includeFilteredValues = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortOrder = null, string templateName = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<PIItemsStreamValues> GetInterpolatedAtTimesAsync(string webId, List<string> time, string categoryName = null, string filterExpression = null, bool? includeFilteredValues = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortOrder = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns interpolated values of attributes for an element, event frame or attribute at the specified times.
@@ -1183,8 +1243,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetInterpolatedAtTimesAsyncWithHttpInfo(string webId, List<string> time, string categoryName = null, string filterExpression = null, bool? includeFilteredValues = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortOrder = null, string templateName = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetInterpolatedAtTimesAsyncWithHttpInfo(string webId, List<string> time, string categoryName = null, string filterExpression = null, bool? includeFilteredValues = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortOrder = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns values of attributes for an element, event frame or attribute over the specified time range suitable for plotting over the number of intervals (typically represents pixels).
@@ -1202,14 +1263,15 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValues></returns>
-		System.Threading.Tasks.Task<PIItemsStreamValues> GetPlotAsync(string webId, string categoryName = null, string endTime = null, int? intervals = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string startTime = null, string templateName = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<PIItemsStreamValues> GetPlotAsync(string webId, string categoryName = null, string endTime = null, int? intervals = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string startTime = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns values of attributes for an element, event frame or attribute over the specified time range suitable for plotting over the number of intervals (typically represents pixels).
@@ -1227,14 +1289,15 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetPlotAsyncWithHttpInfo(string webId, string categoryName = null, string endTime = null, int? intervals = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string startTime = null, string templateName = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetPlotAsyncWithHttpInfo(string webId, string categoryName = null, string endTime = null, int? intervals = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string startTime = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns recorded values of the attributes for an element, event frame, or attribute.
@@ -1255,14 +1318,15 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValues></returns>
-		System.Threading.Tasks.Task<PIItemsStreamValues> GetRecordedAsync(string webId, string boundaryType = null, string categoryName = null, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, int? maxCount = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string startTime = null, string templateName = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<PIItemsStreamValues> GetRecordedAsync(string webId, string boundaryType = null, string categoryName = null, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, int? maxCount = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string startTime = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns recorded values of the attributes for an element, event frame, or attribute.
@@ -1283,14 +1347,15 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetRecordedAsyncWithHttpInfo(string webId, string boundaryType = null, string categoryName = null, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, int? maxCount = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string startTime = null, string templateName = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetRecordedAsyncWithHttpInfo(string webId, string boundaryType = null, string categoryName = null, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, int? maxCount = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string startTime = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Updates multiple values for the specified streams.
@@ -1303,8 +1368,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="values">The values to add or update.</param>
 		/// <param name="bufferOption">The desired AFBufferOption. The default is 'BufferIfPossible'.</param>
 		/// <param name="updateOption">The desired AFUpdateOption. The default is 'Replace'.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsItemsSubstatus></returns>
-		System.Threading.Tasks.Task<PIItemsItemsSubstatus> UpdateValuesAsync(string webId, List<PIStreamValues> values, string bufferOption = null, string updateOption = null);
+		System.Threading.Tasks.Task<PIItemsItemsSubstatus> UpdateValuesAsync(string webId, List<PIStreamValues> values, string bufferOption = null, string updateOption = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Updates multiple values for the specified streams.
@@ -1317,8 +1383,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="values">The values to add or update.</param>
 		/// <param name="bufferOption">The desired AFBufferOption. The default is 'BufferIfPossible'.</param>
 		/// <param name="updateOption">The desired AFUpdateOption. The default is 'Replace'.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsItemsSubstatus>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsItemsSubstatus>> UpdateValuesAsyncWithHttpInfo(string webId, List<PIStreamValues> values, string bufferOption = null, string updateOption = null);
+		System.Threading.Tasks.Task<ApiResponse<PIItemsItemsSubstatus>> UpdateValuesAsyncWithHttpInfo(string webId, List<PIStreamValues> values, string bufferOption = null, string updateOption = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns recorded values of the attributes for an element, event frame, or attribute.
@@ -1339,8 +1406,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValues></returns>
-		System.Threading.Tasks.Task<PIItemsStreamValues> GetRecordedAtTimeAsync(string webId, string time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<PIItemsStreamValues> GetRecordedAtTimeAsync(string webId, string time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns recorded values of the attributes for an element, event frame, or attribute.
@@ -1361,8 +1429,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetRecordedAtTimeAsyncWithHttpInfo(string webId, string time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetRecordedAtTimeAsyncWithHttpInfo(string webId, string time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns recorded values of attributes for an element, event frame or attribute at the specified times.
@@ -1384,8 +1453,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValues></returns>
-		System.Threading.Tasks.Task<PIItemsStreamValues> GetRecordedAtTimesAsync(string webId, List<string> time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortOrder = null, string templateName = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<PIItemsStreamValues> GetRecordedAtTimesAsync(string webId, List<string> time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortOrder = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns recorded values of attributes for an element, event frame or attribute at the specified times.
@@ -1407,8 +1477,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetRecordedAtTimesAsyncWithHttpInfo(string webId, List<string> time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortOrder = null, string templateName = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetRecordedAtTimesAsyncWithHttpInfo(string webId, List<string> time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortOrder = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns summary values of the attributes for an element, event frame or attribute.
@@ -1436,8 +1507,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="timeType">Specifies how to calculate the timestamp for each interval. The default is 'Auto'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamSummaries></returns>
-		System.Threading.Tasks.Task<PIItemsStreamSummaries> GetSummariesAsync(string webId, string calculationBasis = null, string categoryName = null, string endTime = null, string filterExpression = null, string nameFilter = null, string sampleInterval = null, string sampleType = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string startTime = null, string summaryDuration = null, List<string> summaryType = null, string templateName = null, string timeType = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<PIItemsStreamSummaries> GetSummariesAsync(string webId, string calculationBasis = null, string categoryName = null, string endTime = null, string filterExpression = null, string nameFilter = null, string sampleInterval = null, string sampleType = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string startTime = null, string summaryDuration = null, List<string> summaryType = null, string templateName = null, string timeType = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns summary values of the attributes for an element, event frame or attribute.
@@ -1465,8 +1537,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="timeType">Specifies how to calculate the timestamp for each interval. The default is 'Auto'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamSummaries>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamSummaries>> GetSummariesAsyncWithHttpInfo(string webId, string calculationBasis = null, string categoryName = null, string endTime = null, string filterExpression = null, string nameFilter = null, string sampleInterval = null, string sampleType = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string startTime = null, string summaryDuration = null, List<string> summaryType = null, string templateName = null, string timeType = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamSummaries>> GetSummariesAsyncWithHttpInfo(string webId, string calculationBasis = null, string categoryName = null, string endTime = null, string filterExpression = null, string nameFilter = null, string sampleInterval = null, string sampleType = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string startTime = null, string summaryDuration = null, List<string> summaryType = null, string templateName = null, string timeType = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns values of the attributes for an Element, Event Frame or Attribute at the specified time.
@@ -1482,14 +1555,15 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="time">An AF time string, which is used as the time context to get stream values if it is provided. By default, it is not specified, and the default time context of the AF object will be used.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValue></returns>
-		System.Threading.Tasks.Task<PIItemsStreamValue> GetValuesAsync(string webId, string categoryName = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string templateName = null, string time = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<PIItemsStreamValue> GetValuesAsync(string webId, string categoryName = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string templateName = null, string time = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns values of the attributes for an Element, Event Frame or Attribute at the specified time.
@@ -1505,14 +1579,15 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="time">An AF time string, which is used as the time context to get stream values if it is provided. By default, it is not specified, and the default time context of the AF object will be used.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>> GetValuesAsyncWithHttpInfo(string webId, string categoryName = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string templateName = null, string time = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>> GetValuesAsyncWithHttpInfo(string webId, string categoryName = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string templateName = null, string time = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Updates a single value for the specified streams.
@@ -1525,8 +1600,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="values">The values to add or update.</param>
 		/// <param name="bufferOption">The desired AFBufferOption. The default is 'BufferIfPossible'.</param>
 		/// <param name="updateOption">The desired AFUpdateOption. The default is 'Replace'.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsSubstatus></returns>
-		System.Threading.Tasks.Task<PIItemsSubstatus> UpdateValueAsync(string webId, List<PIStreamValue> values, string bufferOption = null, string updateOption = null);
+		System.Threading.Tasks.Task<PIItemsSubstatus> UpdateValueAsync(string webId, List<PIStreamValue> values, string bufferOption = null, string updateOption = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Updates a single value for the specified streams.
@@ -1539,8 +1615,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="values">The values to add or update.</param>
 		/// <param name="bufferOption">The desired AFBufferOption. The default is 'BufferIfPossible'.</param>
 		/// <param name="updateOption">The desired AFUpdateOption. The default is 'Replace'.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsSubstatus>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsSubstatus>> UpdateValueAsyncWithHttpInfo(string webId, List<PIStreamValue> values, string bufferOption = null, string updateOption = null);
+		System.Threading.Tasks.Task<ApiResponse<PIItemsSubstatus>> UpdateValueAsyncWithHttpInfo(string webId, List<PIStreamValue> values, string bufferOption = null, string updateOption = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Opens a channel that will send messages about any value changes for the specified streams.
@@ -1553,8 +1630,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="heartbeatRate">Specifies the maximum number of consecutive empty messages that can be elapsed with no new data updates from the PI System, after which the client receives an empty payload. It helps to check if the connection is still alive. Zero/negative values correspond to no heartbeat, and the default value is no heartbeat.</param>
 		/// <param name="includeInitialValues">Specified if the channel should send a message with the current values of all the streams after the connection is opened. The default is 'false'.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValue></returns>
-		System.Threading.Tasks.Task<PIItemsStreamValue> GetChannelAdHocAsync(List<string> webId, int? heartbeatRate = null, bool? includeInitialValues = null, string webIdType = null);
+		System.Threading.Tasks.Task<PIItemsStreamValue> GetChannelAdHocAsync(List<string> webId, int? heartbeatRate = null, bool? includeInitialValues = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Opens a channel that will send messages about any value changes for the specified streams.
@@ -1567,8 +1645,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="heartbeatRate">Specifies the maximum number of consecutive empty messages that can be elapsed with no new data updates from the PI System, after which the client receives an empty payload. It helps to check if the connection is still alive. Zero/negative values correspond to no heartbeat, and the default value is no heartbeat.</param>
 		/// <param name="includeInitialValues">Specified if the channel should send a message with the current values of all the streams after the connection is opened. The default is 'false'.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>> GetChannelAdHocAsyncWithHttpInfo(List<string> webId, int? heartbeatRate = null, bool? includeInitialValues = null, string webIdType = null);
+		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>> GetChannelAdHocAsyncWithHttpInfo(List<string> webId, int? heartbeatRate = null, bool? includeInitialValues = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns End Of Stream values for attributes of the specified streams
@@ -1579,11 +1658,12 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
 		/// <param name="webId">The ID of a stream. Multiple streams may be specified with multiple instances of the parameter.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValues></returns>
-		System.Threading.Tasks.Task<PIItemsStreamValues> GetEndAdHocAsync(List<string> webId, string selectedFields = null, string sortField = null, string sortOrder = null, string webIdType = null);
+		System.Threading.Tasks.Task<PIItemsStreamValues> GetEndAdHocAsync(List<string> webId, string selectedFields = null, string sortField = null, string sortOrder = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns End Of Stream values for attributes of the specified streams
@@ -1594,11 +1674,12 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
 		/// <param name="webId">The ID of a stream. Multiple streams may be specified with multiple instances of the parameter.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetEndAdHocAsyncWithHttpInfo(List<string> webId, string selectedFields = null, string sortField = null, string sortOrder = null, string webIdType = null);
+		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetEndAdHocAsyncWithHttpInfo(List<string> webId, string selectedFields = null, string sortField = null, string sortOrder = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns interpolated values of the specified streams over the specified time range at the specified sampling interval.
@@ -1613,15 +1694,16 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="includeFilteredValues">Specify 'true' to indicate that values which fail the filter criteria are present in the returned data at the times where they occurred with a value set to a 'Filtered' enumeration value with bad status. Repeated consecutive failures are omitted.</param>
 		/// <param name="interval">The sampling interval, in AFTimeSpan format.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d'.</param>
 		/// <param name="syncTime">An optional start time anchor, in AFTime format. When specified, interpolated data retrieval will use the sync time as the origin for calculating the interval times.</param>
 		/// <param name="syncTimeBoundaryType">An optional string specifying the boundary type to use when applying a syncTime. The allowed values are 'Inside' and 'Outside'. The default is 'Inside'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValues></returns>
-		System.Threading.Tasks.Task<PIItemsStreamValues> GetInterpolatedAdHocAsync(List<string> webId, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, string interval = null, string selectedFields = null, string sortField = null, string sortOrder = null, string startTime = null, string syncTime = null, string syncTimeBoundaryType = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<PIItemsStreamValues> GetInterpolatedAdHocAsync(List<string> webId, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, string interval = null, string selectedFields = null, string sortField = null, string sortOrder = null, string startTime = null, string syncTime = null, string syncTimeBoundaryType = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns interpolated values of the specified streams over the specified time range at the specified sampling interval.
@@ -1636,15 +1718,16 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="includeFilteredValues">Specify 'true' to indicate that values which fail the filter criteria are present in the returned data at the times where they occurred with a value set to a 'Filtered' enumeration value with bad status. Repeated consecutive failures are omitted.</param>
 		/// <param name="interval">The sampling interval, in AFTimeSpan format.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d'.</param>
 		/// <param name="syncTime">An optional start time anchor, in AFTime format. When specified, interpolated data retrieval will use the sync time as the origin for calculating the interval times.</param>
 		/// <param name="syncTimeBoundaryType">An optional string specifying the boundary type to use when applying a syncTime. The allowed values are 'Inside' and 'Outside'. The default is 'Inside'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetInterpolatedAdHocAsyncWithHttpInfo(List<string> webId, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, string interval = null, string selectedFields = null, string sortField = null, string sortOrder = null, string startTime = null, string syncTime = null, string syncTimeBoundaryType = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetInterpolatedAdHocAsyncWithHttpInfo(List<string> webId, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, string interval = null, string selectedFields = null, string sortField = null, string sortOrder = null, string startTime = null, string syncTime = null, string syncTimeBoundaryType = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns interpolated values of the specified streams at the specified times.
@@ -1661,8 +1744,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValues></returns>
-		System.Threading.Tasks.Task<PIItemsStreamValues> GetInterpolatedAtTimesAdHocAsync(List<string> time, List<string> webId, string filterExpression = null, bool? includeFilteredValues = null, string selectedFields = null, string sortOrder = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<PIItemsStreamValues> GetInterpolatedAtTimesAdHocAsync(List<string> time, List<string> webId, string filterExpression = null, bool? includeFilteredValues = null, string selectedFields = null, string sortOrder = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns interpolated values of the specified streams at the specified times.
@@ -1679,8 +1763,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetInterpolatedAtTimesAdHocAsyncWithHttpInfo(List<string> time, List<string> webId, string filterExpression = null, bool? includeFilteredValues = null, string selectedFields = null, string sortOrder = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetInterpolatedAtTimesAdHocAsyncWithHttpInfo(List<string> time, List<string> webId, string filterExpression = null, bool? includeFilteredValues = null, string selectedFields = null, string sortOrder = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns values of attributes for the specified streams over the specified time range suitable for plotting over the number of intervals (typically represents pixels).
@@ -1693,13 +1778,14 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="endTime">An optional end time. The default is '*'. Note that if endTime is earlier than startTime, the resulting values will be in time-descending order.</param>
 		/// <param name="intervals">The number of intervals to plot over. Typically, this would be the number of horizontal pixels in the trend. The default is '24'. For each interval, the data available is examined and significant values are returned. Each interval can produce up to 5 values if they are unique, the first value in the interval, the last value, the highest value, the lowest value and at most one exceptional point (bad status or digital state).</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValues></returns>
-		System.Threading.Tasks.Task<PIItemsStreamValues> GetPlotAdHocAsync(List<string> webId, string endTime = null, int? intervals = null, string selectedFields = null, string sortField = null, string sortOrder = null, string startTime = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<PIItemsStreamValues> GetPlotAdHocAsync(List<string> webId, string endTime = null, int? intervals = null, string selectedFields = null, string sortField = null, string sortOrder = null, string startTime = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns values of attributes for the specified streams over the specified time range suitable for plotting over the number of intervals (typically represents pixels).
@@ -1712,13 +1798,14 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="endTime">An optional end time. The default is '*'. Note that if endTime is earlier than startTime, the resulting values will be in time-descending order.</param>
 		/// <param name="intervals">The number of intervals to plot over. Typically, this would be the number of horizontal pixels in the trend. The default is '24'. For each interval, the data available is examined and significant values are returned. Each interval can produce up to 5 values if they are unique, the first value in the interval, the last value, the highest value, the lowest value and at most one exceptional point (bad status or digital state).</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetPlotAdHocAsyncWithHttpInfo(List<string> webId, string endTime = null, int? intervals = null, string selectedFields = null, string sortField = null, string sortOrder = null, string startTime = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetPlotAdHocAsyncWithHttpInfo(List<string> webId, string endTime = null, int? intervals = null, string selectedFields = null, string sortField = null, string sortOrder = null, string startTime = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns recorded values of the specified streams.
@@ -1734,13 +1821,14 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="includeFilteredValues">Specify 'true' to indicate that values which fail the filter criteria are present in the returned data at the times where they occurred with a value set to a 'Filtered' enumeration value with bad status. Repeated consecutive failures are omitted.</param>
 		/// <param name="maxCount">The maximum number of values to be returned. The default is 1000.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValues></returns>
-		System.Threading.Tasks.Task<PIItemsStreamValues> GetRecordedAdHocAsync(List<string> webId, string boundaryType = null, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, int? maxCount = null, string selectedFields = null, string sortField = null, string sortOrder = null, string startTime = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<PIItemsStreamValues> GetRecordedAdHocAsync(List<string> webId, string boundaryType = null, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, int? maxCount = null, string selectedFields = null, string sortField = null, string sortOrder = null, string startTime = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns recorded values of the specified streams.
@@ -1756,13 +1844,14 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="includeFilteredValues">Specify 'true' to indicate that values which fail the filter criteria are present in the returned data at the times where they occurred with a value set to a 'Filtered' enumeration value with bad status. Repeated consecutive failures are omitted.</param>
 		/// <param name="maxCount">The maximum number of values to be returned. The default is 1000.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetRecordedAdHocAsyncWithHttpInfo(List<string> webId, string boundaryType = null, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, int? maxCount = null, string selectedFields = null, string sortField = null, string sortOrder = null, string startTime = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetRecordedAdHocAsyncWithHttpInfo(List<string> webId, string boundaryType = null, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, int? maxCount = null, string selectedFields = null, string sortField = null, string sortOrder = null, string startTime = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Updates multiple values for the specified streams.
@@ -1774,8 +1863,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="values">The values to add or update.</param>
 		/// <param name="bufferOption">The desired AFBufferOption. The default is 'BufferIfPossible'.</param>
 		/// <param name="updateOption">The desired AFUpdateOption. The default is 'Replace'.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsItemsSubstatus></returns>
-		System.Threading.Tasks.Task<PIItemsItemsSubstatus> UpdateValuesAdHocAsync(List<PIStreamValues> values, string bufferOption = null, string updateOption = null);
+		System.Threading.Tasks.Task<PIItemsItemsSubstatus> UpdateValuesAdHocAsync(List<PIStreamValues> values, string bufferOption = null, string updateOption = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Updates multiple values for the specified streams.
@@ -1787,8 +1877,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="values">The values to add or update.</param>
 		/// <param name="bufferOption">The desired AFBufferOption. The default is 'BufferIfPossible'.</param>
 		/// <param name="updateOption">The desired AFUpdateOption. The default is 'Replace'.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsItemsSubstatus>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsItemsSubstatus>> UpdateValuesAdHocAsyncWithHttpInfo(List<PIStreamValues> values, string bufferOption = null, string updateOption = null);
+		System.Threading.Tasks.Task<ApiResponse<PIItemsItemsSubstatus>> UpdateValuesAdHocAsyncWithHttpInfo(List<PIStreamValues> values, string bufferOption = null, string updateOption = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns recorded values based on the passed time and retrieval mode.
@@ -1803,8 +1894,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValue></returns>
-		System.Threading.Tasks.Task<PIItemsStreamValue> GetRecordedAtTimeAdHocAsync(string time, List<string> webId, string retrievalMode = null, string selectedFields = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<PIItemsStreamValue> GetRecordedAtTimeAdHocAsync(string time, List<string> webId, string retrievalMode = null, string selectedFields = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns recorded values based on the passed time and retrieval mode.
@@ -1819,8 +1911,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>> GetRecordedAtTimeAdHocAsyncWithHttpInfo(string time, List<string> webId, string retrievalMode = null, string selectedFields = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>> GetRecordedAtTimeAdHocAsyncWithHttpInfo(string time, List<string> webId, string retrievalMode = null, string selectedFields = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns recorded values of the specified streams at the specified times.
@@ -1836,8 +1929,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValues></returns>
-		System.Threading.Tasks.Task<PIItemsStreamValues> GetRecordedAtTimesAdHocAsync(List<string> time, List<string> webId, string retrievalMode = null, string selectedFields = null, string sortOrder = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<PIItemsStreamValues> GetRecordedAtTimesAdHocAsync(List<string> time, List<string> webId, string retrievalMode = null, string selectedFields = null, string sortOrder = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns recorded values of the specified streams at the specified times.
@@ -1853,8 +1947,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetRecordedAtTimesAdHocAsyncWithHttpInfo(List<string> time, List<string> webId, string retrievalMode = null, string selectedFields = null, string sortOrder = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetRecordedAtTimesAdHocAsyncWithHttpInfo(List<string> time, List<string> webId, string retrievalMode = null, string selectedFields = null, string sortOrder = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns summary values of the specified streams.
@@ -1876,8 +1971,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="timeType">Specifies how to calculate the timestamp for each interval. The default is 'Auto'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamSummaries></returns>
-		System.Threading.Tasks.Task<PIItemsStreamSummaries> GetSummariesAdHocAsync(List<string> webId, string calculationBasis = null, string endTime = null, string filterExpression = null, string sampleInterval = null, string sampleType = null, string selectedFields = null, string startTime = null, string summaryDuration = null, List<string> summaryType = null, string timeType = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<PIItemsStreamSummaries> GetSummariesAdHocAsync(List<string> webId, string calculationBasis = null, string endTime = null, string filterExpression = null, string sampleInterval = null, string sampleType = null, string selectedFields = null, string startTime = null, string summaryDuration = null, List<string> summaryType = null, string timeType = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns summary values of the specified streams.
@@ -1899,8 +1995,65 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="timeType">Specifies how to calculate the timestamp for each interval. The default is 'Auto'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamSummaries>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamSummaries>> GetSummariesAdHocAsyncWithHttpInfo(List<string> webId, string calculationBasis = null, string endTime = null, string filterExpression = null, string sampleInterval = null, string sampleType = null, string selectedFields = null, string startTime = null, string summaryDuration = null, List<string> summaryType = null, string timeType = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamSummaries>> GetSummariesAdHocAsyncWithHttpInfo(List<string> webId, string calculationBasis = null, string endTime = null, string filterExpression = null, string sampleInterval = null, string sampleType = null, string selectedFields = null, string startTime = null, string summaryDuration = null, List<string> summaryType = null, string timeType = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
+
+		/// <summary>
+		/// Receive stream updates
+		/// </summary>
+		/// <remarks>
+		/// The supplied markers will identify the set of stream updates to retrieve. For a 200 response, the returned location header will contain the url for retrieving the stream updates.
+		/// </remarks>
+		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+		/// <param name="marker">Identifier of stream source and current position. Multiple markers may be specified with multiple instances of the parameter.</param>
+		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
+		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
+		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamUpdatesRetrieve></returns>
+		System.Threading.Tasks.Task<PIItemsStreamUpdatesRetrieve> RetrieveStreamSetUpdatesAsync(List<string> marker, string selectedFields = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
+
+		/// <summary>
+		/// Receive stream updates
+		/// </summary>
+		/// <remarks>
+		/// The supplied markers will identify the set of stream updates to retrieve. For a 200 response, the returned location header will contain the url for retrieving the stream updates.
+		/// </remarks>
+		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+		/// <param name="marker">Identifier of stream source and current position. Multiple markers may be specified with multiple instances of the parameter.</param>
+		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
+		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
+		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamUpdatesRetrieve>></returns>
+		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamUpdatesRetrieve>> RetrieveStreamSetUpdatesAsyncWithHttpInfo(List<string> marker, string selectedFields = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
+
+		/// <summary>
+		/// Register for stream updates
+		/// </summary>
+		/// <remarks>
+		/// The supplied webIds will register for stream updates. For a 200 response, the returned location header will contain the url for retrieving the next set of stream updates.
+		/// </remarks>
+		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+		/// <param name="webId">The ID of a stream. Multiple streams may be specified with multiple instances of the parameter.</param>
+		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
+		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
+		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamUpdatesRegister></returns>
+		System.Threading.Tasks.Task<PIItemsStreamUpdatesRegister> RegisterStreamSetUpdatesAsync(List<string> webId, string selectedFields = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
+
+		/// <summary>
+		/// Register for stream updates
+		/// </summary>
+		/// <remarks>
+		/// The supplied webIds will register for stream updates. For a 200 response, the returned location header will contain the url for retrieving the next set of stream updates.
+		/// </remarks>
+		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+		/// <param name="webId">The ID of a stream. Multiple streams may be specified with multiple instances of the parameter.</param>
+		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
+		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
+		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamUpdatesRegister>></returns>
+		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamUpdatesRegister>> RegisterStreamSetUpdatesAsyncWithHttpInfo(List<string> webId, string selectedFields = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns values of the specified streams.
@@ -1911,13 +2064,14 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
 		/// <param name="webId">The ID of a stream. Multiple streams may be specified with multiple instances of the parameter.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="time">An AF time string, which is used as the time context to get stream values if it is provided. By default, it is not specified, and the default time context of the AF object will be used.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValue></returns>
-		System.Threading.Tasks.Task<PIItemsStreamValue> GetValuesAdHocAsync(List<string> webId, string selectedFields = null, string sortField = null, string sortOrder = null, string time = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<PIItemsStreamValue> GetValuesAdHocAsync(List<string> webId, string selectedFields = null, string sortField = null, string sortOrder = null, string time = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns values of the specified streams.
@@ -1928,13 +2082,14 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
 		/// <param name="webId">The ID of a stream. Multiple streams may be specified with multiple instances of the parameter.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="time">An AF time string, which is used as the time context to get stream values if it is provided. By default, it is not specified, and the default time context of the AF object will be used.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>> GetValuesAdHocAsyncWithHttpInfo(List<string> webId, string selectedFields = null, string sortField = null, string sortOrder = null, string time = null, string timeZone = null, string webIdType = null);
+		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>> GetValuesAdHocAsyncWithHttpInfo(List<string> webId, string selectedFields = null, string sortField = null, string sortOrder = null, string time = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Updates a single value for the specified streams.
@@ -1946,8 +2101,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="values">The values to add or update.</param>
 		/// <param name="bufferOption">The desired AFBufferOption. The default is 'BufferIfPossible'.</param>
 		/// <param name="updateOption">The desired AFUpdateOption. The default is 'Replace'.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsSubstatus></returns>
-		System.Threading.Tasks.Task<PIItemsSubstatus> UpdateValueAdHocAsync(List<PIStreamValue> values, string bufferOption = null, string updateOption = null);
+		System.Threading.Tasks.Task<PIItemsSubstatus> UpdateValueAdHocAsync(List<PIStreamValue> values, string bufferOption = null, string updateOption = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Updates a single value for the specified streams.
@@ -1959,8 +2115,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="values">The values to add or update.</param>
 		/// <param name="bufferOption">The desired AFBufferOption. The default is 'BufferIfPossible'.</param>
 		/// <param name="updateOption">The desired AFUpdateOption. The default is 'Replace'.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsSubstatus>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsSubstatus>> UpdateValueAdHocAsyncWithHttpInfo(List<PIStreamValue> values, string bufferOption = null, string updateOption = null);
+		System.Threading.Tasks.Task<ApiResponse<PIItemsSubstatus>> UpdateValueAdHocAsyncWithHttpInfo(List<PIStreamValue> values, string bufferOption = null, string updateOption = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		#endregion
 	}
@@ -1970,11 +2127,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		private OSIsoft.PIDevClub.PIWebApiClient.Client.ExceptionFactory _exceptionFactory = (name, response) => null;
 		public StreamSetApi(Configuration configuration = null)
 		{
-			if (configuration == null)
-				this.Configuration = Configuration.Default;
-			else
-				this.Configuration = configuration;
-
+			this.Configuration = configuration;
 			ExceptionFactory = OSIsoft.PIDevClub.PIWebApiClient.Client.Configuration.DefaultExceptionFactory;
 			if (Configuration.ApiClient.Configuration == null)
 			{
@@ -2051,30 +2204,21 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (categoryName!= null) localVarQueryParams.Add("categoryName", Configuration.ApiClient.ParameterToString(categoryName));
-			if (heartbeatRate!= null) localVarQueryParams.Add("heartbeatRate", Configuration.ApiClient.ParameterToString(heartbeatRate));
-			if (includeInitialValues!= null) localVarQueryParams.Add("includeInitialValues", Configuration.ApiClient.ParameterToString(includeInitialValues));
-			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", Configuration.ApiClient.ParameterToString(nameFilter));
-			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", Configuration.ApiClient.ParameterToString(searchFullHierarchy));
-			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", Configuration.ApiClient.ParameterToString(showExcluded));
-			if (showHidden!= null) localVarQueryParams.Add("showHidden", Configuration.ApiClient.ParameterToString(showHidden));
-			if (templateName!= null) localVarQueryParams.Add("templateName", Configuration.ApiClient.ParameterToString(templateName));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (categoryName!= null) localVarQueryParams.Add("categoryName", categoryName, false);
+			if (heartbeatRate!= null) localVarQueryParams.Add("heartbeatRate", heartbeatRate, false);
+			if (includeInitialValues!= null) localVarQueryParams.Add("includeInitialValues", includeInitialValues, false);
+			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", nameFilter, false);
+			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", searchFullHierarchy, false);
+			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", showExcluded, false);
+			if (showHidden!= null) localVarQueryParams.Add("showHidden", showHidden, false);
+			if (templateName!= null) localVarQueryParams.Add("templateName", templateName, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -2085,7 +2229,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValue>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValue)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValue)));
 		}
 
@@ -2103,7 +2247,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
@@ -2128,7 +2272,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
@@ -2144,31 +2288,22 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (categoryName!= null) localVarQueryParams.Add("categoryName", Configuration.ApiClient.ParameterToString(categoryName));
-			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", Configuration.ApiClient.ParameterToString(nameFilter));
-			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", Configuration.ApiClient.ParameterToString(searchFullHierarchy));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", Configuration.ApiClient.ParameterToString(showExcluded));
-			if (showHidden!= null) localVarQueryParams.Add("showHidden", Configuration.ApiClient.ParameterToString(showHidden));
-			if (sortField!= null) localVarQueryParams.Add("sortField", Configuration.ApiClient.ParameterToString(sortField));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (templateName!= null) localVarQueryParams.Add("templateName", Configuration.ApiClient.ParameterToString(templateName));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (categoryName!= null) localVarQueryParams.Add("categoryName", categoryName, false);
+			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", nameFilter, false);
+			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", searchFullHierarchy, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", showExcluded, false);
+			if (showHidden!= null) localVarQueryParams.Add("showHidden", showHidden, false);
+			if (sortField!= null) localVarQueryParams.Add("sortField", sortField, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (templateName!= null) localVarQueryParams.Add("templateName", templateName, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -2179,7 +2314,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValue>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValue)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValue)));
 		}
 
@@ -2201,8 +2336,8 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
-		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'.</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="syncTime">An optional start time anchor, in AFTime format. When specified, interpolated data retrieval will use the sync time as the origin for calculating the interval times.</param>
 		/// <param name="syncTimeBoundaryType">An optional string specifying the boundary type to use when applying a syncTime. The allowed values are 'Inside' and 'Outside'. The default is 'Inside'.</param>
@@ -2234,8 +2369,8 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
-		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'.</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="syncTime">An optional start time anchor, in AFTime format. When specified, interpolated data retrieval will use the sync time as the origin for calculating the interval times.</param>
 		/// <param name="syncTimeBoundaryType">An optional string specifying the boundary type to use when applying a syncTime. The allowed values are 'Inside' and 'Outside'. The default is 'Inside'.</param>
@@ -2254,39 +2389,30 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (categoryName!= null) localVarQueryParams.Add("categoryName", Configuration.ApiClient.ParameterToString(categoryName));
-			if (endTime!= null) localVarQueryParams.Add("endTime", Configuration.ApiClient.ParameterToString(endTime));
-			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", Configuration.ApiClient.ParameterToString(filterExpression));
-			if (includeFilteredValues!= null) localVarQueryParams.Add("includeFilteredValues", Configuration.ApiClient.ParameterToString(includeFilteredValues));
-			if (interval!= null) localVarQueryParams.Add("interval", Configuration.ApiClient.ParameterToString(interval));
-			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", Configuration.ApiClient.ParameterToString(nameFilter));
-			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", Configuration.ApiClient.ParameterToString(searchFullHierarchy));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", Configuration.ApiClient.ParameterToString(showExcluded));
-			if (showHidden!= null) localVarQueryParams.Add("showHidden", Configuration.ApiClient.ParameterToString(showHidden));
-			if (sortField!= null) localVarQueryParams.Add("sortField", Configuration.ApiClient.ParameterToString(sortField));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (startTime!= null) localVarQueryParams.Add("startTime", Configuration.ApiClient.ParameterToString(startTime));
-			if (syncTime!= null) localVarQueryParams.Add("syncTime", Configuration.ApiClient.ParameterToString(syncTime));
-			if (syncTimeBoundaryType!= null) localVarQueryParams.Add("syncTimeBoundaryType", Configuration.ApiClient.ParameterToString(syncTimeBoundaryType));
-			if (templateName!= null) localVarQueryParams.Add("templateName", Configuration.ApiClient.ParameterToString(templateName));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (categoryName!= null) localVarQueryParams.Add("categoryName", categoryName, false);
+			if (endTime!= null) localVarQueryParams.Add("endTime", endTime, false);
+			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", filterExpression, false);
+			if (includeFilteredValues!= null) localVarQueryParams.Add("includeFilteredValues", includeFilteredValues, false);
+			if (interval!= null) localVarQueryParams.Add("interval", interval, false);
+			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", nameFilter, false);
+			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", searchFullHierarchy, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", showExcluded, false);
+			if (showHidden!= null) localVarQueryParams.Add("showHidden", showHidden, false);
+			if (sortField!= null) localVarQueryParams.Add("sortField", sortField, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (startTime!= null) localVarQueryParams.Add("startTime", startTime, false);
+			if (syncTime!= null) localVarQueryParams.Add("syncTime", syncTime, false);
+			if (syncTimeBoundaryType!= null) localVarQueryParams.Add("syncTimeBoundaryType", syncTimeBoundaryType, false);
+			if (templateName!= null) localVarQueryParams.Add("templateName", templateName, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -2297,7 +2423,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValues)));
 		}
 
@@ -2365,34 +2491,25 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (time!= null) localVarQueryParams.Add("time", Configuration.ApiClient.ParameterToString(time));
-			if (categoryName!= null) localVarQueryParams.Add("categoryName", Configuration.ApiClient.ParameterToString(categoryName));
-			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", Configuration.ApiClient.ParameterToString(filterExpression));
-			if (includeFilteredValues!= null) localVarQueryParams.Add("includeFilteredValues", Configuration.ApiClient.ParameterToString(includeFilteredValues));
-			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", Configuration.ApiClient.ParameterToString(nameFilter));
-			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", Configuration.ApiClient.ParameterToString(searchFullHierarchy));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", Configuration.ApiClient.ParameterToString(showExcluded));
-			if (showHidden!= null) localVarQueryParams.Add("showHidden", Configuration.ApiClient.ParameterToString(showHidden));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (templateName!= null) localVarQueryParams.Add("templateName", Configuration.ApiClient.ParameterToString(templateName));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (time!= null) localVarQueryParams.Add("time", time, true);
+			if (categoryName!= null) localVarQueryParams.Add("categoryName", categoryName, false);
+			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", filterExpression, false);
+			if (includeFilteredValues!= null) localVarQueryParams.Add("includeFilteredValues", includeFilteredValues, false);
+			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", nameFilter, false);
+			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", searchFullHierarchy, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", showExcluded, false);
+			if (showHidden!= null) localVarQueryParams.Add("showHidden", showHidden, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (templateName!= null) localVarQueryParams.Add("templateName", templateName, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -2403,7 +2520,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValues)));
 		}
 
@@ -2423,7 +2540,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
@@ -2452,7 +2569,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
@@ -2470,35 +2587,26 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (categoryName!= null) localVarQueryParams.Add("categoryName", Configuration.ApiClient.ParameterToString(categoryName));
-			if (endTime!= null) localVarQueryParams.Add("endTime", Configuration.ApiClient.ParameterToString(endTime));
-			if (intervals!= null) localVarQueryParams.Add("intervals", Configuration.ApiClient.ParameterToString(intervals));
-			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", Configuration.ApiClient.ParameterToString(nameFilter));
-			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", Configuration.ApiClient.ParameterToString(searchFullHierarchy));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", Configuration.ApiClient.ParameterToString(showExcluded));
-			if (showHidden!= null) localVarQueryParams.Add("showHidden", Configuration.ApiClient.ParameterToString(showHidden));
-			if (sortField!= null) localVarQueryParams.Add("sortField", Configuration.ApiClient.ParameterToString(sortField));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (startTime!= null) localVarQueryParams.Add("startTime", Configuration.ApiClient.ParameterToString(startTime));
-			if (templateName!= null) localVarQueryParams.Add("templateName", Configuration.ApiClient.ParameterToString(templateName));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (categoryName!= null) localVarQueryParams.Add("categoryName", categoryName, false);
+			if (endTime!= null) localVarQueryParams.Add("endTime", endTime, false);
+			if (intervals!= null) localVarQueryParams.Add("intervals", intervals, false);
+			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", nameFilter, false);
+			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", searchFullHierarchy, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", showExcluded, false);
+			if (showHidden!= null) localVarQueryParams.Add("showHidden", showHidden, false);
+			if (sortField!= null) localVarQueryParams.Add("sortField", sortField, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (startTime!= null) localVarQueryParams.Add("startTime", startTime, false);
+			if (templateName!= null) localVarQueryParams.Add("templateName", templateName, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -2509,7 +2617,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValues)));
 		}
 
@@ -2532,7 +2640,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
@@ -2564,7 +2672,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
@@ -2582,38 +2690,29 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (boundaryType!= null) localVarQueryParams.Add("boundaryType", Configuration.ApiClient.ParameterToString(boundaryType));
-			if (categoryName!= null) localVarQueryParams.Add("categoryName", Configuration.ApiClient.ParameterToString(categoryName));
-			if (endTime!= null) localVarQueryParams.Add("endTime", Configuration.ApiClient.ParameterToString(endTime));
-			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", Configuration.ApiClient.ParameterToString(filterExpression));
-			if (includeFilteredValues!= null) localVarQueryParams.Add("includeFilteredValues", Configuration.ApiClient.ParameterToString(includeFilteredValues));
-			if (maxCount!= null) localVarQueryParams.Add("maxCount", Configuration.ApiClient.ParameterToString(maxCount));
-			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", Configuration.ApiClient.ParameterToString(nameFilter));
-			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", Configuration.ApiClient.ParameterToString(searchFullHierarchy));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", Configuration.ApiClient.ParameterToString(showExcluded));
-			if (showHidden!= null) localVarQueryParams.Add("showHidden", Configuration.ApiClient.ParameterToString(showHidden));
-			if (sortField!= null) localVarQueryParams.Add("sortField", Configuration.ApiClient.ParameterToString(sortField));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (startTime!= null) localVarQueryParams.Add("startTime", Configuration.ApiClient.ParameterToString(startTime));
-			if (templateName!= null) localVarQueryParams.Add("templateName", Configuration.ApiClient.ParameterToString(templateName));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (boundaryType!= null) localVarQueryParams.Add("boundaryType", boundaryType, false);
+			if (categoryName!= null) localVarQueryParams.Add("categoryName", categoryName, false);
+			if (endTime!= null) localVarQueryParams.Add("endTime", endTime, false);
+			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", filterExpression, false);
+			if (includeFilteredValues!= null) localVarQueryParams.Add("includeFilteredValues", includeFilteredValues, false);
+			if (maxCount!= null) localVarQueryParams.Add("maxCount", maxCount, false);
+			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", nameFilter, false);
+			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", searchFullHierarchy, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", showExcluded, false);
+			if (showHidden!= null) localVarQueryParams.Add("showHidden", showHidden, false);
+			if (sortField!= null) localVarQueryParams.Add("sortField", sortField, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (startTime!= null) localVarQueryParams.Add("startTime", startTime, false);
+			if (templateName!= null) localVarQueryParams.Add("templateName", templateName, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -2624,7 +2723,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValues)));
 		}
 
@@ -2672,31 +2771,15 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (values != null && values.GetType() != typeof(byte[]))
-			{
-				localVarPostBody = Configuration.ApiClient.Serialize(values);
-			}
-			else
-			{
-				localVarPostBody = values;
-			}
-			if (bufferOption!= null) localVarQueryParams.Add("bufferOption", Configuration.ApiClient.ParameterToString(bufferOption));
-			if (updateOption!= null) localVarQueryParams.Add("updateOption", Configuration.ApiClient.ParameterToString(updateOption));
+			localVarPostBody = Configuration.ApiClient.Serialize(values);
+			if (bufferOption!= null) localVarQueryParams.Add("bufferOption", bufferOption, false);
+			if (updateOption!= null) localVarQueryParams.Add("updateOption", updateOption, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.POST, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("POST"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -2707,7 +2790,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsItemsSubstatus>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsItemsSubstatus)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsItemsSubstatus)));
 		}
 
@@ -2771,32 +2854,23 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (time!= null) localVarQueryParams.Add("time", Configuration.ApiClient.ParameterToString(time));
-			if (categoryName!= null) localVarQueryParams.Add("categoryName", Configuration.ApiClient.ParameterToString(categoryName));
-			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", Configuration.ApiClient.ParameterToString(nameFilter));
-			if (retrievalMode!= null) localVarQueryParams.Add("retrievalMode", Configuration.ApiClient.ParameterToString(retrievalMode));
-			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", Configuration.ApiClient.ParameterToString(searchFullHierarchy));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", Configuration.ApiClient.ParameterToString(showExcluded));
-			if (showHidden!= null) localVarQueryParams.Add("showHidden", Configuration.ApiClient.ParameterToString(showHidden));
-			if (templateName!= null) localVarQueryParams.Add("templateName", Configuration.ApiClient.ParameterToString(templateName));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (time!= null) localVarQueryParams.Add("time", time, false);
+			if (categoryName!= null) localVarQueryParams.Add("categoryName", categoryName, false);
+			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", nameFilter, false);
+			if (retrievalMode!= null) localVarQueryParams.Add("retrievalMode", retrievalMode, false);
+			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", searchFullHierarchy, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", showExcluded, false);
+			if (showHidden!= null) localVarQueryParams.Add("showHidden", showHidden, false);
+			if (templateName!= null) localVarQueryParams.Add("templateName", templateName, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -2807,7 +2881,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValues)));
 		}
 
@@ -2873,33 +2947,24 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (time!= null) localVarQueryParams.Add("time", Configuration.ApiClient.ParameterToString(time));
-			if (categoryName!= null) localVarQueryParams.Add("categoryName", Configuration.ApiClient.ParameterToString(categoryName));
-			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", Configuration.ApiClient.ParameterToString(nameFilter));
-			if (retrievalMode!= null) localVarQueryParams.Add("retrievalMode", Configuration.ApiClient.ParameterToString(retrievalMode));
-			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", Configuration.ApiClient.ParameterToString(searchFullHierarchy));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", Configuration.ApiClient.ParameterToString(showExcluded));
-			if (showHidden!= null) localVarQueryParams.Add("showHidden", Configuration.ApiClient.ParameterToString(showHidden));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (templateName!= null) localVarQueryParams.Add("templateName", Configuration.ApiClient.ParameterToString(templateName));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (time!= null) localVarQueryParams.Add("time", time, true);
+			if (categoryName!= null) localVarQueryParams.Add("categoryName", categoryName, false);
+			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", nameFilter, false);
+			if (retrievalMode!= null) localVarQueryParams.Add("retrievalMode", retrievalMode, false);
+			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", searchFullHierarchy, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", showExcluded, false);
+			if (showHidden!= null) localVarQueryParams.Add("showHidden", showHidden, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (templateName!= null) localVarQueryParams.Add("templateName", templateName, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -2910,7 +2975,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValues)));
 		}
 
@@ -2985,39 +3050,30 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (calculationBasis!= null) localVarQueryParams.Add("calculationBasis", Configuration.ApiClient.ParameterToString(calculationBasis));
-			if (categoryName!= null) localVarQueryParams.Add("categoryName", Configuration.ApiClient.ParameterToString(categoryName));
-			if (endTime!= null) localVarQueryParams.Add("endTime", Configuration.ApiClient.ParameterToString(endTime));
-			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", Configuration.ApiClient.ParameterToString(filterExpression));
-			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", Configuration.ApiClient.ParameterToString(nameFilter));
-			if (sampleInterval!= null) localVarQueryParams.Add("sampleInterval", Configuration.ApiClient.ParameterToString(sampleInterval));
-			if (sampleType!= null) localVarQueryParams.Add("sampleType", Configuration.ApiClient.ParameterToString(sampleType));
-			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", Configuration.ApiClient.ParameterToString(searchFullHierarchy));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", Configuration.ApiClient.ParameterToString(showExcluded));
-			if (showHidden!= null) localVarQueryParams.Add("showHidden", Configuration.ApiClient.ParameterToString(showHidden));
-			if (startTime!= null) localVarQueryParams.Add("startTime", Configuration.ApiClient.ParameterToString(startTime));
-			if (summaryDuration!= null) localVarQueryParams.Add("summaryDuration", Configuration.ApiClient.ParameterToString(summaryDuration));
-			if (summaryType!= null) localVarQueryParams.Add("summaryType", Configuration.ApiClient.ParameterToString(summaryType));
-			if (templateName!= null) localVarQueryParams.Add("templateName", Configuration.ApiClient.ParameterToString(templateName));
-			if (timeType!= null) localVarQueryParams.Add("timeType", Configuration.ApiClient.ParameterToString(timeType));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (calculationBasis!= null) localVarQueryParams.Add("calculationBasis", calculationBasis, false);
+			if (categoryName!= null) localVarQueryParams.Add("categoryName", categoryName, false);
+			if (endTime!= null) localVarQueryParams.Add("endTime", endTime, false);
+			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", filterExpression, false);
+			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", nameFilter, false);
+			if (sampleInterval!= null) localVarQueryParams.Add("sampleInterval", sampleInterval, false);
+			if (sampleType!= null) localVarQueryParams.Add("sampleType", sampleType, false);
+			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", searchFullHierarchy, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", showExcluded, false);
+			if (showHidden!= null) localVarQueryParams.Add("showHidden", showHidden, false);
+			if (startTime!= null) localVarQueryParams.Add("startTime", startTime, false);
+			if (summaryDuration!= null) localVarQueryParams.Add("summaryDuration", summaryDuration, false);
+			if (summaryType!= null) localVarQueryParams.Add("summaryType", summaryType, true);
+			if (templateName!= null) localVarQueryParams.Add("templateName", templateName, false);
+			if (timeType!= null) localVarQueryParams.Add("timeType", timeType, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -3028,7 +3084,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamSummaries>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamSummaries)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamSummaries)));
 		}
 
@@ -3046,7 +3102,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="time">An AF time string, which is used as the time context to get stream values if it is provided. By default, it is not specified, and the default time context of the AF object will be used.</param>
@@ -3073,7 +3129,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="time">An AF time string, which is used as the time context to get stream values if it is provided. By default, it is not specified, and the default time context of the AF object will be used.</param>
@@ -3091,33 +3147,24 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (categoryName!= null) localVarQueryParams.Add("categoryName", Configuration.ApiClient.ParameterToString(categoryName));
-			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", Configuration.ApiClient.ParameterToString(nameFilter));
-			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", Configuration.ApiClient.ParameterToString(searchFullHierarchy));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", Configuration.ApiClient.ParameterToString(showExcluded));
-			if (showHidden!= null) localVarQueryParams.Add("showHidden", Configuration.ApiClient.ParameterToString(showHidden));
-			if (sortField!= null) localVarQueryParams.Add("sortField", Configuration.ApiClient.ParameterToString(sortField));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (templateName!= null) localVarQueryParams.Add("templateName", Configuration.ApiClient.ParameterToString(templateName));
-			if (time!= null) localVarQueryParams.Add("time", Configuration.ApiClient.ParameterToString(time));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (categoryName!= null) localVarQueryParams.Add("categoryName", categoryName, false);
+			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", nameFilter, false);
+			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", searchFullHierarchy, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", showExcluded, false);
+			if (showHidden!= null) localVarQueryParams.Add("showHidden", showHidden, false);
+			if (sortField!= null) localVarQueryParams.Add("sortField", sortField, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (templateName!= null) localVarQueryParams.Add("templateName", templateName, false);
+			if (time!= null) localVarQueryParams.Add("time", time, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -3128,7 +3175,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValue>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValue)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValue)));
 		}
 
@@ -3176,31 +3223,15 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (values != null && values.GetType() != typeof(byte[]))
-			{
-				localVarPostBody = Configuration.ApiClient.Serialize(values);
-			}
-			else
-			{
-				localVarPostBody = values;
-			}
-			if (bufferOption!= null) localVarQueryParams.Add("bufferOption", Configuration.ApiClient.ParameterToString(bufferOption));
-			if (updateOption!= null) localVarQueryParams.Add("updateOption", Configuration.ApiClient.ParameterToString(updateOption));
+			localVarPostBody = Configuration.ApiClient.Serialize(values);
+			if (bufferOption!= null) localVarQueryParams.Add("bufferOption", bufferOption, false);
+			if (updateOption!= null) localVarQueryParams.Add("updateOption", updateOption, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.POST, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("POST"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -3211,7 +3242,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsSubstatus>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsSubstatus)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsSubstatus)));
 		}
 
@@ -3256,24 +3287,15 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (heartbeatRate!= null) localVarQueryParams.Add("heartbeatRate", Configuration.ApiClient.ParameterToString(heartbeatRate));
-			if (includeInitialValues!= null) localVarQueryParams.Add("includeInitialValues", Configuration.ApiClient.ParameterToString(includeInitialValues));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (webId!= null) localVarQueryParams.Add("webId", webId, true);
+			if (heartbeatRate!= null) localVarQueryParams.Add("heartbeatRate", heartbeatRate, false);
+			if (includeInitialValues!= null) localVarQueryParams.Add("includeInitialValues", includeInitialValues, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -3284,7 +3306,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValue>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValue)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValue)));
 		}
 
@@ -3297,7 +3319,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
 		/// <param name="webId">The ID of a stream. Multiple streams may be specified with multiple instances of the parameter.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
 		/// <returns>PIItemsStreamValues</returns>
@@ -3316,7 +3338,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
 		/// <param name="webId">The ID of a stream. Multiple streams may be specified with multiple instances of the parameter.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
 		/// <returns>ApiResponse<PIItemsStreamValues></returns>
@@ -3331,25 +3353,16 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (sortField!= null) localVarQueryParams.Add("sortField", Configuration.ApiClient.ParameterToString(sortField));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (webId!= null) localVarQueryParams.Add("webId", webId, true);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (sortField!= null) localVarQueryParams.Add("sortField", sortField, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -3360,7 +3373,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValues)));
 		}
 
@@ -3377,7 +3390,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="includeFilteredValues">Specify 'true' to indicate that values which fail the filter criteria are present in the returned data at the times where they occurred with a value set to a 'Filtered' enumeration value with bad status. Repeated consecutive failures are omitted.</param>
 		/// <param name="interval">The sampling interval, in AFTimeSpan format.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d'.</param>
 		/// <param name="syncTime">An optional start time anchor, in AFTime format. When specified, interpolated data retrieval will use the sync time as the origin for calculating the interval times.</param>
@@ -3404,7 +3417,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="includeFilteredValues">Specify 'true' to indicate that values which fail the filter criteria are present in the returned data at the times where they occurred with a value set to a 'Filtered' enumeration value with bad status. Repeated consecutive failures are omitted.</param>
 		/// <param name="interval">The sampling interval, in AFTimeSpan format.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d'.</param>
 		/// <param name="syncTime">An optional start time anchor, in AFTime format. When specified, interpolated data retrieval will use the sync time as the origin for calculating the interval times.</param>
@@ -3423,33 +3436,24 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (endTime!= null) localVarQueryParams.Add("endTime", Configuration.ApiClient.ParameterToString(endTime));
-			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", Configuration.ApiClient.ParameterToString(filterExpression));
-			if (includeFilteredValues!= null) localVarQueryParams.Add("includeFilteredValues", Configuration.ApiClient.ParameterToString(includeFilteredValues));
-			if (interval!= null) localVarQueryParams.Add("interval", Configuration.ApiClient.ParameterToString(interval));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (sortField!= null) localVarQueryParams.Add("sortField", Configuration.ApiClient.ParameterToString(sortField));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (startTime!= null) localVarQueryParams.Add("startTime", Configuration.ApiClient.ParameterToString(startTime));
-			if (syncTime!= null) localVarQueryParams.Add("syncTime", Configuration.ApiClient.ParameterToString(syncTime));
-			if (syncTimeBoundaryType!= null) localVarQueryParams.Add("syncTimeBoundaryType", Configuration.ApiClient.ParameterToString(syncTimeBoundaryType));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (webId!= null) localVarQueryParams.Add("webId", webId, true);
+			if (endTime!= null) localVarQueryParams.Add("endTime", endTime, false);
+			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", filterExpression, false);
+			if (includeFilteredValues!= null) localVarQueryParams.Add("includeFilteredValues", includeFilteredValues, false);
+			if (interval!= null) localVarQueryParams.Add("interval", interval, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (sortField!= null) localVarQueryParams.Add("sortField", sortField, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (startTime!= null) localVarQueryParams.Add("startTime", startTime, false);
+			if (syncTime!= null) localVarQueryParams.Add("syncTime", syncTime, false);
+			if (syncTimeBoundaryType!= null) localVarQueryParams.Add("syncTimeBoundaryType", syncTimeBoundaryType, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -3460,7 +3464,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValues)));
 		}
 
@@ -3516,28 +3520,19 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (time!= null) localVarQueryParams.Add("time", Configuration.ApiClient.ParameterToString(time));
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", Configuration.ApiClient.ParameterToString(filterExpression));
-			if (includeFilteredValues!= null) localVarQueryParams.Add("includeFilteredValues", Configuration.ApiClient.ParameterToString(includeFilteredValues));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (time!= null) localVarQueryParams.Add("time", time, true);
+			if (webId!= null) localVarQueryParams.Add("webId", webId, true);
+			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", filterExpression, false);
+			if (includeFilteredValues!= null) localVarQueryParams.Add("includeFilteredValues", includeFilteredValues, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -3548,7 +3543,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValues)));
 		}
 
@@ -3563,7 +3558,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="endTime">An optional end time. The default is '*'. Note that if endTime is earlier than startTime, the resulting values will be in time-descending order.</param>
 		/// <param name="intervals">The number of intervals to plot over. Typically, this would be the number of horizontal pixels in the trend. The default is '24'. For each interval, the data available is examined and significant values are returned. Each interval can produce up to 5 values if they are unique, the first value in the interval, the last value, the highest value, the lowest value and at most one exceptional point (bad status or digital state).</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
@@ -3586,7 +3581,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="endTime">An optional end time. The default is '*'. Note that if endTime is earlier than startTime, the resulting values will be in time-descending order.</param>
 		/// <param name="intervals">The number of intervals to plot over. Typically, this would be the number of horizontal pixels in the trend. The default is '24'. For each interval, the data available is examined and significant values are returned. Each interval can produce up to 5 values if they are unique, the first value in the interval, the last value, the highest value, the lowest value and at most one exceptional point (bad status or digital state).</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
@@ -3603,29 +3598,20 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (endTime!= null) localVarQueryParams.Add("endTime", Configuration.ApiClient.ParameterToString(endTime));
-			if (intervals!= null) localVarQueryParams.Add("intervals", Configuration.ApiClient.ParameterToString(intervals));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (sortField!= null) localVarQueryParams.Add("sortField", Configuration.ApiClient.ParameterToString(sortField));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (startTime!= null) localVarQueryParams.Add("startTime", Configuration.ApiClient.ParameterToString(startTime));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (webId!= null) localVarQueryParams.Add("webId", webId, true);
+			if (endTime!= null) localVarQueryParams.Add("endTime", endTime, false);
+			if (intervals!= null) localVarQueryParams.Add("intervals", intervals, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (sortField!= null) localVarQueryParams.Add("sortField", sortField, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (startTime!= null) localVarQueryParams.Add("startTime", startTime, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -3636,7 +3622,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValues)));
 		}
 
@@ -3654,7 +3640,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="includeFilteredValues">Specify 'true' to indicate that values which fail the filter criteria are present in the returned data at the times where they occurred with a value set to a 'Filtered' enumeration value with bad status. Repeated consecutive failures are omitted.</param>
 		/// <param name="maxCount">The maximum number of values to be returned. The default is 1000.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
@@ -3680,7 +3666,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="includeFilteredValues">Specify 'true' to indicate that values which fail the filter criteria are present in the returned data at the times where they occurred with a value set to a 'Filtered' enumeration value with bad status. Repeated consecutive failures are omitted.</param>
 		/// <param name="maxCount">The maximum number of values to be returned. The default is 1000.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
@@ -3697,32 +3683,23 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (boundaryType!= null) localVarQueryParams.Add("boundaryType", Configuration.ApiClient.ParameterToString(boundaryType));
-			if (endTime!= null) localVarQueryParams.Add("endTime", Configuration.ApiClient.ParameterToString(endTime));
-			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", Configuration.ApiClient.ParameterToString(filterExpression));
-			if (includeFilteredValues!= null) localVarQueryParams.Add("includeFilteredValues", Configuration.ApiClient.ParameterToString(includeFilteredValues));
-			if (maxCount!= null) localVarQueryParams.Add("maxCount", Configuration.ApiClient.ParameterToString(maxCount));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (sortField!= null) localVarQueryParams.Add("sortField", Configuration.ApiClient.ParameterToString(sortField));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (startTime!= null) localVarQueryParams.Add("startTime", Configuration.ApiClient.ParameterToString(startTime));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (webId!= null) localVarQueryParams.Add("webId", webId, true);
+			if (boundaryType!= null) localVarQueryParams.Add("boundaryType", boundaryType, false);
+			if (endTime!= null) localVarQueryParams.Add("endTime", endTime, false);
+			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", filterExpression, false);
+			if (includeFilteredValues!= null) localVarQueryParams.Add("includeFilteredValues", includeFilteredValues, false);
+			if (maxCount!= null) localVarQueryParams.Add("maxCount", maxCount, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (sortField!= null) localVarQueryParams.Add("sortField", sortField, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (startTime!= null) localVarQueryParams.Add("startTime", startTime, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -3733,7 +3710,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValues)));
 		}
 
@@ -3776,30 +3753,14 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (values != null && values.GetType() != typeof(byte[]))
-			{
-				localVarPostBody = Configuration.ApiClient.Serialize(values);
-			}
-			else
-			{
-				localVarPostBody = values;
-			}
-			if (bufferOption!= null) localVarQueryParams.Add("bufferOption", Configuration.ApiClient.ParameterToString(bufferOption));
-			if (updateOption!= null) localVarQueryParams.Add("updateOption", Configuration.ApiClient.ParameterToString(updateOption));
+			localVarPostBody = Configuration.ApiClient.Serialize(values);
+			if (bufferOption!= null) localVarQueryParams.Add("bufferOption", bufferOption, false);
+			if (updateOption!= null) localVarQueryParams.Add("updateOption", updateOption, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.POST, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("POST"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -3810,7 +3771,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsItemsSubstatus>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsItemsSubstatus)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsItemsSubstatus)));
 		}
 
@@ -3862,26 +3823,17 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (time!= null) localVarQueryParams.Add("time", Configuration.ApiClient.ParameterToString(time));
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (retrievalMode!= null) localVarQueryParams.Add("retrievalMode", Configuration.ApiClient.ParameterToString(retrievalMode));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (time!= null) localVarQueryParams.Add("time", time, false);
+			if (webId!= null) localVarQueryParams.Add("webId", webId, true);
+			if (retrievalMode!= null) localVarQueryParams.Add("retrievalMode", retrievalMode, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -3892,7 +3844,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValue>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValue)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValue)));
 		}
 
@@ -3946,27 +3898,18 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (time!= null) localVarQueryParams.Add("time", Configuration.ApiClient.ParameterToString(time));
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (retrievalMode!= null) localVarQueryParams.Add("retrievalMode", Configuration.ApiClient.ParameterToString(retrievalMode));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (time!= null) localVarQueryParams.Add("time", time, true);
+			if (webId!= null) localVarQueryParams.Add("webId", webId, true);
+			if (retrievalMode!= null) localVarQueryParams.Add("retrievalMode", retrievalMode, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -3977,7 +3920,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValues)));
 		}
 
@@ -4040,33 +3983,24 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (calculationBasis!= null) localVarQueryParams.Add("calculationBasis", Configuration.ApiClient.ParameterToString(calculationBasis));
-			if (endTime!= null) localVarQueryParams.Add("endTime", Configuration.ApiClient.ParameterToString(endTime));
-			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", Configuration.ApiClient.ParameterToString(filterExpression));
-			if (sampleInterval!= null) localVarQueryParams.Add("sampleInterval", Configuration.ApiClient.ParameterToString(sampleInterval));
-			if (sampleType!= null) localVarQueryParams.Add("sampleType", Configuration.ApiClient.ParameterToString(sampleType));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (startTime!= null) localVarQueryParams.Add("startTime", Configuration.ApiClient.ParameterToString(startTime));
-			if (summaryDuration!= null) localVarQueryParams.Add("summaryDuration", Configuration.ApiClient.ParameterToString(summaryDuration));
-			if (summaryType!= null) localVarQueryParams.Add("summaryType", Configuration.ApiClient.ParameterToString(summaryType));
-			if (timeType!= null) localVarQueryParams.Add("timeType", Configuration.ApiClient.ParameterToString(timeType));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (webId!= null) localVarQueryParams.Add("webId", webId, true);
+			if (calculationBasis!= null) localVarQueryParams.Add("calculationBasis", calculationBasis, false);
+			if (endTime!= null) localVarQueryParams.Add("endTime", endTime, false);
+			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", filterExpression, false);
+			if (sampleInterval!= null) localVarQueryParams.Add("sampleInterval", sampleInterval, false);
+			if (sampleType!= null) localVarQueryParams.Add("sampleType", sampleType, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (startTime!= null) localVarQueryParams.Add("startTime", startTime, false);
+			if (summaryDuration!= null) localVarQueryParams.Add("summaryDuration", summaryDuration, false);
+			if (summaryType!= null) localVarQueryParams.Add("summaryType", summaryType, true);
+			if (timeType!= null) localVarQueryParams.Add("timeType", timeType, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -4077,8 +4011,130 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamSummaries>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamSummaries)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamSummaries)));
+		}
+
+		/// <summary>
+		/// Receive stream updates
+		/// </summary>
+		/// <remarks>
+		/// The supplied markers will identify the set of stream updates to retrieve. For a 200 response, the returned location header will contain the url for retrieving the stream updates.
+		/// </remarks>
+		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+		/// <param name="marker">Identifier of stream source and current position. Multiple markers may be specified with multiple instances of the parameter.</param>
+		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
+		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <returns>PIItemsStreamUpdatesRetrieve</returns>
+		public PIItemsStreamUpdatesRetrieve RetrieveStreamSetUpdates(List<string> marker, string selectedFields = null, string webIdType = null)
+		{
+			ApiResponse<PIItemsStreamUpdatesRetrieve> localVarResponse = RetrieveStreamSetUpdatesWithHttpInfo(marker, selectedFields, webIdType);
+			return localVarResponse.Data;
+		}
+
+		/// <summary>
+		/// Receive stream updates
+		/// </summary>
+		/// <remarks>
+		/// The supplied markers will identify the set of stream updates to retrieve. For a 200 response, the returned location header will contain the url for retrieving the stream updates.
+		/// </remarks>
+		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+		/// <param name="marker">Identifier of stream source and current position. Multiple markers may be specified with multiple instances of the parameter.</param>
+		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
+		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <returns>ApiResponse<PIItemsStreamUpdatesRetrieve></returns>
+		public ApiResponse<PIItemsStreamUpdatesRetrieve> RetrieveStreamSetUpdatesWithHttpInfo(List<string> marker, string selectedFields = null, string webIdType = null)
+		{
+			// verify the required parameter 'marker' is set
+			if (marker == null)
+				throw new ApiException(400, "Missing required parameter 'marker'");
+
+			var localVarPath = "/streamsets/updates";
+			var localVarPathParams = new Dictionary<String, String>();
+			var localVarQueryParams = new CustomDictionaryForQueryString();
+			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
+			var localVarFormParams = new Dictionary<String, String>();
+			string localVarPostBody = null;
+
+			if (marker!= null) localVarQueryParams.Add("marker", marker, true);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
+			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
+
+			int localVarStatusCode = (int)localVarResponse.StatusCode;
+
+			if (ExceptionFactory != null)
+			{
+				Exception exception = ExceptionFactory("RetrieveStreamSetUpdatesWithHttpInfo", localVarResponse);
+				if (exception != null) throw exception;
+			}
+
+			return new ApiResponse<PIItemsStreamUpdatesRetrieve>(localVarStatusCode,
+				localVarResponse.Headers,
+				(PIItemsStreamUpdatesRetrieve)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamUpdatesRetrieve)));
+		}
+
+		/// <summary>
+		/// Register for stream updates
+		/// </summary>
+		/// <remarks>
+		/// The supplied webIds will register for stream updates. For a 200 response, the returned location header will contain the url for retrieving the next set of stream updates.
+		/// </remarks>
+		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+		/// <param name="webId">The ID of a stream. Multiple streams may be specified with multiple instances of the parameter.</param>
+		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
+		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <returns>PIItemsStreamUpdatesRegister</returns>
+		public PIItemsStreamUpdatesRegister RegisterStreamSetUpdates(List<string> webId, string selectedFields = null, string webIdType = null)
+		{
+			ApiResponse<PIItemsStreamUpdatesRegister> localVarResponse = RegisterStreamSetUpdatesWithHttpInfo(webId, selectedFields, webIdType);
+			return localVarResponse.Data;
+		}
+
+		/// <summary>
+		/// Register for stream updates
+		/// </summary>
+		/// <remarks>
+		/// The supplied webIds will register for stream updates. For a 200 response, the returned location header will contain the url for retrieving the next set of stream updates.
+		/// </remarks>
+		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+		/// <param name="webId">The ID of a stream. Multiple streams may be specified with multiple instances of the parameter.</param>
+		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
+		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <returns>ApiResponse<PIItemsStreamUpdatesRegister></returns>
+		public ApiResponse<PIItemsStreamUpdatesRegister> RegisterStreamSetUpdatesWithHttpInfo(List<string> webId, string selectedFields = null, string webIdType = null)
+		{
+			// verify the required parameter 'webId' is set
+			if (webId == null)
+				throw new ApiException(400, "Missing required parameter 'webId'");
+
+			var localVarPath = "/streamsets/updates";
+			var localVarPathParams = new Dictionary<String, String>();
+			var localVarQueryParams = new CustomDictionaryForQueryString();
+			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
+			var localVarFormParams = new Dictionary<String, String>();
+			string localVarPostBody = null;
+
+			if (webId!= null) localVarQueryParams.Add("webId", webId, true);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
+			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
+				new HttpMethod("POST"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
+
+			int localVarStatusCode = (int)localVarResponse.StatusCode;
+
+			if (ExceptionFactory != null)
+			{
+				Exception exception = ExceptionFactory("RegisterStreamSetUpdatesWithHttpInfo", localVarResponse);
+				if (exception != null) throw exception;
+			}
+
+			return new ApiResponse<PIItemsStreamUpdatesRegister>(localVarStatusCode,
+				localVarResponse.Headers,
+				(PIItemsStreamUpdatesRegister)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamUpdatesRegister)));
 		}
 
 		/// <summary>
@@ -4090,7 +4146,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
 		/// <param name="webId">The ID of a stream. Multiple streams may be specified with multiple instances of the parameter.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="time">An AF time string, which is used as the time context to get stream values if it is provided. By default, it is not specified, and the default time context of the AF object will be used.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
@@ -4111,7 +4167,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
 		/// <param name="webId">The ID of a stream. Multiple streams may be specified with multiple instances of the parameter.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="time">An AF time string, which is used as the time context to get stream values if it is provided. By default, it is not specified, and the default time context of the AF object will be used.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
@@ -4128,27 +4184,18 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (sortField!= null) localVarQueryParams.Add("sortField", Configuration.ApiClient.ParameterToString(sortField));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (time!= null) localVarQueryParams.Add("time", Configuration.ApiClient.ParameterToString(time));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (webId!= null) localVarQueryParams.Add("webId", webId, true);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (sortField!= null) localVarQueryParams.Add("sortField", sortField, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (time!= null) localVarQueryParams.Add("time", time, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -4159,7 +4206,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValue>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValue)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValue)));
 		}
 
@@ -4202,30 +4249,14 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (values != null && values.GetType() != typeof(byte[]))
-			{
-				localVarPostBody = Configuration.ApiClient.Serialize(values);
-			}
-			else
-			{
-				localVarPostBody = values;
-			}
-			if (bufferOption!= null) localVarQueryParams.Add("bufferOption", Configuration.ApiClient.ParameterToString(bufferOption));
-			if (updateOption!= null) localVarQueryParams.Add("updateOption", Configuration.ApiClient.ParameterToString(updateOption));
+			localVarPostBody = Configuration.ApiClient.Serialize(values);
+			if (bufferOption!= null) localVarQueryParams.Add("bufferOption", bufferOption, false);
+			if (updateOption!= null) localVarQueryParams.Add("updateOption", updateOption, false);
 			IRestResponse localVarResponse = (IRestResponse)Configuration.ApiClient.CallApi(localVarPath,
-				Method.POST, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("POST"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -4236,7 +4267,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsSubstatus>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsSubstatus)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsSubstatus)));
 		}
 
@@ -4259,10 +4290,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValue></returns>
-		public async System.Threading.Tasks.Task<PIItemsStreamValue> GetChannelAsync(string webId, string categoryName = null, int? heartbeatRate = null, bool? includeInitialValues = null, string nameFilter = null, bool? searchFullHierarchy = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<PIItemsStreamValue> GetChannelAsync(string webId, string categoryName = null, int? heartbeatRate = null, bool? includeInitialValues = null, string nameFilter = null, bool? searchFullHierarchy = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsStreamValue> localVarResponse = await GetChannelAsyncWithHttpInfo(webId, categoryName, heartbeatRate, includeInitialValues, nameFilter, searchFullHierarchy, showExcluded, showHidden, templateName, webIdType);
+			ApiResponse<PIItemsStreamValue> localVarResponse = await GetChannelAsyncWithHttpInfo(webId, categoryName, heartbeatRate, includeInitialValues, nameFilter, searchFullHierarchy, showExcluded, showHidden, templateName, webIdType, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -4283,8 +4315,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>> GetChannelAsyncWithHttpInfo(string webId, string categoryName = null, int? heartbeatRate = null, bool? includeInitialValues = null, string nameFilter = null, bool? searchFullHierarchy = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>> GetChannelAsyncWithHttpInfo(string webId, string categoryName = null, int? heartbeatRate = null, bool? includeInitialValues = null, string nameFilter = null, bool? searchFullHierarchy = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'webId' is set
 			if (webId == null)
@@ -4295,30 +4328,21 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (categoryName!= null) localVarQueryParams.Add("categoryName", Configuration.ApiClient.ParameterToString(categoryName));
-			if (heartbeatRate!= null) localVarQueryParams.Add("heartbeatRate", Configuration.ApiClient.ParameterToString(heartbeatRate));
-			if (includeInitialValues!= null) localVarQueryParams.Add("includeInitialValues", Configuration.ApiClient.ParameterToString(includeInitialValues));
-			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", Configuration.ApiClient.ParameterToString(nameFilter));
-			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", Configuration.ApiClient.ParameterToString(searchFullHierarchy));
-			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", Configuration.ApiClient.ParameterToString(showExcluded));
-			if (showHidden!= null) localVarQueryParams.Add("showHidden", Configuration.ApiClient.ParameterToString(showHidden));
-			if (templateName!= null) localVarQueryParams.Add("templateName", Configuration.ApiClient.ParameterToString(templateName));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (categoryName!= null) localVarQueryParams.Add("categoryName", categoryName, false);
+			if (heartbeatRate!= null) localVarQueryParams.Add("heartbeatRate", heartbeatRate, false);
+			if (includeInitialValues!= null) localVarQueryParams.Add("includeInitialValues", includeInitialValues, false);
+			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", nameFilter, false);
+			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", searchFullHierarchy, false);
+			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", showExcluded, false);
+			if (showHidden!= null) localVarQueryParams.Add("showHidden", showHidden, false);
+			if (templateName!= null) localVarQueryParams.Add("templateName", templateName, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -4329,7 +4353,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValue>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValue)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValue)));
 		}
 
@@ -4347,14 +4371,15 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValue></returns>
-		public async System.Threading.Tasks.Task<PIItemsStreamValue> GetEndAsync(string webId, string categoryName = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string templateName = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<PIItemsStreamValue> GetEndAsync(string webId, string categoryName = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string templateName = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsStreamValue> localVarResponse = await GetEndAsyncWithHttpInfo(webId, categoryName, nameFilter, searchFullHierarchy, selectedFields, showExcluded, showHidden, sortField, sortOrder, templateName, webIdType);
+			ApiResponse<PIItemsStreamValue> localVarResponse = await GetEndAsyncWithHttpInfo(webId, categoryName, nameFilter, searchFullHierarchy, selectedFields, showExcluded, showHidden, sortField, sortOrder, templateName, webIdType, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -4372,12 +4397,13 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>> GetEndAsyncWithHttpInfo(string webId, string categoryName = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string templateName = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>> GetEndAsyncWithHttpInfo(string webId, string categoryName = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string templateName = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'webId' is set
 			if (webId == null)
@@ -4388,31 +4414,22 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (categoryName!= null) localVarQueryParams.Add("categoryName", Configuration.ApiClient.ParameterToString(categoryName));
-			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", Configuration.ApiClient.ParameterToString(nameFilter));
-			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", Configuration.ApiClient.ParameterToString(searchFullHierarchy));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", Configuration.ApiClient.ParameterToString(showExcluded));
-			if (showHidden!= null) localVarQueryParams.Add("showHidden", Configuration.ApiClient.ParameterToString(showHidden));
-			if (sortField!= null) localVarQueryParams.Add("sortField", Configuration.ApiClient.ParameterToString(sortField));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (templateName!= null) localVarQueryParams.Add("templateName", Configuration.ApiClient.ParameterToString(templateName));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (categoryName!= null) localVarQueryParams.Add("categoryName", categoryName, false);
+			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", nameFilter, false);
+			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", searchFullHierarchy, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", showExcluded, false);
+			if (showHidden!= null) localVarQueryParams.Add("showHidden", showHidden, false);
+			if (sortField!= null) localVarQueryParams.Add("sortField", sortField, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (templateName!= null) localVarQueryParams.Add("templateName", templateName, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -4423,7 +4440,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValue>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValue)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValue)));
 		}
 
@@ -4445,18 +4462,19 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
-		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'.</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="syncTime">An optional start time anchor, in AFTime format. When specified, interpolated data retrieval will use the sync time as the origin for calculating the interval times.</param>
 		/// <param name="syncTimeBoundaryType">An optional string specifying the boundary type to use when applying a syncTime. The allowed values are 'Inside' and 'Outside'. The default is 'Inside'.</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValues></returns>
-		public async System.Threading.Tasks.Task<PIItemsStreamValues> GetInterpolatedAsync(string webId, string categoryName = null, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, string interval = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string startTime = null, string syncTime = null, string syncTimeBoundaryType = null, string templateName = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<PIItemsStreamValues> GetInterpolatedAsync(string webId, string categoryName = null, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, string interval = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string startTime = null, string syncTime = null, string syncTimeBoundaryType = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsStreamValues> localVarResponse = await GetInterpolatedAsyncWithHttpInfo(webId, categoryName, endTime, filterExpression, includeFilteredValues, interval, nameFilter, searchFullHierarchy, selectedFields, showExcluded, showHidden, sortField, sortOrder, startTime, syncTime, syncTimeBoundaryType, templateName, timeZone, webIdType);
+			ApiResponse<PIItemsStreamValues> localVarResponse = await GetInterpolatedAsyncWithHttpInfo(webId, categoryName, endTime, filterExpression, includeFilteredValues, interval, nameFilter, searchFullHierarchy, selectedFields, showExcluded, showHidden, sortField, sortOrder, startTime, syncTime, syncTimeBoundaryType, templateName, timeZone, webIdType, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -4478,16 +4496,17 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
-		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'.</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="syncTime">An optional start time anchor, in AFTime format. When specified, interpolated data retrieval will use the sync time as the origin for calculating the interval times.</param>
 		/// <param name="syncTimeBoundaryType">An optional string specifying the boundary type to use when applying a syncTime. The allowed values are 'Inside' and 'Outside'. The default is 'Inside'.</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetInterpolatedAsyncWithHttpInfo(string webId, string categoryName = null, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, string interval = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string startTime = null, string syncTime = null, string syncTimeBoundaryType = null, string templateName = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetInterpolatedAsyncWithHttpInfo(string webId, string categoryName = null, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, string interval = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string startTime = null, string syncTime = null, string syncTimeBoundaryType = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'webId' is set
 			if (webId == null)
@@ -4498,39 +4517,30 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (categoryName!= null) localVarQueryParams.Add("categoryName", Configuration.ApiClient.ParameterToString(categoryName));
-			if (endTime!= null) localVarQueryParams.Add("endTime", Configuration.ApiClient.ParameterToString(endTime));
-			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", Configuration.ApiClient.ParameterToString(filterExpression));
-			if (includeFilteredValues!= null) localVarQueryParams.Add("includeFilteredValues", Configuration.ApiClient.ParameterToString(includeFilteredValues));
-			if (interval!= null) localVarQueryParams.Add("interval", Configuration.ApiClient.ParameterToString(interval));
-			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", Configuration.ApiClient.ParameterToString(nameFilter));
-			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", Configuration.ApiClient.ParameterToString(searchFullHierarchy));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", Configuration.ApiClient.ParameterToString(showExcluded));
-			if (showHidden!= null) localVarQueryParams.Add("showHidden", Configuration.ApiClient.ParameterToString(showHidden));
-			if (sortField!= null) localVarQueryParams.Add("sortField", Configuration.ApiClient.ParameterToString(sortField));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (startTime!= null) localVarQueryParams.Add("startTime", Configuration.ApiClient.ParameterToString(startTime));
-			if (syncTime!= null) localVarQueryParams.Add("syncTime", Configuration.ApiClient.ParameterToString(syncTime));
-			if (syncTimeBoundaryType!= null) localVarQueryParams.Add("syncTimeBoundaryType", Configuration.ApiClient.ParameterToString(syncTimeBoundaryType));
-			if (templateName!= null) localVarQueryParams.Add("templateName", Configuration.ApiClient.ParameterToString(templateName));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (categoryName!= null) localVarQueryParams.Add("categoryName", categoryName, false);
+			if (endTime!= null) localVarQueryParams.Add("endTime", endTime, false);
+			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", filterExpression, false);
+			if (includeFilteredValues!= null) localVarQueryParams.Add("includeFilteredValues", includeFilteredValues, false);
+			if (interval!= null) localVarQueryParams.Add("interval", interval, false);
+			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", nameFilter, false);
+			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", searchFullHierarchy, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", showExcluded, false);
+			if (showHidden!= null) localVarQueryParams.Add("showHidden", showHidden, false);
+			if (sortField!= null) localVarQueryParams.Add("sortField", sortField, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (startTime!= null) localVarQueryParams.Add("startTime", startTime, false);
+			if (syncTime!= null) localVarQueryParams.Add("syncTime", syncTime, false);
+			if (syncTimeBoundaryType!= null) localVarQueryParams.Add("syncTimeBoundaryType", syncTimeBoundaryType, false);
+			if (templateName!= null) localVarQueryParams.Add("templateName", templateName, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -4541,7 +4551,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValues)));
 		}
 
@@ -4566,10 +4576,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValues></returns>
-		public async System.Threading.Tasks.Task<PIItemsStreamValues> GetInterpolatedAtTimesAsync(string webId, List<string> time, string categoryName = null, string filterExpression = null, bool? includeFilteredValues = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortOrder = null, string templateName = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<PIItemsStreamValues> GetInterpolatedAtTimesAsync(string webId, List<string> time, string categoryName = null, string filterExpression = null, bool? includeFilteredValues = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortOrder = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsStreamValues> localVarResponse = await GetInterpolatedAtTimesAsyncWithHttpInfo(webId, time, categoryName, filterExpression, includeFilteredValues, nameFilter, searchFullHierarchy, selectedFields, showExcluded, showHidden, sortOrder, templateName, timeZone, webIdType);
+			ApiResponse<PIItemsStreamValues> localVarResponse = await GetInterpolatedAtTimesAsyncWithHttpInfo(webId, time, categoryName, filterExpression, includeFilteredValues, nameFilter, searchFullHierarchy, selectedFields, showExcluded, showHidden, sortOrder, templateName, timeZone, webIdType, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -4594,8 +4605,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetInterpolatedAtTimesAsyncWithHttpInfo(string webId, List<string> time, string categoryName = null, string filterExpression = null, bool? includeFilteredValues = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortOrder = null, string templateName = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetInterpolatedAtTimesAsyncWithHttpInfo(string webId, List<string> time, string categoryName = null, string filterExpression = null, bool? includeFilteredValues = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortOrder = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'webId' is set
 			if (webId == null)
@@ -4609,34 +4621,25 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (time!= null) localVarQueryParams.Add("time", Configuration.ApiClient.ParameterToString(time));
-			if (categoryName!= null) localVarQueryParams.Add("categoryName", Configuration.ApiClient.ParameterToString(categoryName));
-			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", Configuration.ApiClient.ParameterToString(filterExpression));
-			if (includeFilteredValues!= null) localVarQueryParams.Add("includeFilteredValues", Configuration.ApiClient.ParameterToString(includeFilteredValues));
-			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", Configuration.ApiClient.ParameterToString(nameFilter));
-			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", Configuration.ApiClient.ParameterToString(searchFullHierarchy));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", Configuration.ApiClient.ParameterToString(showExcluded));
-			if (showHidden!= null) localVarQueryParams.Add("showHidden", Configuration.ApiClient.ParameterToString(showHidden));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (templateName!= null) localVarQueryParams.Add("templateName", Configuration.ApiClient.ParameterToString(templateName));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (time!= null) localVarQueryParams.Add("time", time, true);
+			if (categoryName!= null) localVarQueryParams.Add("categoryName", categoryName, false);
+			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", filterExpression, false);
+			if (includeFilteredValues!= null) localVarQueryParams.Add("includeFilteredValues", includeFilteredValues, false);
+			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", nameFilter, false);
+			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", searchFullHierarchy, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", showExcluded, false);
+			if (showHidden!= null) localVarQueryParams.Add("showHidden", showHidden, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (templateName!= null) localVarQueryParams.Add("templateName", templateName, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -4647,7 +4650,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValues)));
 		}
 
@@ -4667,16 +4670,17 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValues></returns>
-		public async System.Threading.Tasks.Task<PIItemsStreamValues> GetPlotAsync(string webId, string categoryName = null, string endTime = null, int? intervals = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string startTime = null, string templateName = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<PIItemsStreamValues> GetPlotAsync(string webId, string categoryName = null, string endTime = null, int? intervals = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string startTime = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsStreamValues> localVarResponse = await GetPlotAsyncWithHttpInfo(webId, categoryName, endTime, intervals, nameFilter, searchFullHierarchy, selectedFields, showExcluded, showHidden, sortField, sortOrder, startTime, templateName, timeZone, webIdType);
+			ApiResponse<PIItemsStreamValues> localVarResponse = await GetPlotAsyncWithHttpInfo(webId, categoryName, endTime, intervals, nameFilter, searchFullHierarchy, selectedFields, showExcluded, showHidden, sortField, sortOrder, startTime, templateName, timeZone, webIdType, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -4696,14 +4700,15 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetPlotAsyncWithHttpInfo(string webId, string categoryName = null, string endTime = null, int? intervals = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string startTime = null, string templateName = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetPlotAsyncWithHttpInfo(string webId, string categoryName = null, string endTime = null, int? intervals = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string startTime = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'webId' is set
 			if (webId == null)
@@ -4714,35 +4719,26 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (categoryName!= null) localVarQueryParams.Add("categoryName", Configuration.ApiClient.ParameterToString(categoryName));
-			if (endTime!= null) localVarQueryParams.Add("endTime", Configuration.ApiClient.ParameterToString(endTime));
-			if (intervals!= null) localVarQueryParams.Add("intervals", Configuration.ApiClient.ParameterToString(intervals));
-			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", Configuration.ApiClient.ParameterToString(nameFilter));
-			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", Configuration.ApiClient.ParameterToString(searchFullHierarchy));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", Configuration.ApiClient.ParameterToString(showExcluded));
-			if (showHidden!= null) localVarQueryParams.Add("showHidden", Configuration.ApiClient.ParameterToString(showHidden));
-			if (sortField!= null) localVarQueryParams.Add("sortField", Configuration.ApiClient.ParameterToString(sortField));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (startTime!= null) localVarQueryParams.Add("startTime", Configuration.ApiClient.ParameterToString(startTime));
-			if (templateName!= null) localVarQueryParams.Add("templateName", Configuration.ApiClient.ParameterToString(templateName));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (categoryName!= null) localVarQueryParams.Add("categoryName", categoryName, false);
+			if (endTime!= null) localVarQueryParams.Add("endTime", endTime, false);
+			if (intervals!= null) localVarQueryParams.Add("intervals", intervals, false);
+			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", nameFilter, false);
+			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", searchFullHierarchy, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", showExcluded, false);
+			if (showHidden!= null) localVarQueryParams.Add("showHidden", showHidden, false);
+			if (sortField!= null) localVarQueryParams.Add("sortField", sortField, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (startTime!= null) localVarQueryParams.Add("startTime", startTime, false);
+			if (templateName!= null) localVarQueryParams.Add("templateName", templateName, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -4753,7 +4749,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValues)));
 		}
 
@@ -4776,16 +4772,17 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValues></returns>
-		public async System.Threading.Tasks.Task<PIItemsStreamValues> GetRecordedAsync(string webId, string boundaryType = null, string categoryName = null, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, int? maxCount = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string startTime = null, string templateName = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<PIItemsStreamValues> GetRecordedAsync(string webId, string boundaryType = null, string categoryName = null, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, int? maxCount = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string startTime = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsStreamValues> localVarResponse = await GetRecordedAsyncWithHttpInfo(webId, boundaryType, categoryName, endTime, filterExpression, includeFilteredValues, maxCount, nameFilter, searchFullHierarchy, selectedFields, showExcluded, showHidden, sortField, sortOrder, startTime, templateName, timeZone, webIdType);
+			ApiResponse<PIItemsStreamValues> localVarResponse = await GetRecordedAsyncWithHttpInfo(webId, boundaryType, categoryName, endTime, filterExpression, includeFilteredValues, maxCount, nameFilter, searchFullHierarchy, selectedFields, showExcluded, showHidden, sortField, sortOrder, startTime, templateName, timeZone, webIdType, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -4808,14 +4805,15 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d' for element attributes and points. For event frame attributes, the default is the event frame's start time, or '*-1d' if that is not set.</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetRecordedAsyncWithHttpInfo(string webId, string boundaryType = null, string categoryName = null, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, int? maxCount = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string startTime = null, string templateName = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetRecordedAsyncWithHttpInfo(string webId, string boundaryType = null, string categoryName = null, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, int? maxCount = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string startTime = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'webId' is set
 			if (webId == null)
@@ -4826,38 +4824,29 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (boundaryType!= null) localVarQueryParams.Add("boundaryType", Configuration.ApiClient.ParameterToString(boundaryType));
-			if (categoryName!= null) localVarQueryParams.Add("categoryName", Configuration.ApiClient.ParameterToString(categoryName));
-			if (endTime!= null) localVarQueryParams.Add("endTime", Configuration.ApiClient.ParameterToString(endTime));
-			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", Configuration.ApiClient.ParameterToString(filterExpression));
-			if (includeFilteredValues!= null) localVarQueryParams.Add("includeFilteredValues", Configuration.ApiClient.ParameterToString(includeFilteredValues));
-			if (maxCount!= null) localVarQueryParams.Add("maxCount", Configuration.ApiClient.ParameterToString(maxCount));
-			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", Configuration.ApiClient.ParameterToString(nameFilter));
-			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", Configuration.ApiClient.ParameterToString(searchFullHierarchy));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", Configuration.ApiClient.ParameterToString(showExcluded));
-			if (showHidden!= null) localVarQueryParams.Add("showHidden", Configuration.ApiClient.ParameterToString(showHidden));
-			if (sortField!= null) localVarQueryParams.Add("sortField", Configuration.ApiClient.ParameterToString(sortField));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (startTime!= null) localVarQueryParams.Add("startTime", Configuration.ApiClient.ParameterToString(startTime));
-			if (templateName!= null) localVarQueryParams.Add("templateName", Configuration.ApiClient.ParameterToString(templateName));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (boundaryType!= null) localVarQueryParams.Add("boundaryType", boundaryType, false);
+			if (categoryName!= null) localVarQueryParams.Add("categoryName", categoryName, false);
+			if (endTime!= null) localVarQueryParams.Add("endTime", endTime, false);
+			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", filterExpression, false);
+			if (includeFilteredValues!= null) localVarQueryParams.Add("includeFilteredValues", includeFilteredValues, false);
+			if (maxCount!= null) localVarQueryParams.Add("maxCount", maxCount, false);
+			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", nameFilter, false);
+			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", searchFullHierarchy, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", showExcluded, false);
+			if (showHidden!= null) localVarQueryParams.Add("showHidden", showHidden, false);
+			if (sortField!= null) localVarQueryParams.Add("sortField", sortField, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (startTime!= null) localVarQueryParams.Add("startTime", startTime, false);
+			if (templateName!= null) localVarQueryParams.Add("templateName", templateName, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -4868,7 +4857,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValues)));
 		}
 
@@ -4883,10 +4872,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="values">The values to add or update.</param>
 		/// <param name="bufferOption">The desired AFBufferOption. The default is 'BufferIfPossible'.</param>
 		/// <param name="updateOption">The desired AFUpdateOption. The default is 'Replace'.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsItemsSubstatus></returns>
-		public async System.Threading.Tasks.Task<PIItemsItemsSubstatus> UpdateValuesAsync(string webId, List<PIStreamValues> values, string bufferOption = null, string updateOption = null)
+		public async System.Threading.Tasks.Task<PIItemsItemsSubstatus> UpdateValuesAsync(string webId, List<PIStreamValues> values, string bufferOption = null, string updateOption = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsItemsSubstatus> localVarResponse = await UpdateValuesAsyncWithHttpInfo(webId, values, bufferOption, updateOption);
+			ApiResponse<PIItemsItemsSubstatus> localVarResponse = await UpdateValuesAsyncWithHttpInfo(webId, values, bufferOption, updateOption, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -4901,8 +4891,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="values">The values to add or update.</param>
 		/// <param name="bufferOption">The desired AFBufferOption. The default is 'BufferIfPossible'.</param>
 		/// <param name="updateOption">The desired AFUpdateOption. The default is 'Replace'.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsItemsSubstatus>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsItemsSubstatus>> UpdateValuesAsyncWithHttpInfo(string webId, List<PIStreamValues> values, string bufferOption = null, string updateOption = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsItemsSubstatus>> UpdateValuesAsyncWithHttpInfo(string webId, List<PIStreamValues> values, string bufferOption = null, string updateOption = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'webId' is set
 			if (webId == null)
@@ -4916,31 +4907,15 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (values != null && values.GetType() != typeof(byte[]))
-			{
-				localVarPostBody = Configuration.ApiClient.Serialize(values);
-			}
-			else
-			{
-				localVarPostBody = values;
-			}
-			if (bufferOption!= null) localVarQueryParams.Add("bufferOption", Configuration.ApiClient.ParameterToString(bufferOption));
-			if (updateOption!= null) localVarQueryParams.Add("updateOption", Configuration.ApiClient.ParameterToString(updateOption));
+			localVarPostBody = Configuration.ApiClient.Serialize(values);
+			if (bufferOption!= null) localVarQueryParams.Add("bufferOption", bufferOption, false);
+			if (updateOption!= null) localVarQueryParams.Add("updateOption", updateOption, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.POST, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("POST"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -4951,7 +4926,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsItemsSubstatus>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsItemsSubstatus)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsItemsSubstatus)));
 		}
 
@@ -4974,10 +4949,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValues></returns>
-		public async System.Threading.Tasks.Task<PIItemsStreamValues> GetRecordedAtTimeAsync(string webId, string time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<PIItemsStreamValues> GetRecordedAtTimeAsync(string webId, string time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsStreamValues> localVarResponse = await GetRecordedAtTimeAsyncWithHttpInfo(webId, time, categoryName, nameFilter, retrievalMode, searchFullHierarchy, selectedFields, showExcluded, showHidden, templateName, timeZone, webIdType);
+			ApiResponse<PIItemsStreamValues> localVarResponse = await GetRecordedAtTimeAsyncWithHttpInfo(webId, time, categoryName, nameFilter, retrievalMode, searchFullHierarchy, selectedFields, showExcluded, showHidden, templateName, timeZone, webIdType, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -5000,8 +4976,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetRecordedAtTimeAsyncWithHttpInfo(string webId, string time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetRecordedAtTimeAsyncWithHttpInfo(string webId, string time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'webId' is set
 			if (webId == null)
@@ -5015,32 +4992,23 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (time!= null) localVarQueryParams.Add("time", Configuration.ApiClient.ParameterToString(time));
-			if (categoryName!= null) localVarQueryParams.Add("categoryName", Configuration.ApiClient.ParameterToString(categoryName));
-			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", Configuration.ApiClient.ParameterToString(nameFilter));
-			if (retrievalMode!= null) localVarQueryParams.Add("retrievalMode", Configuration.ApiClient.ParameterToString(retrievalMode));
-			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", Configuration.ApiClient.ParameterToString(searchFullHierarchy));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", Configuration.ApiClient.ParameterToString(showExcluded));
-			if (showHidden!= null) localVarQueryParams.Add("showHidden", Configuration.ApiClient.ParameterToString(showHidden));
-			if (templateName!= null) localVarQueryParams.Add("templateName", Configuration.ApiClient.ParameterToString(templateName));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (time!= null) localVarQueryParams.Add("time", time, false);
+			if (categoryName!= null) localVarQueryParams.Add("categoryName", categoryName, false);
+			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", nameFilter, false);
+			if (retrievalMode!= null) localVarQueryParams.Add("retrievalMode", retrievalMode, false);
+			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", searchFullHierarchy, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", showExcluded, false);
+			if (showHidden!= null) localVarQueryParams.Add("showHidden", showHidden, false);
+			if (templateName!= null) localVarQueryParams.Add("templateName", templateName, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -5051,7 +5019,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValues)));
 		}
 
@@ -5075,10 +5043,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValues></returns>
-		public async System.Threading.Tasks.Task<PIItemsStreamValues> GetRecordedAtTimesAsync(string webId, List<string> time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortOrder = null, string templateName = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<PIItemsStreamValues> GetRecordedAtTimesAsync(string webId, List<string> time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortOrder = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsStreamValues> localVarResponse = await GetRecordedAtTimesAsyncWithHttpInfo(webId, time, categoryName, nameFilter, retrievalMode, searchFullHierarchy, selectedFields, showExcluded, showHidden, sortOrder, templateName, timeZone, webIdType);
+			ApiResponse<PIItemsStreamValues> localVarResponse = await GetRecordedAtTimesAsyncWithHttpInfo(webId, time, categoryName, nameFilter, retrievalMode, searchFullHierarchy, selectedFields, showExcluded, showHidden, sortOrder, templateName, timeZone, webIdType, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -5102,8 +5071,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetRecordedAtTimesAsyncWithHttpInfo(string webId, List<string> time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortOrder = null, string templateName = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetRecordedAtTimesAsyncWithHttpInfo(string webId, List<string> time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortOrder = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'webId' is set
 			if (webId == null)
@@ -5117,33 +5087,24 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (time!= null) localVarQueryParams.Add("time", Configuration.ApiClient.ParameterToString(time));
-			if (categoryName!= null) localVarQueryParams.Add("categoryName", Configuration.ApiClient.ParameterToString(categoryName));
-			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", Configuration.ApiClient.ParameterToString(nameFilter));
-			if (retrievalMode!= null) localVarQueryParams.Add("retrievalMode", Configuration.ApiClient.ParameterToString(retrievalMode));
-			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", Configuration.ApiClient.ParameterToString(searchFullHierarchy));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", Configuration.ApiClient.ParameterToString(showExcluded));
-			if (showHidden!= null) localVarQueryParams.Add("showHidden", Configuration.ApiClient.ParameterToString(showHidden));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (templateName!= null) localVarQueryParams.Add("templateName", Configuration.ApiClient.ParameterToString(templateName));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (time!= null) localVarQueryParams.Add("time", time, true);
+			if (categoryName!= null) localVarQueryParams.Add("categoryName", categoryName, false);
+			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", nameFilter, false);
+			if (retrievalMode!= null) localVarQueryParams.Add("retrievalMode", retrievalMode, false);
+			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", searchFullHierarchy, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", showExcluded, false);
+			if (showHidden!= null) localVarQueryParams.Add("showHidden", showHidden, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (templateName!= null) localVarQueryParams.Add("templateName", templateName, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -5154,7 +5115,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValues)));
 		}
 
@@ -5184,10 +5145,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="timeType">Specifies how to calculate the timestamp for each interval. The default is 'Auto'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamSummaries></returns>
-		public async System.Threading.Tasks.Task<PIItemsStreamSummaries> GetSummariesAsync(string webId, string calculationBasis = null, string categoryName = null, string endTime = null, string filterExpression = null, string nameFilter = null, string sampleInterval = null, string sampleType = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string startTime = null, string summaryDuration = null, List<string> summaryType = null, string templateName = null, string timeType = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<PIItemsStreamSummaries> GetSummariesAsync(string webId, string calculationBasis = null, string categoryName = null, string endTime = null, string filterExpression = null, string nameFilter = null, string sampleInterval = null, string sampleType = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string startTime = null, string summaryDuration = null, List<string> summaryType = null, string templateName = null, string timeType = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsStreamSummaries> localVarResponse = await GetSummariesAsyncWithHttpInfo(webId, calculationBasis, categoryName, endTime, filterExpression, nameFilter, sampleInterval, sampleType, searchFullHierarchy, selectedFields, showExcluded, showHidden, startTime, summaryDuration, summaryType, templateName, timeType, timeZone, webIdType);
+			ApiResponse<PIItemsStreamSummaries> localVarResponse = await GetSummariesAsyncWithHttpInfo(webId, calculationBasis, categoryName, endTime, filterExpression, nameFilter, sampleInterval, sampleType, searchFullHierarchy, selectedFields, showExcluded, showHidden, startTime, summaryDuration, summaryType, templateName, timeType, timeZone, webIdType, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -5217,8 +5179,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="timeType">Specifies how to calculate the timestamp for each interval. The default is 'Auto'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamSummaries>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamSummaries>> GetSummariesAsyncWithHttpInfo(string webId, string calculationBasis = null, string categoryName = null, string endTime = null, string filterExpression = null, string nameFilter = null, string sampleInterval = null, string sampleType = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string startTime = null, string summaryDuration = null, List<string> summaryType = null, string templateName = null, string timeType = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamSummaries>> GetSummariesAsyncWithHttpInfo(string webId, string calculationBasis = null, string categoryName = null, string endTime = null, string filterExpression = null, string nameFilter = null, string sampleInterval = null, string sampleType = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string startTime = null, string summaryDuration = null, List<string> summaryType = null, string templateName = null, string timeType = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'webId' is set
 			if (webId == null)
@@ -5229,39 +5192,30 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (calculationBasis!= null) localVarQueryParams.Add("calculationBasis", Configuration.ApiClient.ParameterToString(calculationBasis));
-			if (categoryName!= null) localVarQueryParams.Add("categoryName", Configuration.ApiClient.ParameterToString(categoryName));
-			if (endTime!= null) localVarQueryParams.Add("endTime", Configuration.ApiClient.ParameterToString(endTime));
-			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", Configuration.ApiClient.ParameterToString(filterExpression));
-			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", Configuration.ApiClient.ParameterToString(nameFilter));
-			if (sampleInterval!= null) localVarQueryParams.Add("sampleInterval", Configuration.ApiClient.ParameterToString(sampleInterval));
-			if (sampleType!= null) localVarQueryParams.Add("sampleType", Configuration.ApiClient.ParameterToString(sampleType));
-			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", Configuration.ApiClient.ParameterToString(searchFullHierarchy));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", Configuration.ApiClient.ParameterToString(showExcluded));
-			if (showHidden!= null) localVarQueryParams.Add("showHidden", Configuration.ApiClient.ParameterToString(showHidden));
-			if (startTime!= null) localVarQueryParams.Add("startTime", Configuration.ApiClient.ParameterToString(startTime));
-			if (summaryDuration!= null) localVarQueryParams.Add("summaryDuration", Configuration.ApiClient.ParameterToString(summaryDuration));
-			if (summaryType!= null) localVarQueryParams.Add("summaryType", Configuration.ApiClient.ParameterToString(summaryType));
-			if (templateName!= null) localVarQueryParams.Add("templateName", Configuration.ApiClient.ParameterToString(templateName));
-			if (timeType!= null) localVarQueryParams.Add("timeType", Configuration.ApiClient.ParameterToString(timeType));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (calculationBasis!= null) localVarQueryParams.Add("calculationBasis", calculationBasis, false);
+			if (categoryName!= null) localVarQueryParams.Add("categoryName", categoryName, false);
+			if (endTime!= null) localVarQueryParams.Add("endTime", endTime, false);
+			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", filterExpression, false);
+			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", nameFilter, false);
+			if (sampleInterval!= null) localVarQueryParams.Add("sampleInterval", sampleInterval, false);
+			if (sampleType!= null) localVarQueryParams.Add("sampleType", sampleType, false);
+			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", searchFullHierarchy, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", showExcluded, false);
+			if (showHidden!= null) localVarQueryParams.Add("showHidden", showHidden, false);
+			if (startTime!= null) localVarQueryParams.Add("startTime", startTime, false);
+			if (summaryDuration!= null) localVarQueryParams.Add("summaryDuration", summaryDuration, false);
+			if (summaryType!= null) localVarQueryParams.Add("summaryType", summaryType, true);
+			if (templateName!= null) localVarQueryParams.Add("templateName", templateName, false);
+			if (timeType!= null) localVarQueryParams.Add("timeType", timeType, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -5272,7 +5226,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamSummaries>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamSummaries)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamSummaries)));
 		}
 
@@ -5290,16 +5244,17 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="time">An AF time string, which is used as the time context to get stream values if it is provided. By default, it is not specified, and the default time context of the AF object will be used.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValue></returns>
-		public async System.Threading.Tasks.Task<PIItemsStreamValue> GetValuesAsync(string webId, string categoryName = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string templateName = null, string time = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<PIItemsStreamValue> GetValuesAsync(string webId, string categoryName = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string templateName = null, string time = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsStreamValue> localVarResponse = await GetValuesAsyncWithHttpInfo(webId, categoryName, nameFilter, searchFullHierarchy, selectedFields, showExcluded, showHidden, sortField, sortOrder, templateName, time, timeZone, webIdType);
+			ApiResponse<PIItemsStreamValue> localVarResponse = await GetValuesAsyncWithHttpInfo(webId, categoryName, nameFilter, searchFullHierarchy, selectedFields, showExcluded, showHidden, sortField, sortOrder, templateName, time, timeZone, webIdType, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -5317,14 +5272,15 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="showExcluded">Specified if the search should include attributes with the Excluded property set. The default is 'false'.</param>
 		/// <param name="showHidden">Specified if the search should include attributes with the Hidden property set. The default is 'false'.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="time">An AF time string, which is used as the time context to get stream values if it is provided. By default, it is not specified, and the default time context of the AF object will be used.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>> GetValuesAsyncWithHttpInfo(string webId, string categoryName = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string templateName = null, string time = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>> GetValuesAsyncWithHttpInfo(string webId, string categoryName = null, string nameFilter = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string sortField = null, string sortOrder = null, string templateName = null, string time = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'webId' is set
 			if (webId == null)
@@ -5335,33 +5291,24 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (categoryName!= null) localVarQueryParams.Add("categoryName", Configuration.ApiClient.ParameterToString(categoryName));
-			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", Configuration.ApiClient.ParameterToString(nameFilter));
-			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", Configuration.ApiClient.ParameterToString(searchFullHierarchy));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", Configuration.ApiClient.ParameterToString(showExcluded));
-			if (showHidden!= null) localVarQueryParams.Add("showHidden", Configuration.ApiClient.ParameterToString(showHidden));
-			if (sortField!= null) localVarQueryParams.Add("sortField", Configuration.ApiClient.ParameterToString(sortField));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (templateName!= null) localVarQueryParams.Add("templateName", Configuration.ApiClient.ParameterToString(templateName));
-			if (time!= null) localVarQueryParams.Add("time", Configuration.ApiClient.ParameterToString(time));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (categoryName!= null) localVarQueryParams.Add("categoryName", categoryName, false);
+			if (nameFilter!= null) localVarQueryParams.Add("nameFilter", nameFilter, false);
+			if (searchFullHierarchy!= null) localVarQueryParams.Add("searchFullHierarchy", searchFullHierarchy, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (showExcluded!= null) localVarQueryParams.Add("showExcluded", showExcluded, false);
+			if (showHidden!= null) localVarQueryParams.Add("showHidden", showHidden, false);
+			if (sortField!= null) localVarQueryParams.Add("sortField", sortField, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (templateName!= null) localVarQueryParams.Add("templateName", templateName, false);
+			if (time!= null) localVarQueryParams.Add("time", time, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -5372,7 +5319,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValue>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValue)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValue)));
 		}
 
@@ -5387,10 +5334,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="values">The values to add or update.</param>
 		/// <param name="bufferOption">The desired AFBufferOption. The default is 'BufferIfPossible'.</param>
 		/// <param name="updateOption">The desired AFUpdateOption. The default is 'Replace'.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsSubstatus></returns>
-		public async System.Threading.Tasks.Task<PIItemsSubstatus> UpdateValueAsync(string webId, List<PIStreamValue> values, string bufferOption = null, string updateOption = null)
+		public async System.Threading.Tasks.Task<PIItemsSubstatus> UpdateValueAsync(string webId, List<PIStreamValue> values, string bufferOption = null, string updateOption = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsSubstatus> localVarResponse = await UpdateValueAsyncWithHttpInfo(webId, values, bufferOption, updateOption);
+			ApiResponse<PIItemsSubstatus> localVarResponse = await UpdateValueAsyncWithHttpInfo(webId, values, bufferOption, updateOption, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -5405,8 +5353,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="values">The values to add or update.</param>
 		/// <param name="bufferOption">The desired AFBufferOption. The default is 'BufferIfPossible'.</param>
 		/// <param name="updateOption">The desired AFUpdateOption. The default is 'Replace'.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsSubstatus>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsSubstatus>> UpdateValueAsyncWithHttpInfo(string webId, List<PIStreamValue> values, string bufferOption = null, string updateOption = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsSubstatus>> UpdateValueAsyncWithHttpInfo(string webId, List<PIStreamValue> values, string bufferOption = null, string updateOption = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'webId' is set
 			if (webId == null)
@@ -5420,31 +5369,15 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
-
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
+			string localVarPostBody = null;
 
 			if (webId!= null) localVarPathParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (values != null && values.GetType() != typeof(byte[]))
-			{
-				localVarPostBody = Configuration.ApiClient.Serialize(values);
-			}
-			else
-			{
-				localVarPostBody = values;
-			}
-			if (bufferOption!= null) localVarQueryParams.Add("bufferOption", Configuration.ApiClient.ParameterToString(bufferOption));
-			if (updateOption!= null) localVarQueryParams.Add("updateOption", Configuration.ApiClient.ParameterToString(updateOption));
+			localVarPostBody = Configuration.ApiClient.Serialize(values);
+			if (bufferOption!= null) localVarQueryParams.Add("bufferOption", bufferOption, false);
+			if (updateOption!= null) localVarQueryParams.Add("updateOption", updateOption, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.POST, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("POST"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -5455,7 +5388,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsSubstatus>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsSubstatus)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsSubstatus)));
 		}
 
@@ -5470,10 +5403,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="heartbeatRate">Specifies the maximum number of consecutive empty messages that can be elapsed with no new data updates from the PI System, after which the client receives an empty payload. It helps to check if the connection is still alive. Zero/negative values correspond to no heartbeat, and the default value is no heartbeat.</param>
 		/// <param name="includeInitialValues">Specified if the channel should send a message with the current values of all the streams after the connection is opened. The default is 'false'.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValue></returns>
-		public async System.Threading.Tasks.Task<PIItemsStreamValue> GetChannelAdHocAsync(List<string> webId, int? heartbeatRate = null, bool? includeInitialValues = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<PIItemsStreamValue> GetChannelAdHocAsync(List<string> webId, int? heartbeatRate = null, bool? includeInitialValues = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsStreamValue> localVarResponse = await GetChannelAdHocAsyncWithHttpInfo(webId, heartbeatRate, includeInitialValues, webIdType);
+			ApiResponse<PIItemsStreamValue> localVarResponse = await GetChannelAdHocAsyncWithHttpInfo(webId, heartbeatRate, includeInitialValues, webIdType, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -5488,8 +5422,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="heartbeatRate">Specifies the maximum number of consecutive empty messages that can be elapsed with no new data updates from the PI System, after which the client receives an empty payload. It helps to check if the connection is still alive. Zero/negative values correspond to no heartbeat, and the default value is no heartbeat.</param>
 		/// <param name="includeInitialValues">Specified if the channel should send a message with the current values of all the streams after the connection is opened. The default is 'false'.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>> GetChannelAdHocAsyncWithHttpInfo(List<string> webId, int? heartbeatRate = null, bool? includeInitialValues = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>> GetChannelAdHocAsyncWithHttpInfo(List<string> webId, int? heartbeatRate = null, bool? includeInitialValues = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'webId' is set
 			if (webId == null)
@@ -5500,24 +5435,15 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (heartbeatRate!= null) localVarQueryParams.Add("heartbeatRate", Configuration.ApiClient.ParameterToString(heartbeatRate));
-			if (includeInitialValues!= null) localVarQueryParams.Add("includeInitialValues", Configuration.ApiClient.ParameterToString(includeInitialValues));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (webId!= null) localVarQueryParams.Add("webId", webId, true);
+			if (heartbeatRate!= null) localVarQueryParams.Add("heartbeatRate", heartbeatRate, false);
+			if (includeInitialValues!= null) localVarQueryParams.Add("includeInitialValues", includeInitialValues, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -5528,7 +5454,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValue>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValue)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValue)));
 		}
 
@@ -5541,13 +5467,14 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
 		/// <param name="webId">The ID of a stream. Multiple streams may be specified with multiple instances of the parameter.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValues></returns>
-		public async System.Threading.Tasks.Task<PIItemsStreamValues> GetEndAdHocAsync(List<string> webId, string selectedFields = null, string sortField = null, string sortOrder = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<PIItemsStreamValues> GetEndAdHocAsync(List<string> webId, string selectedFields = null, string sortField = null, string sortOrder = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsStreamValues> localVarResponse = await GetEndAdHocAsyncWithHttpInfo(webId, selectedFields, sortField, sortOrder, webIdType);
+			ApiResponse<PIItemsStreamValues> localVarResponse = await GetEndAdHocAsyncWithHttpInfo(webId, selectedFields, sortField, sortOrder, webIdType, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -5560,11 +5487,12 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
 		/// <param name="webId">The ID of a stream. Multiple streams may be specified with multiple instances of the parameter.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetEndAdHocAsyncWithHttpInfo(List<string> webId, string selectedFields = null, string sortField = null, string sortOrder = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetEndAdHocAsyncWithHttpInfo(List<string> webId, string selectedFields = null, string sortField = null, string sortOrder = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'webId' is set
 			if (webId == null)
@@ -5575,25 +5503,16 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (sortField!= null) localVarQueryParams.Add("sortField", Configuration.ApiClient.ParameterToString(sortField));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (webId!= null) localVarQueryParams.Add("webId", webId, true);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (sortField!= null) localVarQueryParams.Add("sortField", sortField, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -5604,7 +5523,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValues)));
 		}
 
@@ -5621,17 +5540,18 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="includeFilteredValues">Specify 'true' to indicate that values which fail the filter criteria are present in the returned data at the times where they occurred with a value set to a 'Filtered' enumeration value with bad status. Repeated consecutive failures are omitted.</param>
 		/// <param name="interval">The sampling interval, in AFTimeSpan format.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d'.</param>
 		/// <param name="syncTime">An optional start time anchor, in AFTime format. When specified, interpolated data retrieval will use the sync time as the origin for calculating the interval times.</param>
 		/// <param name="syncTimeBoundaryType">An optional string specifying the boundary type to use when applying a syncTime. The allowed values are 'Inside' and 'Outside'. The default is 'Inside'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValues></returns>
-		public async System.Threading.Tasks.Task<PIItemsStreamValues> GetInterpolatedAdHocAsync(List<string> webId, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, string interval = null, string selectedFields = null, string sortField = null, string sortOrder = null, string startTime = null, string syncTime = null, string syncTimeBoundaryType = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<PIItemsStreamValues> GetInterpolatedAdHocAsync(List<string> webId, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, string interval = null, string selectedFields = null, string sortField = null, string sortOrder = null, string startTime = null, string syncTime = null, string syncTimeBoundaryType = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsStreamValues> localVarResponse = await GetInterpolatedAdHocAsyncWithHttpInfo(webId, endTime, filterExpression, includeFilteredValues, interval, selectedFields, sortField, sortOrder, startTime, syncTime, syncTimeBoundaryType, timeZone, webIdType);
+			ApiResponse<PIItemsStreamValues> localVarResponse = await GetInterpolatedAdHocAsyncWithHttpInfo(webId, endTime, filterExpression, includeFilteredValues, interval, selectedFields, sortField, sortOrder, startTime, syncTime, syncTimeBoundaryType, timeZone, webIdType, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -5648,15 +5568,16 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="includeFilteredValues">Specify 'true' to indicate that values which fail the filter criteria are present in the returned data at the times where they occurred with a value set to a 'Filtered' enumeration value with bad status. Repeated consecutive failures are omitted.</param>
 		/// <param name="interval">The sampling interval, in AFTimeSpan format.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d'.</param>
 		/// <param name="syncTime">An optional start time anchor, in AFTime format. When specified, interpolated data retrieval will use the sync time as the origin for calculating the interval times.</param>
 		/// <param name="syncTimeBoundaryType">An optional string specifying the boundary type to use when applying a syncTime. The allowed values are 'Inside' and 'Outside'. The default is 'Inside'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetInterpolatedAdHocAsyncWithHttpInfo(List<string> webId, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, string interval = null, string selectedFields = null, string sortField = null, string sortOrder = null, string startTime = null, string syncTime = null, string syncTimeBoundaryType = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetInterpolatedAdHocAsyncWithHttpInfo(List<string> webId, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, string interval = null, string selectedFields = null, string sortField = null, string sortOrder = null, string startTime = null, string syncTime = null, string syncTimeBoundaryType = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'webId' is set
 			if (webId == null)
@@ -5667,33 +5588,24 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (endTime!= null) localVarQueryParams.Add("endTime", Configuration.ApiClient.ParameterToString(endTime));
-			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", Configuration.ApiClient.ParameterToString(filterExpression));
-			if (includeFilteredValues!= null) localVarQueryParams.Add("includeFilteredValues", Configuration.ApiClient.ParameterToString(includeFilteredValues));
-			if (interval!= null) localVarQueryParams.Add("interval", Configuration.ApiClient.ParameterToString(interval));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (sortField!= null) localVarQueryParams.Add("sortField", Configuration.ApiClient.ParameterToString(sortField));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (startTime!= null) localVarQueryParams.Add("startTime", Configuration.ApiClient.ParameterToString(startTime));
-			if (syncTime!= null) localVarQueryParams.Add("syncTime", Configuration.ApiClient.ParameterToString(syncTime));
-			if (syncTimeBoundaryType!= null) localVarQueryParams.Add("syncTimeBoundaryType", Configuration.ApiClient.ParameterToString(syncTimeBoundaryType));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (webId!= null) localVarQueryParams.Add("webId", webId, true);
+			if (endTime!= null) localVarQueryParams.Add("endTime", endTime, false);
+			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", filterExpression, false);
+			if (includeFilteredValues!= null) localVarQueryParams.Add("includeFilteredValues", includeFilteredValues, false);
+			if (interval!= null) localVarQueryParams.Add("interval", interval, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (sortField!= null) localVarQueryParams.Add("sortField", sortField, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (startTime!= null) localVarQueryParams.Add("startTime", startTime, false);
+			if (syncTime!= null) localVarQueryParams.Add("syncTime", syncTime, false);
+			if (syncTimeBoundaryType!= null) localVarQueryParams.Add("syncTimeBoundaryType", syncTimeBoundaryType, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -5704,7 +5616,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValues)));
 		}
 
@@ -5723,10 +5635,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValues></returns>
-		public async System.Threading.Tasks.Task<PIItemsStreamValues> GetInterpolatedAtTimesAdHocAsync(List<string> time, List<string> webId, string filterExpression = null, bool? includeFilteredValues = null, string selectedFields = null, string sortOrder = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<PIItemsStreamValues> GetInterpolatedAtTimesAdHocAsync(List<string> time, List<string> webId, string filterExpression = null, bool? includeFilteredValues = null, string selectedFields = null, string sortOrder = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsStreamValues> localVarResponse = await GetInterpolatedAtTimesAdHocAsyncWithHttpInfo(time, webId, filterExpression, includeFilteredValues, selectedFields, sortOrder, timeZone, webIdType);
+			ApiResponse<PIItemsStreamValues> localVarResponse = await GetInterpolatedAtTimesAdHocAsyncWithHttpInfo(time, webId, filterExpression, includeFilteredValues, selectedFields, sortOrder, timeZone, webIdType, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -5745,8 +5658,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetInterpolatedAtTimesAdHocAsyncWithHttpInfo(List<string> time, List<string> webId, string filterExpression = null, bool? includeFilteredValues = null, string selectedFields = null, string sortOrder = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetInterpolatedAtTimesAdHocAsyncWithHttpInfo(List<string> time, List<string> webId, string filterExpression = null, bool? includeFilteredValues = null, string selectedFields = null, string sortOrder = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'time' is set
 			if (time == null)
@@ -5760,28 +5674,19 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (time!= null) localVarQueryParams.Add("time", Configuration.ApiClient.ParameterToString(time));
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", Configuration.ApiClient.ParameterToString(filterExpression));
-			if (includeFilteredValues!= null) localVarQueryParams.Add("includeFilteredValues", Configuration.ApiClient.ParameterToString(includeFilteredValues));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (time!= null) localVarQueryParams.Add("time", time, true);
+			if (webId!= null) localVarQueryParams.Add("webId", webId, true);
+			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", filterExpression, false);
+			if (includeFilteredValues!= null) localVarQueryParams.Add("includeFilteredValues", includeFilteredValues, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -5792,7 +5697,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValues)));
 		}
 
@@ -5807,15 +5712,16 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="endTime">An optional end time. The default is '*'. Note that if endTime is earlier than startTime, the resulting values will be in time-descending order.</param>
 		/// <param name="intervals">The number of intervals to plot over. Typically, this would be the number of horizontal pixels in the trend. The default is '24'. For each interval, the data available is examined and significant values are returned. Each interval can produce up to 5 values if they are unique, the first value in the interval, the last value, the highest value, the lowest value and at most one exceptional point (bad status or digital state).</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValues></returns>
-		public async System.Threading.Tasks.Task<PIItemsStreamValues> GetPlotAdHocAsync(List<string> webId, string endTime = null, int? intervals = null, string selectedFields = null, string sortField = null, string sortOrder = null, string startTime = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<PIItemsStreamValues> GetPlotAdHocAsync(List<string> webId, string endTime = null, int? intervals = null, string selectedFields = null, string sortField = null, string sortOrder = null, string startTime = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsStreamValues> localVarResponse = await GetPlotAdHocAsyncWithHttpInfo(webId, endTime, intervals, selectedFields, sortField, sortOrder, startTime, timeZone, webIdType);
+			ApiResponse<PIItemsStreamValues> localVarResponse = await GetPlotAdHocAsyncWithHttpInfo(webId, endTime, intervals, selectedFields, sortField, sortOrder, startTime, timeZone, webIdType, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -5830,13 +5736,14 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="endTime">An optional end time. The default is '*'. Note that if endTime is earlier than startTime, the resulting values will be in time-descending order.</param>
 		/// <param name="intervals">The number of intervals to plot over. Typically, this would be the number of horizontal pixels in the trend. The default is '24'. For each interval, the data available is examined and significant values are returned. Each interval can produce up to 5 values if they are unique, the first value in the interval, the last value, the highest value, the lowest value and at most one exceptional point (bad status or digital state).</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetPlotAdHocAsyncWithHttpInfo(List<string> webId, string endTime = null, int? intervals = null, string selectedFields = null, string sortField = null, string sortOrder = null, string startTime = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetPlotAdHocAsyncWithHttpInfo(List<string> webId, string endTime = null, int? intervals = null, string selectedFields = null, string sortField = null, string sortOrder = null, string startTime = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'webId' is set
 			if (webId == null)
@@ -5847,29 +5754,20 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (endTime!= null) localVarQueryParams.Add("endTime", Configuration.ApiClient.ParameterToString(endTime));
-			if (intervals!= null) localVarQueryParams.Add("intervals", Configuration.ApiClient.ParameterToString(intervals));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (sortField!= null) localVarQueryParams.Add("sortField", Configuration.ApiClient.ParameterToString(sortField));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (startTime!= null) localVarQueryParams.Add("startTime", Configuration.ApiClient.ParameterToString(startTime));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (webId!= null) localVarQueryParams.Add("webId", webId, true);
+			if (endTime!= null) localVarQueryParams.Add("endTime", endTime, false);
+			if (intervals!= null) localVarQueryParams.Add("intervals", intervals, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (sortField!= null) localVarQueryParams.Add("sortField", sortField, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (startTime!= null) localVarQueryParams.Add("startTime", startTime, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -5880,7 +5778,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValues)));
 		}
 
@@ -5898,15 +5796,16 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="includeFilteredValues">Specify 'true' to indicate that values which fail the filter criteria are present in the returned data at the times where they occurred with a value set to a 'Filtered' enumeration value with bad status. Repeated consecutive failures are omitted.</param>
 		/// <param name="maxCount">The maximum number of values to be returned. The default is 1000.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValues></returns>
-		public async System.Threading.Tasks.Task<PIItemsStreamValues> GetRecordedAdHocAsync(List<string> webId, string boundaryType = null, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, int? maxCount = null, string selectedFields = null, string sortField = null, string sortOrder = null, string startTime = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<PIItemsStreamValues> GetRecordedAdHocAsync(List<string> webId, string boundaryType = null, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, int? maxCount = null, string selectedFields = null, string sortField = null, string sortOrder = null, string startTime = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsStreamValues> localVarResponse = await GetRecordedAdHocAsyncWithHttpInfo(webId, boundaryType, endTime, filterExpression, includeFilteredValues, maxCount, selectedFields, sortField, sortOrder, startTime, timeZone, webIdType);
+			ApiResponse<PIItemsStreamValues> localVarResponse = await GetRecordedAdHocAsyncWithHttpInfo(webId, boundaryType, endTime, filterExpression, includeFilteredValues, maxCount, selectedFields, sortField, sortOrder, startTime, timeZone, webIdType, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -5924,13 +5823,14 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="includeFilteredValues">Specify 'true' to indicate that values which fail the filter criteria are present in the returned data at the times where they occurred with a value set to a 'Filtered' enumeration value with bad status. Repeated consecutive failures are omitted.</param>
 		/// <param name="maxCount">The maximum number of values to be returned. The default is 1000.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="startTime">An optional start time. The default is '*-1d'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetRecordedAdHocAsyncWithHttpInfo(List<string> webId, string boundaryType = null, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, int? maxCount = null, string selectedFields = null, string sortField = null, string sortOrder = null, string startTime = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetRecordedAdHocAsyncWithHttpInfo(List<string> webId, string boundaryType = null, string endTime = null, string filterExpression = null, bool? includeFilteredValues = null, int? maxCount = null, string selectedFields = null, string sortField = null, string sortOrder = null, string startTime = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'webId' is set
 			if (webId == null)
@@ -5941,32 +5841,23 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (boundaryType!= null) localVarQueryParams.Add("boundaryType", Configuration.ApiClient.ParameterToString(boundaryType));
-			if (endTime!= null) localVarQueryParams.Add("endTime", Configuration.ApiClient.ParameterToString(endTime));
-			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", Configuration.ApiClient.ParameterToString(filterExpression));
-			if (includeFilteredValues!= null) localVarQueryParams.Add("includeFilteredValues", Configuration.ApiClient.ParameterToString(includeFilteredValues));
-			if (maxCount!= null) localVarQueryParams.Add("maxCount", Configuration.ApiClient.ParameterToString(maxCount));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (sortField!= null) localVarQueryParams.Add("sortField", Configuration.ApiClient.ParameterToString(sortField));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (startTime!= null) localVarQueryParams.Add("startTime", Configuration.ApiClient.ParameterToString(startTime));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (webId!= null) localVarQueryParams.Add("webId", webId, true);
+			if (boundaryType!= null) localVarQueryParams.Add("boundaryType", boundaryType, false);
+			if (endTime!= null) localVarQueryParams.Add("endTime", endTime, false);
+			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", filterExpression, false);
+			if (includeFilteredValues!= null) localVarQueryParams.Add("includeFilteredValues", includeFilteredValues, false);
+			if (maxCount!= null) localVarQueryParams.Add("maxCount", maxCount, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (sortField!= null) localVarQueryParams.Add("sortField", sortField, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (startTime!= null) localVarQueryParams.Add("startTime", startTime, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -5977,7 +5868,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValues)));
 		}
 
@@ -5991,10 +5882,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="values">The values to add or update.</param>
 		/// <param name="bufferOption">The desired AFBufferOption. The default is 'BufferIfPossible'.</param>
 		/// <param name="updateOption">The desired AFUpdateOption. The default is 'Replace'.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsItemsSubstatus></returns>
-		public async System.Threading.Tasks.Task<PIItemsItemsSubstatus> UpdateValuesAdHocAsync(List<PIStreamValues> values, string bufferOption = null, string updateOption = null)
+		public async System.Threading.Tasks.Task<PIItemsItemsSubstatus> UpdateValuesAdHocAsync(List<PIStreamValues> values, string bufferOption = null, string updateOption = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsItemsSubstatus> localVarResponse = await UpdateValuesAdHocAsyncWithHttpInfo(values, bufferOption, updateOption);
+			ApiResponse<PIItemsItemsSubstatus> localVarResponse = await UpdateValuesAdHocAsyncWithHttpInfo(values, bufferOption, updateOption, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -6008,8 +5900,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="values">The values to add or update.</param>
 		/// <param name="bufferOption">The desired AFBufferOption. The default is 'BufferIfPossible'.</param>
 		/// <param name="updateOption">The desired AFUpdateOption. The default is 'Replace'.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsItemsSubstatus>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsItemsSubstatus>> UpdateValuesAdHocAsyncWithHttpInfo(List<PIStreamValues> values, string bufferOption = null, string updateOption = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsItemsSubstatus>> UpdateValuesAdHocAsyncWithHttpInfo(List<PIStreamValues> values, string bufferOption = null, string updateOption = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'values' is set
 			if (values == null)
@@ -6020,30 +5913,14 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (values != null && values.GetType() != typeof(byte[]))
-			{
-				localVarPostBody = Configuration.ApiClient.Serialize(values);
-			}
-			else
-			{
-				localVarPostBody = values;
-			}
-			if (bufferOption!= null) localVarQueryParams.Add("bufferOption", Configuration.ApiClient.ParameterToString(bufferOption));
-			if (updateOption!= null) localVarQueryParams.Add("updateOption", Configuration.ApiClient.ParameterToString(updateOption));
+			localVarPostBody = Configuration.ApiClient.Serialize(values);
+			if (bufferOption!= null) localVarQueryParams.Add("bufferOption", bufferOption, false);
+			if (updateOption!= null) localVarQueryParams.Add("updateOption", updateOption, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.POST, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("POST"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -6054,7 +5931,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsItemsSubstatus>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsItemsSubstatus)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsItemsSubstatus)));
 		}
 
@@ -6071,10 +5948,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValue></returns>
-		public async System.Threading.Tasks.Task<PIItemsStreamValue> GetRecordedAtTimeAdHocAsync(string time, List<string> webId, string retrievalMode = null, string selectedFields = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<PIItemsStreamValue> GetRecordedAtTimeAdHocAsync(string time, List<string> webId, string retrievalMode = null, string selectedFields = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsStreamValue> localVarResponse = await GetRecordedAtTimeAdHocAsyncWithHttpInfo(time, webId, retrievalMode, selectedFields, timeZone, webIdType);
+			ApiResponse<PIItemsStreamValue> localVarResponse = await GetRecordedAtTimeAdHocAsyncWithHttpInfo(time, webId, retrievalMode, selectedFields, timeZone, webIdType, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -6091,8 +5969,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>> GetRecordedAtTimeAdHocAsyncWithHttpInfo(string time, List<string> webId, string retrievalMode = null, string selectedFields = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>> GetRecordedAtTimeAdHocAsyncWithHttpInfo(string time, List<string> webId, string retrievalMode = null, string selectedFields = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'time' is set
 			if (time == null)
@@ -6106,26 +5985,17 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (time!= null) localVarQueryParams.Add("time", Configuration.ApiClient.ParameterToString(time));
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (retrievalMode!= null) localVarQueryParams.Add("retrievalMode", Configuration.ApiClient.ParameterToString(retrievalMode));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (time!= null) localVarQueryParams.Add("time", time, false);
+			if (webId!= null) localVarQueryParams.Add("webId", webId, true);
+			if (retrievalMode!= null) localVarQueryParams.Add("retrievalMode", retrievalMode, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -6136,7 +6006,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValue>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValue)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValue)));
 		}
 
@@ -6154,10 +6024,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValues></returns>
-		public async System.Threading.Tasks.Task<PIItemsStreamValues> GetRecordedAtTimesAdHocAsync(List<string> time, List<string> webId, string retrievalMode = null, string selectedFields = null, string sortOrder = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<PIItemsStreamValues> GetRecordedAtTimesAdHocAsync(List<string> time, List<string> webId, string retrievalMode = null, string selectedFields = null, string sortOrder = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsStreamValues> localVarResponse = await GetRecordedAtTimesAdHocAsyncWithHttpInfo(time, webId, retrievalMode, selectedFields, sortOrder, timeZone, webIdType);
+			ApiResponse<PIItemsStreamValues> localVarResponse = await GetRecordedAtTimesAdHocAsyncWithHttpInfo(time, webId, retrievalMode, selectedFields, sortOrder, timeZone, webIdType, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -6175,8 +6046,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetRecordedAtTimesAdHocAsyncWithHttpInfo(List<string> time, List<string> webId, string retrievalMode = null, string selectedFields = null, string sortOrder = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetRecordedAtTimesAdHocAsyncWithHttpInfo(List<string> time, List<string> webId, string retrievalMode = null, string selectedFields = null, string sortOrder = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'time' is set
 			if (time == null)
@@ -6190,27 +6062,18 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (time!= null) localVarQueryParams.Add("time", Configuration.ApiClient.ParameterToString(time));
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (retrievalMode!= null) localVarQueryParams.Add("retrievalMode", Configuration.ApiClient.ParameterToString(retrievalMode));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (time!= null) localVarQueryParams.Add("time", time, true);
+			if (webId!= null) localVarQueryParams.Add("webId", webId, true);
+			if (retrievalMode!= null) localVarQueryParams.Add("retrievalMode", retrievalMode, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -6221,7 +6084,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValues>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValues)));
 		}
 
@@ -6245,10 +6108,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="timeType">Specifies how to calculate the timestamp for each interval. The default is 'Auto'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamSummaries></returns>
-		public async System.Threading.Tasks.Task<PIItemsStreamSummaries> GetSummariesAdHocAsync(List<string> webId, string calculationBasis = null, string endTime = null, string filterExpression = null, string sampleInterval = null, string sampleType = null, string selectedFields = null, string startTime = null, string summaryDuration = null, List<string> summaryType = null, string timeType = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<PIItemsStreamSummaries> GetSummariesAdHocAsync(List<string> webId, string calculationBasis = null, string endTime = null, string filterExpression = null, string sampleInterval = null, string sampleType = null, string selectedFields = null, string startTime = null, string summaryDuration = null, List<string> summaryType = null, string timeType = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsStreamSummaries> localVarResponse = await GetSummariesAdHocAsyncWithHttpInfo(webId, calculationBasis, endTime, filterExpression, sampleInterval, sampleType, selectedFields, startTime, summaryDuration, summaryType, timeType, timeZone, webIdType);
+			ApiResponse<PIItemsStreamSummaries> localVarResponse = await GetSummariesAdHocAsyncWithHttpInfo(webId, calculationBasis, endTime, filterExpression, sampleInterval, sampleType, selectedFields, startTime, summaryDuration, summaryType, timeType, timeZone, webIdType, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -6272,8 +6136,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="timeType">Specifies how to calculate the timestamp for each interval. The default is 'Auto'.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamSummaries>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamSummaries>> GetSummariesAdHocAsyncWithHttpInfo(List<string> webId, string calculationBasis = null, string endTime = null, string filterExpression = null, string sampleInterval = null, string sampleType = null, string selectedFields = null, string startTime = null, string summaryDuration = null, List<string> summaryType = null, string timeType = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamSummaries>> GetSummariesAdHocAsyncWithHttpInfo(List<string> webId, string calculationBasis = null, string endTime = null, string filterExpression = null, string sampleInterval = null, string sampleType = null, string selectedFields = null, string startTime = null, string summaryDuration = null, List<string> summaryType = null, string timeType = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'webId' is set
 			if (webId == null)
@@ -6284,33 +6149,24 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (calculationBasis!= null) localVarQueryParams.Add("calculationBasis", Configuration.ApiClient.ParameterToString(calculationBasis));
-			if (endTime!= null) localVarQueryParams.Add("endTime", Configuration.ApiClient.ParameterToString(endTime));
-			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", Configuration.ApiClient.ParameterToString(filterExpression));
-			if (sampleInterval!= null) localVarQueryParams.Add("sampleInterval", Configuration.ApiClient.ParameterToString(sampleInterval));
-			if (sampleType!= null) localVarQueryParams.Add("sampleType", Configuration.ApiClient.ParameterToString(sampleType));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (startTime!= null) localVarQueryParams.Add("startTime", Configuration.ApiClient.ParameterToString(startTime));
-			if (summaryDuration!= null) localVarQueryParams.Add("summaryDuration", Configuration.ApiClient.ParameterToString(summaryDuration));
-			if (summaryType!= null) localVarQueryParams.Add("summaryType", Configuration.ApiClient.ParameterToString(summaryType));
-			if (timeType!= null) localVarQueryParams.Add("timeType", Configuration.ApiClient.ParameterToString(timeType));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (webId!= null) localVarQueryParams.Add("webId", webId, true);
+			if (calculationBasis!= null) localVarQueryParams.Add("calculationBasis", calculationBasis, false);
+			if (endTime!= null) localVarQueryParams.Add("endTime", endTime, false);
+			if (filterExpression!= null) localVarQueryParams.Add("filterExpression", filterExpression, false);
+			if (sampleInterval!= null) localVarQueryParams.Add("sampleInterval", sampleInterval, false);
+			if (sampleType!= null) localVarQueryParams.Add("sampleType", sampleType, false);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (startTime!= null) localVarQueryParams.Add("startTime", startTime, false);
+			if (summaryDuration!= null) localVarQueryParams.Add("summaryDuration", summaryDuration, false);
+			if (summaryType!= null) localVarQueryParams.Add("summaryType", summaryType, true);
+			if (timeType!= null) localVarQueryParams.Add("timeType", timeType, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -6321,8 +6177,134 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamSummaries>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamSummaries)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamSummaries)));
+		}
+
+		/// <summary>
+		/// Receive stream updates
+		/// </summary>
+		/// <remarks>
+		/// The supplied markers will identify the set of stream updates to retrieve. For a 200 response, the returned location header will contain the url for retrieving the stream updates.
+		/// </remarks>
+		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+		/// <param name="marker">Identifier of stream source and current position. Multiple markers may be specified with multiple instances of the parameter.</param>
+		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
+		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
+		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamUpdatesRetrieve></returns>
+		public async System.Threading.Tasks.Task<PIItemsStreamUpdatesRetrieve> RetrieveStreamSetUpdatesAsync(List<string> marker, string selectedFields = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			ApiResponse<PIItemsStreamUpdatesRetrieve> localVarResponse = await RetrieveStreamSetUpdatesAsyncWithHttpInfo(marker, selectedFields, webIdType, cancellationToken);
+			return localVarResponse.Data;
+		}
+
+		/// <summary>
+		/// Receive stream updates
+		/// </summary>
+		/// <remarks>
+		/// The supplied markers will identify the set of stream updates to retrieve. For a 200 response, the returned location header will contain the url for retrieving the stream updates.
+		/// </remarks>
+		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+		/// <param name="marker">Identifier of stream source and current position. Multiple markers may be specified with multiple instances of the parameter.</param>
+		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
+		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
+		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamUpdatesRetrieve>></returns>
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamUpdatesRetrieve>> RetrieveStreamSetUpdatesAsyncWithHttpInfo(List<string> marker, string selectedFields = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			// verify the required parameter 'marker' is set
+			if (marker == null)
+				throw new ApiException(400, "Missing required parameter 'marker'");
+
+			var localVarPath = "/streamsets/updates";
+			var localVarPathParams = new Dictionary<String, String>();
+			var localVarQueryParams = new CustomDictionaryForQueryString();
+			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
+			var localVarFormParams = new Dictionary<String, String>();
+			string localVarPostBody = null;
+
+			if (marker!= null) localVarQueryParams.Add("marker", marker, true);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
+			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
+
+			int localVarStatusCode = (int)localVarResponse.StatusCode;
+
+			if (ExceptionFactory != null)
+			{
+				Exception exception = ExceptionFactory("RetrieveStreamSetUpdatesAsyncWithHttpInfo", localVarResponse);
+				if (exception != null) throw exception;
+			}
+
+			return new ApiResponse<PIItemsStreamUpdatesRetrieve>(localVarStatusCode,
+				localVarResponse.Headers,
+				(PIItemsStreamUpdatesRetrieve)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamUpdatesRetrieve)));
+		}
+
+		/// <summary>
+		/// Register for stream updates
+		/// </summary>
+		/// <remarks>
+		/// The supplied webIds will register for stream updates. For a 200 response, the returned location header will contain the url for retrieving the next set of stream updates.
+		/// </remarks>
+		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+		/// <param name="webId">The ID of a stream. Multiple streams may be specified with multiple instances of the parameter.</param>
+		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
+		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
+		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamUpdatesRegister></returns>
+		public async System.Threading.Tasks.Task<PIItemsStreamUpdatesRegister> RegisterStreamSetUpdatesAsync(List<string> webId, string selectedFields = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			ApiResponse<PIItemsStreamUpdatesRegister> localVarResponse = await RegisterStreamSetUpdatesAsyncWithHttpInfo(webId, selectedFields, webIdType, cancellationToken);
+			return localVarResponse.Data;
+		}
+
+		/// <summary>
+		/// Register for stream updates
+		/// </summary>
+		/// <remarks>
+		/// The supplied webIds will register for stream updates. For a 200 response, the returned location header will contain the url for retrieving the next set of stream updates.
+		/// </remarks>
+		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+		/// <param name="webId">The ID of a stream. Multiple streams may be specified with multiple instances of the parameter.</param>
+		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
+		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
+		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamUpdatesRegister>></returns>
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamUpdatesRegister>> RegisterStreamSetUpdatesAsyncWithHttpInfo(List<string> webId, string selectedFields = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
+		{
+			// verify the required parameter 'webId' is set
+			if (webId == null)
+				throw new ApiException(400, "Missing required parameter 'webId'");
+
+			var localVarPath = "/streamsets/updates";
+			var localVarPathParams = new Dictionary<String, String>();
+			var localVarQueryParams = new CustomDictionaryForQueryString();
+			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
+			var localVarFormParams = new Dictionary<String, String>();
+			string localVarPostBody = null;
+
+			if (webId!= null) localVarQueryParams.Add("webId", webId, true);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
+			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
+				new HttpMethod("POST"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
+
+			int localVarStatusCode = (int)localVarResponse.StatusCode;
+
+			if (ExceptionFactory != null)
+			{
+				Exception exception = ExceptionFactory("RegisterStreamSetUpdatesAsyncWithHttpInfo", localVarResponse);
+				if (exception != null) throw exception;
+			}
+
+			return new ApiResponse<PIItemsStreamUpdatesRegister>(localVarStatusCode,
+				localVarResponse.Headers,
+				(PIItemsStreamUpdatesRegister)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamUpdatesRegister)));
 		}
 
 		/// <summary>
@@ -6334,15 +6316,16 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
 		/// <param name="webId">The ID of a stream. Multiple streams may be specified with multiple instances of the parameter.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="time">An AF time string, which is used as the time context to get stream values if it is provided. By default, it is not specified, and the default time context of the AF object will be used.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValue></returns>
-		public async System.Threading.Tasks.Task<PIItemsStreamValue> GetValuesAdHocAsync(List<string> webId, string selectedFields = null, string sortField = null, string sortOrder = null, string time = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<PIItemsStreamValue> GetValuesAdHocAsync(List<string> webId, string selectedFields = null, string sortField = null, string sortOrder = null, string time = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsStreamValue> localVarResponse = await GetValuesAdHocAsyncWithHttpInfo(webId, selectedFields, sortField, sortOrder, time, timeZone, webIdType);
+			ApiResponse<PIItemsStreamValue> localVarResponse = await GetValuesAdHocAsyncWithHttpInfo(webId, selectedFields, sortField, sortOrder, time, timeZone, webIdType, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -6355,13 +6338,14 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
 		/// <param name="webId">The ID of a stream. Multiple streams may be specified with multiple instances of the parameter.</param>
 		/// <param name="selectedFields">List of fields to be returned in the response, separated by semicolons (;). If this parameter is not specified, all available fields will be returned.</param>
-		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, The default is unsorted. 'Name' is the only supported field by which to sort.</param>
+		/// <param name="sortField">The field or property of the object used to sort the returned collection. For better performance, by default no sorting is applied. 'Name' is the only supported field by which to sort.</param>
 		/// <param name="sortOrder">The order that the returned collection is sorted. The default is 'Ascending'</param>
 		/// <param name="time">An AF time string, which is used as the time context to get stream values if it is provided. By default, it is not specified, and the default time context of the AF object will be used.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>> GetValuesAdHocAsyncWithHttpInfo(List<string> webId, string selectedFields = null, string sortField = null, string sortOrder = null, string time = null, string timeZone = null, string webIdType = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>> GetValuesAdHocAsyncWithHttpInfo(List<string> webId, string selectedFields = null, string sortField = null, string sortOrder = null, string time = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'webId' is set
 			if (webId == null)
@@ -6372,27 +6356,18 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (webId!= null) localVarQueryParams.Add("webId", Configuration.ApiClient.ParameterToString(webId));
-			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", Configuration.ApiClient.ParameterToString(selectedFields));
-			if (sortField!= null) localVarQueryParams.Add("sortField", Configuration.ApiClient.ParameterToString(sortField));
-			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", Configuration.ApiClient.ParameterToString(sortOrder));
-			if (time!= null) localVarQueryParams.Add("time", Configuration.ApiClient.ParameterToString(time));
-			if (timeZone!= null) localVarQueryParams.Add("timeZone", Configuration.ApiClient.ParameterToString(timeZone));
-			if (webIdType!= null) localVarQueryParams.Add("webIdType", Configuration.ApiClient.ParameterToString(webIdType));
+			if (webId!= null) localVarQueryParams.Add("webId", webId, true);
+			if (selectedFields!= null) localVarQueryParams.Add("selectedFields", selectedFields, false);
+			if (sortField!= null) localVarQueryParams.Add("sortField", sortField, false);
+			if (sortOrder!= null) localVarQueryParams.Add("sortOrder", sortOrder, false);
+			if (time!= null) localVarQueryParams.Add("time", time, false);
+			if (timeZone!= null) localVarQueryParams.Add("timeZone", timeZone, false);
+			if (webIdType!= null) localVarQueryParams.Add("webIdType", webIdType, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.GET, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("GET"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -6403,7 +6378,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsStreamValue>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsStreamValue)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValue)));
 		}
 
@@ -6417,10 +6392,11 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="values">The values to add or update.</param>
 		/// <param name="bufferOption">The desired AFBufferOption. The default is 'BufferIfPossible'.</param>
 		/// <param name="updateOption">The desired AFUpdateOption. The default is 'Replace'.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<PIItemsSubstatus></returns>
-		public async System.Threading.Tasks.Task<PIItemsSubstatus> UpdateValueAdHocAsync(List<PIStreamValue> values, string bufferOption = null, string updateOption = null)
+		public async System.Threading.Tasks.Task<PIItemsSubstatus> UpdateValueAdHocAsync(List<PIStreamValue> values, string bufferOption = null, string updateOption = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsSubstatus> localVarResponse = await UpdateValueAdHocAsyncWithHttpInfo(values, bufferOption, updateOption);
+			ApiResponse<PIItemsSubstatus> localVarResponse = await UpdateValueAdHocAsyncWithHttpInfo(values, bufferOption, updateOption, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -6434,8 +6410,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="values">The values to add or update.</param>
 		/// <param name="bufferOption">The desired AFBufferOption. The default is 'BufferIfPossible'.</param>
 		/// <param name="updateOption">The desired AFUpdateOption. The default is 'Replace'.</param>
+		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
 		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsSubstatus>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsSubstatus>> UpdateValueAdHocAsyncWithHttpInfo(List<PIStreamValue> values, string bufferOption = null, string updateOption = null)
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsSubstatus>> UpdateValueAdHocAsyncWithHttpInfo(List<PIStreamValue> values, string bufferOption = null, string updateOption = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'values' is set
 			if (values == null)
@@ -6446,30 +6423,14 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			var localVarQueryParams = new CustomDictionaryForQueryString();
 			var localVarHeaderParams = new Dictionary<String, String>(Configuration.DefaultHeader);
 			var localVarFormParams = new Dictionary<String, String>();
-			var localVarFileParams = new Dictionary<String, FileParameter>();
-			Object localVarPostBody = null;
+			string localVarPostBody = null;
 
-			String[] localVarHttpContentTypes = new String[] { }; 
-			String localVarHttpContentType = Configuration.ApiClient.SelectHeaderContentType(localVarHttpContentTypes);
-			String[] localVarHttpHeaderAccepts = new String[] { "application/json", "text/json", "text/xml" };
-			String localVarHttpHeaderAccept = Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
-			if (localVarHttpHeaderAccept != null)
-				localVarHeaderParams.Add("Accept", localVarHttpHeaderAccept);
-			localVarPathParams.Add("format", "json");
-
-			if (values != null && values.GetType() != typeof(byte[]))
-			{
-				localVarPostBody = Configuration.ApiClient.Serialize(values);
-			}
-			else
-			{
-				localVarPostBody = values;
-			}
-			if (bufferOption!= null) localVarQueryParams.Add("bufferOption", Configuration.ApiClient.ParameterToString(bufferOption));
-			if (updateOption!= null) localVarQueryParams.Add("updateOption", Configuration.ApiClient.ParameterToString(updateOption));
+			localVarPostBody = Configuration.ApiClient.Serialize(values);
+			if (bufferOption!= null) localVarQueryParams.Add("bufferOption", bufferOption, false);
+			if (updateOption!= null) localVarQueryParams.Add("updateOption", updateOption, false);
 			IRestResponse localVarResponse = (IRestResponse) await Configuration.ApiClient.CallApiAsync(localVarPath,
-				Method.POST, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarFileParams,
-				localVarPathParams, localVarHttpContentType);
+				new HttpMethod("POST"), localVarQueryParams, localVarPostBody, localVarHeaderParams, 
+				localVarPathParams, cancellationToken);
 
 			int localVarStatusCode = (int)localVarResponse.StatusCode;
 
@@ -6480,7 +6441,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 			}
 
 			return new ApiResponse<PIItemsSubstatus>(localVarStatusCode,
-				localVarResponse.Headers.ToDictionary(x => x.Name, x => x.Value.ToString()),
+				localVarResponse.Headers,
 				(PIItemsSubstatus)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsSubstatus)));
 		}
 

@@ -60,7 +60,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.WebID
             {
                 if ((ownerType != typeof(PIElementTemplate)))
                 {
-                    throw new WebIdException("PIElementTemplate owner type must be a PIElementTemplate.");
+                    throw new WebIdException("PIAttributeTemplate owner type must be a PIElementTemplate.");
                 }
             }
             else if ((type == typeof(PIEnumerationSet)) || (type == typeof(PIEnumerationValue)))
@@ -244,10 +244,5 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.WebID
             return encoded.TrimEnd(new char[] { '=' }).Replace('+', '-').Replace('/', '_');
         }
 
-        internal static string Encode(Guid value)
-        {
-            byte[] bytes = value.ToByteArray();
-            return Encode(bytes);
-        }
     } 
 }

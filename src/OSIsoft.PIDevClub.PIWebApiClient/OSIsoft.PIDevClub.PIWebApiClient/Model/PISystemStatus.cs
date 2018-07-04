@@ -25,7 +25,6 @@ using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using System.ComponentModel.DataAnnotations;
 using OSIsoft.PIDevClub.PIWebApiClient.Client;
 using System.Runtime.InteropServices;
 
@@ -39,11 +38,12 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Model
 
 	public class PISystemStatus
 	{
-		public PISystemStatus(double? UpTimeInMinutes = null, string State = null, int? CacheInstances = null, PIWebException WebException = null)
+		public PISystemStatus(double? UpTimeInMinutes = null, string State = null, int? CacheInstances = null, string ServerTime = null, PIWebException WebException = null)
 		{
 			this.UpTimeInMinutes = UpTimeInMinutes;
 			this.State = State;
 			this.CacheInstances = CacheInstances;
+			this.ServerTime = ServerTime;
 			this.WebException = WebException;
 		}
 
@@ -64,6 +64,12 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Model
 		/// </summary>
 		[DataMember(Name = "CacheInstances", EmitDefaultValue = false)]
 		public int? CacheInstances { get; set; }
+
+		/// <summary>
+		/// Gets or Sets PISystemStatus
+		/// </summary>
+		[DataMember(Name = "ServerTime", EmitDefaultValue = false)]
+		public string ServerTime { get; set; }
 
 		/// <summary>
 		/// Gets or Sets PISystemStatus
