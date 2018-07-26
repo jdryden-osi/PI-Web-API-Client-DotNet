@@ -34,7 +34,13 @@ namespace LibraryTest
         static void Main(string[] args)
         {
             //Create an instance of the PI Web API top level object.
+
             PIWebApiClient client = new PIWebApiClient("https://marc-web-sql.marc.net/piwebapi", true);
+            // TODO: The PI Web API client must provide a user name and password when using “basic” authentication 
+            // Store passwords outside of the code in a hardware TPM, trusted service (credential manager) or in a protected file.
+            // Code to return the user name and password is not shown here.
+
+
 
             var homeLanding = client.Home.Get();
             ////Get the PI Data Archive object
