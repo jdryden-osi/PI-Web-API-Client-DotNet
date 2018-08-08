@@ -745,10 +745,6 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		{
 			this.Configuration = configuration;
 			ExceptionFactory = OSIsoft.PIDevClub.PIWebApiClient.Client.Configuration.DefaultExceptionFactory;
-			if (Configuration.ApiClient.Configuration == null)
-			{
-				this.Configuration.ApiClient.Configuration = this.Configuration;
-			}
 		}
 
 		public Configuration Configuration { get; set; }

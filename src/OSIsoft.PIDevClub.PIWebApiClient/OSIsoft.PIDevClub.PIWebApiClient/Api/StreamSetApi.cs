@@ -374,8 +374,8 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
-		/// <returns>PIItemsStreamValues</returns>
-		PIItemsStreamValues GetRecordedAtTime(string webId, string time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string timeZone = null, string webIdType = null);
+		/// <returns>PIItemsStreamValue</returns>
+		PIItemsStreamValue GetRecordedAtTime(string webId, string time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string timeZone = null, string webIdType = null);
 
 		/// <summary>
 		/// Returns recorded values of the attributes for an element, event frame, or attribute.
@@ -396,8 +396,8 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
-		/// <returns>ApiResponse<PIItemsStreamValues></returns>
-		ApiResponse<PIItemsStreamValues> GetRecordedAtTimeWithHttpInfo(string webId, string time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string timeZone = null, string webIdType = null);
+		/// <returns>ApiResponse<PIItemsStreamValue></returns>
+		ApiResponse<PIItemsStreamValue> GetRecordedAtTimeWithHttpInfo(string webId, string time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string timeZone = null, string webIdType = null);
 
 		/// <summary>
 		/// Returns recorded values of attributes for an element, event frame or attribute at the specified times.
@@ -1407,8 +1407,8 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
 		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
-		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValues></returns>
-		System.Threading.Tasks.Task<PIItemsStreamValues> GetRecordedAtTimeAsync(string webId, string time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
+		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValue></returns>
+		System.Threading.Tasks.Task<PIItemsStreamValue> GetRecordedAtTimeAsync(string webId, string time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns recorded values of the attributes for an element, event frame, or attribute.
@@ -1430,8 +1430,8 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
 		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
-		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetRecordedAtTimeAsyncWithHttpInfo(string webId, string time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
+		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>></returns>
+		System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>> GetRecordedAtTimeAsyncWithHttpInfo(string webId, string time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken));
 
 		/// <summary>
 		/// Returns recorded values of attributes for an element, event frame or attribute at the specified times.
@@ -2129,10 +2129,6 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		{
 			this.Configuration = configuration;
 			ExceptionFactory = OSIsoft.PIDevClub.PIWebApiClient.Client.Configuration.DefaultExceptionFactory;
-			if (Configuration.ApiClient.Configuration == null)
-			{
-				this.Configuration.ApiClient.Configuration = this.Configuration;
-			}
 		}
 
 		public Configuration Configuration { get; set; }
@@ -2813,10 +2809,10 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
-		/// <returns>PIItemsStreamValues</returns>
-		public PIItemsStreamValues GetRecordedAtTime(string webId, string time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string timeZone = null, string webIdType = null)
+		/// <returns>PIItemsStreamValue</returns>
+		public PIItemsStreamValue GetRecordedAtTime(string webId, string time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string timeZone = null, string webIdType = null)
 		{
-			ApiResponse<PIItemsStreamValues> localVarResponse = GetRecordedAtTimeWithHttpInfo(webId, time, categoryName, nameFilter, retrievalMode, searchFullHierarchy, selectedFields, showExcluded, showHidden, templateName, timeZone, webIdType);
+			ApiResponse<PIItemsStreamValue> localVarResponse = GetRecordedAtTimeWithHttpInfo(webId, time, categoryName, nameFilter, retrievalMode, searchFullHierarchy, selectedFields, showExcluded, showHidden, templateName, timeZone, webIdType);
 			return localVarResponse.Data;
 		}
 
@@ -2839,8 +2835,8 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="templateName">Specify that included attributes must be members of this template. The default is no template filter.</param>
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
-		/// <returns>ApiResponse<PIItemsStreamValues></returns>
-		public ApiResponse<PIItemsStreamValues> GetRecordedAtTimeWithHttpInfo(string webId, string time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string timeZone = null, string webIdType = null)
+		/// <returns>ApiResponse<PIItemsStreamValue></returns>
+		public ApiResponse<PIItemsStreamValue> GetRecordedAtTimeWithHttpInfo(string webId, string time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string timeZone = null, string webIdType = null)
 		{
 			// verify the required parameter 'webId' is set
 			if (webId == null)
@@ -2880,9 +2876,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 				if (exception != null) throw exception;
 			}
 
-			return new ApiResponse<PIItemsStreamValues>(localVarStatusCode,
+			return new ApiResponse<PIItemsStreamValue>(localVarStatusCode,
 				localVarResponse.Headers,
-				(PIItemsStreamValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValues)));
+				(PIItemsStreamValue)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValue)));
 		}
 
 		/// <summary>
@@ -4950,10 +4946,10 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
 		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
-		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValues></returns>
-		public async System.Threading.Tasks.Task<PIItemsStreamValues> GetRecordedAtTimeAsync(string webId, string time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
+		/// <returns>async System.Threading.Tasks.Task<PIItemsStreamValue></returns>
+		public async System.Threading.Tasks.Task<PIItemsStreamValue> GetRecordedAtTimeAsync(string webId, string time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			ApiResponse<PIItemsStreamValues> localVarResponse = await GetRecordedAtTimeAsyncWithHttpInfo(webId, time, categoryName, nameFilter, retrievalMode, searchFullHierarchy, selectedFields, showExcluded, showHidden, templateName, timeZone, webIdType, cancellationToken);
+			ApiResponse<PIItemsStreamValue> localVarResponse = await GetRecordedAtTimeAsyncWithHttpInfo(webId, time, categoryName, nameFilter, retrievalMode, searchFullHierarchy, selectedFields, showExcluded, showHidden, templateName, timeZone, webIdType, cancellationToken);
 			return localVarResponse.Data;
 		}
 
@@ -4977,8 +4973,8 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 		/// <param name="timeZone">The time zone in which the time string will be interpreted. This parameter will be ignored if a time zone is specified in the time string. If no time zone is specified in either places, the PI Web API server time zone will be used.</param>
 		/// <param name="webIdType">Optional parameter. Used to specify the type of WebID. Useful for URL brevity and other special cases. Default is the value of the configuration item "WebIDType".</param>
 		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
-		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>></returns>
-		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValues>> GetRecordedAtTimeAsyncWithHttpInfo(string webId, string time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
+		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>></returns>
+		public async System.Threading.Tasks.Task<ApiResponse<PIItemsStreamValue>> GetRecordedAtTimeAsyncWithHttpInfo(string webId, string time, string categoryName = null, string nameFilter = null, string retrievalMode = null, bool? searchFullHierarchy = null, string selectedFields = null, bool? showExcluded = null, bool? showHidden = null, string templateName = null, string timeZone = null, string webIdType = null, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			// verify the required parameter 'webId' is set
 			if (webId == null)
@@ -5018,9 +5014,9 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 				if (exception != null) throw exception;
 			}
 
-			return new ApiResponse<PIItemsStreamValues>(localVarStatusCode,
+			return new ApiResponse<PIItemsStreamValue>(localVarStatusCode,
 				localVarResponse.Headers,
-				(PIItemsStreamValues)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValues)));
+				(PIItemsStreamValue)Configuration.ApiClient.Deserialize(localVarResponse, typeof(PIItemsStreamValue)));
 		}
 
 		/// <summary>

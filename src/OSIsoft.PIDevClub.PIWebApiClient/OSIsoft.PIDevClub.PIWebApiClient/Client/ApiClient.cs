@@ -41,41 +41,35 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Client
             ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor
         };
 
-        public Configuration Configuration { get; internal set; }
         public string BaseUrl { get; private set; }
 
-        private string username;
-        private string password;
+        internal string Username { get; private set; }
+        internal string Password { get; private set; }
         private bool useKerberos;
         private HttpClientHandler handler = null;
+        private HttpClient client;
 
         public ApiClient(string baseUrl, bool useKerberos, string username, string password)
         {
             this.BaseUrl = baseUrl;
-            this.username = username;
-            this.password = password;
+            this.Username = username;
+            this.Password = password;
             this.useKerberos = useKerberos;
             handler = new HttpClientHandler();
             if (useKerberos == true)
             {
                 handler.UseDefaultCredentials = true;
+                client = new HttpClient(handler);
             }
-        }
-
-        public string Username
-        {
-            get
+            else
             {
-                return username;
+                client = new HttpClient(handler);
+                var byteArray = Encoding.ASCII.GetBytes(string.Format("{0}:{1}", this.Username, this.Password));
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
             }
-        }
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Add("X-Requested-With", "PIWebApiWrapper");
 
-        public string Password
-        {
-            get
-            {
-                return password;
-            }
         }
 
 
@@ -123,20 +117,7 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Client
             }
         }
 
-        internal IRestResponse CallApi(string localVarPath, HttpMethod method, CustomDictionaryForQueryString localVarQueryParams,
-            string localVarPostBody, Dictionary<string, string> localVarHeaderParams, Dictionary<string, string> localVarPathParams)
-        {
-            HttpRequestMessage request = PrepareRequest(localVarPath, method, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarPathParams);
-            HttpClient client = new HttpClient(handler);
-            if (this.useKerberos == false)
-            {
-                var byteArray = Encoding.ASCII.GetBytes(string.Format("{0}:{1}", this.username, this.password));
-                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
-            }
-            HttpResponseMessage response = client.SendAsync(request).Result;
-            IRestResponse restResponse = new RestResponse(response);
-            return restResponse;
-        }
+
 
         private HttpRequestMessage PrepareRequest(string localVarPath, HttpMethod method, CustomDictionaryForQueryString localVarQueryParams, string localVarPostBody, Dictionary<string, string> localVarHeaderParams, Dictionary<string, string> localVarPathParams)
         {
@@ -156,8 +137,6 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Client
                 requestUri = string.Format("{0}?{1}", requestUri, queryString.Substring(0, queryString.Length - 1));
             }
             HttpRequestMessage request = new HttpRequestMessage(method, requestUri);
-            request.Headers.Accept.Clear();
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             foreach (var item in localVarHeaderParams)
             {
                 request.Headers.Add(item.Key, item.Value);
@@ -170,15 +149,34 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Client
             return request;
         }
 
+        internal IRestResponse CallApi(string localVarPath, HttpMethod method, CustomDictionaryForQueryString localVarQueryParams,
+    string localVarPostBody, Dictionary<string, string> localVarHeaderParams, Dictionary<string, string> localVarPathParams)
+        {
+            HttpRequestMessage request = PrepareRequest(localVarPath, method, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarPathParams);
+            HttpResponseMessage response = null;
+            try
+            {
+                response = client.SendAsync(request).Result;
+            }
+            catch (TaskCanceledException e)
+            {
+                throw e;
+            }
+            catch (Exception e)
+            {
+                throw new ApiException(1, e.Message);
+            }
+            IRestResponse restResponse = new RestResponse(response);
+            return restResponse;
+        }
+
         internal async Task<IRestResponse> CallApiAsync(string localVarPath, HttpMethod method, CustomDictionaryForQueryString localVarQueryParams,
             string localVarPostBody, Dictionary<string, string> localVarHeaderParams, Dictionary<string, string> localVarPathParams,
             CancellationToken cancellationToken)
         {
             HttpRequestMessage request = PrepareRequest(localVarPath, method, localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarPathParams);
             HttpResponseMessage response = null;
-            HttpClient client = new HttpClient(handler);
 
-            
             try
             {
                 if (cancellationToken == CancellationToken.None)
@@ -189,7 +187,6 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Client
                 {
                     response = await client.SendAsync(request, cancellationToken);
                 }
-
             }
             catch (TaskCanceledException e)
             {

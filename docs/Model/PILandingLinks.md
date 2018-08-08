@@ -6,7 +6,6 @@ Name | Type | Notes
 **Self** | **string**
 **AssetServers** | **string**
 **DataServers** | **string**
-**PIDirectory** | **string**
 **Search** | **string**
 **System** | **string**
 

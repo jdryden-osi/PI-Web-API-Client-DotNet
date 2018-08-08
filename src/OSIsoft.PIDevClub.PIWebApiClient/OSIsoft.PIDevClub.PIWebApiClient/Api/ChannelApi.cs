@@ -28,55 +28,55 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
 {
 
 
-	/// <summary>
-	/// Represents a collection of functions to interact with the PI Web API Channel controller.
-	/// </summary>
-	public interface IChannelApi
-	{
-		#region Synchronous Operations
-		/// <summary>
-		/// Retrieves a list of currently running channel instances.
-		/// </summary>
-		/// <remarks>
-		/// 
-		/// </remarks>
-		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
-		/// <returns>PIItemsChannelInstance</returns>
-		PIItemsChannelInstance Instances();
+    /// <summary>
+    /// Represents a collection of functions to interact with the PI Web API Channel controller.
+    /// </summary>
+    public interface IChannelApi
+    {
+        #region Synchronous Operations
+        /// <summary>
+        /// Retrieves a list of currently running channel instances.
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <returns>PIItemsChannelInstance</returns>
+        PIItemsChannelInstance Instances();
 
-		/// <summary>
-		/// Retrieves a list of currently running channel instances.
-		/// </summary>
-		/// <remarks>
-		/// 
-		/// </remarks>
-		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
-		/// <returns>ApiResponse<PIItemsChannelInstance></returns>
-		ApiResponse<PIItemsChannelInstance> InstancesWithHttpInfo();
+        /// <summary>
+        /// Retrieves a list of currently running channel instances.
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <returns>ApiResponse<PIItemsChannelInstance></returns>
+        ApiResponse<PIItemsChannelInstance> InstancesWithHttpInfo();
 
-		#endregion
-		#region Asynchronous Operations
-		/// <summary>
-		/// Retrieves a list of currently running channel instances.
-		/// </summary>
-		/// <remarks>
-		/// 
-		/// </remarks>
-		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
-		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
-		/// <returns>async System.Threading.Tasks.Task<PIItemsChannelInstance></returns>
-		System.Threading.Tasks.Task<PIItemsChannelInstance> InstancesAsync(CancellationToken cancellationToken = default(CancellationToken));
+        #endregion
+        #region Asynchronous Operations
+        /// <summary>
+        /// Retrieves a list of currently running channel instances.
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
+        /// <returns>async System.Threading.Tasks.Task<PIItemsChannelInstance></returns>
+        System.Threading.Tasks.Task<PIItemsChannelInstance> InstancesAsync(CancellationToken cancellationToken = default(CancellationToken));
 
-		/// <summary>
-		/// Retrieves a list of currently running channel instances.
-		/// </summary>
-		/// <remarks>
-		/// 
-		/// </remarks>
-		/// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
-		/// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
-		/// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsChannelInstance>></returns>
-		System.Threading.Tasks.Task<ApiResponse<PIItemsChannelInstance>> InstancesAsyncWithHttpInfo(CancellationToken cancellationToken = default(CancellationToken));
+        /// <summary>
+        /// Retrieves a list of currently running channel instances.
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// </remarks>
+        /// <exception cref="OSIsoft.PIDevClub.PIWebApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="cancellationTokenSource">Signals to a CancellationToken that might be cancelled</param>
+        /// <returns>async System.Threading.Tasks.Task<ApiResponse<PIItemsChannelInstance>></returns>
+        System.Threading.Tasks.Task<ApiResponse<PIItemsChannelInstance>> InstancesAsyncWithHttpInfo(CancellationToken cancellationToken = default(CancellationToken));
         Task StartStream(string v, IObserver<PIItemsStreamValues> observer1, CancellationToken token);
         Task StartStreamSet(string webId, IObserver<PIItemsStreamValues> observer2, CancellationToken token);
         Task StartStreamSets(List<string> webIds, IObserver<PIItemsStreamValues> observer3, CancellationToken token);
@@ -91,10 +91,6 @@ namespace OSIsoft.PIDevClub.PIWebApiClient.Api
         {
             this.Configuration = configuration;
             ExceptionFactory = OSIsoft.PIDevClub.PIWebApiClient.Client.Configuration.DefaultExceptionFactory;
-            if (Configuration.ApiClient.Configuration == null)
-            {
-                this.Configuration.ApiClient.Configuration = this.Configuration;
-            }
         }
 
         public Configuration Configuration { get; set; }
